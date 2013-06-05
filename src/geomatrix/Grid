@@ -29,6 +29,10 @@ The distance between points is defined as the pythagorean distance: it's the
 square root of the sum of the squared differences of their coordinates.
 distance((x1,y1),(x2,y2)) = sqrt((x1-x2)^2  + (y1-y2)^2)
 
+The distance between two areas is defined as the distance between the closest
+pair of points such that each point is adjacent to a cell contained in each
+area.
+
 Lines:
 There are only vertical and horizontal lines. The x coordinate of a vertical
 line is discrete, as well as the y coordinate of a horizontal line.
@@ -90,7 +94,7 @@ Edges:
 An edge of an area is a segment that fulfills the following property.
 A segment s is an edge of an area a if there is no pair of
 cells separated by s such that exactly one of them is
-contained in a.
+contained in a and its endpoints are the endspoints of other edges of a.
 Two cells are separated by s if there is a pair of points such that each cell is
 adjacent to both of them and the segment formed by those points is contained in
 s.

@@ -14,6 +14,17 @@ public class Point {
         this.y = y;
     }
 
+    public static float distance(Point p1, Point p2) {
+        float xOffset = Math.abs(p1.x - p2.x);
+        //-1 because squares are 1 unit wide
+        float yOffset = Math.abs(p1.y - p2.y);
+        return (float) Math.sqrt(xOffset*xOffset + yOffset*yOffset);
+    }
+    
+    /**
+     * In netbeans we trust.
+     * @return 
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -22,6 +33,11 @@ public class Point {
         return hash;
     }
 
+    /**
+     * In netbeans we trust.
+     * @param obj
+     * @return 
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

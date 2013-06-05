@@ -1,6 +1,8 @@
 
 package geomatrix.business.models.binary;
 
+import geomatrix.utils.Interval;
+
 /**
  * Represents a rectangle of the grid.
  * It is represented by the coordinates of two grid points:
@@ -11,6 +13,7 @@ package geomatrix.business.models.binary;
  * @author Nil
  */
 public class Rectangle {
+    
     Point topLeft;
     Point bottomRight;
 
@@ -19,6 +22,38 @@ public class Rectangle {
         this.bottomRight = bottomRight;
     }
 
+    /**
+     * Returns the distance between 2 Rectangles.
+     * @param r1
+     * @param r2
+     * @return 
+     */
+    public static float distance(Rectangle r1, Rectangle r2) {
+        int xOffset = r1.getXinterval().distance(r2.getXinterval());
+        int yOffset = r1.getYinterval().distance(r2.getYinterval());
+        return Point.distance(new Point(0,0), new Point(xOffset, yOffset));
+    }
+    
+    /**
+     * Returns the interval of x values between the vertical segments of this
+     * rectangle.
+     * @return an interval containing the x values between the vertical
+     * segments.
+     */
+    public Interval getXinterval() {
+        return new Interval(topLeft.x, bottomRight.x);
+    }
+    
+    /**
+     * Returns the interval of y values between the horizontal segments of this
+     * rectangle.
+     * @return an interval containing the y values between the horizontal
+     * segments.
+     */
+    public Interval getYinterval() {
+        return new Interval(topLeft.y, bottomRight.y);
+    }
+    
     /**
      * Returns whether a rectangle is consistent.
      * For a rectangle to be consistent, the coordinates of topLeft must be lower

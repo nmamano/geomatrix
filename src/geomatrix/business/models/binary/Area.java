@@ -44,6 +44,12 @@ public interface Area
     void rotation(int degrees);
     
     /**
+     * Returns the smallest rectangle that contains this area.
+     * @return 
+     */
+    public Rectangle getBoundingRectangle();
+    
+    /**
      * Returns a list of disjoint rectangles such that every cell contained in
      * this area is within one of the rectangles, and every cell non-contained
      * in this area is not.
@@ -73,4 +79,6 @@ public interface Area
      * @return the cardinality of this set.
      */
     int size();
+    
+
 }

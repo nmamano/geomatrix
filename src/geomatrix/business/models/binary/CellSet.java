@@ -43,19 +43,5 @@ public interface CellSet
      * @param cells the cell set to be rested to this cell set.
      */    
     void difference(CellSet cells);
- 
-    /**
-     * This cell set becomes the symmetric difference of this cell set and
-     * cells. cells is not modified.
-     * @param cells the cell set with which this cell set is to be applied the
-     * symmetric difference.
-     */   
-    void symmetricDifference(CellSet cells);
-    
-    /**
-     * Returns the cardinality of this set.
-     * @return the cardinality of this set.
-     */
-    int size();
     
 }
