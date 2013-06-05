@@ -1,0 +1,112 @@
+/////
+This file belongs to docs folder. It is here so I can open it with netbeans lols
+/////
+
+The grid or grid plane is a plane with a special topology.
+
+Axis:
+The x coordinate grows to the right, whereas the y coordinate grows downwards.
+It extends infinitely in all four directions.
+
+Geometric figures:
+The following geometric figures are defined in the grid plane: points, lines,
+rays, segments and cells. Each geometric figure can be described with an
+equation.
+
+Points:
+Points have discrete coordinates. Therefore, there are infinite points,
+but the density of points is not infinite.
+A point is identified by its coordinates (x,y).
+The equation of the point (x',y') is:
+x = x'
+y = y'
+
+Neighbour points:
+Two points (x1,y1), (x2,y2) are neighbours if they are at distance 1.
+
+Distance:
+The distance between points is defined as the pythagorean distance: it's the
+square root of the sum of the squared differences of their coordinates.
+distance((x1,y1),(x2,y2)) = sqrt((x1-x2)^2  + (y1-y2)^2)
+
+Lines:
+There are only vertical and horizontal lines. The x coordinate of a vertical
+line is discrete, as well as the y coordinate of a horizontal line.
+A line is identified by its fixed coordinate.
+The equation of the vertical line x' is:
+x = x'
+y = any
+
+Rays:
+A ray is a variaton of line that has a starting at a point, called origin.
+A ray is identified by its starting point and its direction, which can be
+N, W, S or E.
+The equation of the right ray (x',y') is:
+x > x'
+y = y'
+
+Segments:
+A segment is a variation of line that starts and ends at two points, called
+endpoints. The endpoints must be different.
+The length of the segment is the distance between the endpoints.
+A segment is identified by its endpoints.
+The equation of the vertical segment (x',y1),(x',y2) is, given y1 < y2:
+x = x'
+y1 < y < y2
+
+Cells:
+The area between a set of four points such that each one has exactly two
+neighbours in the set (points such that their coordinates are of the form (x,y),
+(x,y+1), (x+1,y) and (x+1,y+1)) is called cell.
+Therefore, a cell has the shape of a one unit wide and one unit high square.
+To identify it, the coordinates of the upper left point ((x,y)) are used, with
+the following notation: <x,y>.
+The equation of a cell <x',y'> is:
+x' < x < x'+1
+y' < y < y'+1
+
+Contention:
+One geometric figures f1 is contained in another f2 if the set of pairs of
+values (x,y) that fulfill the equation of f2 also fulfill the equation of f1.
+In particular, the origin of a ray is not contained in the ray, and the
+endpoints of a segment are not contained in the segments.
+
+Intersection:
+Two geometric figures intersect if there is exactly one pairs of values
+(x,y) that fulfill the equations of both. Said point is called the intersection.
+
+Adjacency:
+A cell is adjacent to the four aforementioned points and none more.
+Two cells are adjacent if they share 2 adjacent points.
+A cell is adjacent to a line, segment or ray if two of its adjacent points are
+contained in it.
+In any case, adjacent figures of a cell are not contained in it.
+
+Areas:
+An area is an arbitrary set of cells.
+A cell is contained in an area if it's part of the set.
+
+Edges:
+An edge of an area is a segment that fulfills the following property.
+A segment s is an edge of an area a if there is no pair of
+cells separated by s such that exactly one of them is
+contained in a.
+Two cells are separated by s if there is a pair of points such that each cell is
+adjacent to both of them and the segment formed by those points is contained in
+s.
+
+Informally, an edge is a segment that, along its whole length, it has a
+contained cell on one side and a non-contained cell on the other.
+
+However, the side of the contained cell can change. This happens when the edge
+is intersected by another edge of the same area.
+
+Perimeter:
+The perimeter of an area is the set of its edges.
+
+Rectangles:
+A rectangle is a set of four segments. Two are horizontal and have
+the same length, and two are horizontal and have the same length too. The
+endpoints of the segments coincide, forming a cicle.
+
+
