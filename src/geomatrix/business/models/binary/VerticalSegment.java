@@ -1,23 +1,26 @@
 
 package geomatrix.business.models.binary;
 
+import geomatrix.utils.Interval;
+
 /**
- * A cell of the grid.
+ * Represents a vertical segment.
  * @author Nil
  */
-public class Cell {
-    public int x;
-    public int y;
+public class VerticalSegment {
+    int x;
+    Interval yInterval;
 
-    public Cell(int x, int y) {
+    public VerticalSegment(int x, int yLow, int yHigh) {
         this.x = x;
-        this.y = y;
-    }
-
-    public static Cell copy(Cell cell) {
-        return new Cell(cell.x, cell.y);
+        this.yInterval = new Interval(yLow, yHigh);
     }
     
+    public VerticalSegment(int x, Interval yInterval) {
+        this.x = x;
+        this.yInterval = yInterval;
+    }
+
     /**
      * In netbeans we trust.
      * @return 
@@ -25,8 +28,8 @@ public class Cell {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + this.x;
-        hash = 97 * hash + this.y;
+        hash = 89 * hash + this.x;
+        hash = 89 * hash + (this.yInterval != null ? this.yInterval.hashCode() : 0);
         return hash;
     }
 
@@ -43,19 +46,17 @@ public class Cell {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Cell other = (Cell) obj;
+        final VerticalSegment other = (VerticalSegment) obj;
         if (this.x != other.x) {
             return false;
         }
-        if (this.y != other.y) {
+        if (this.yInterval != other.yInterval && (this.yInterval == null || !this.yInterval.equals(other.yInterval))) {
             return false;
         }
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "<" + x + ',' + y + '>';
-    }
 
+    
+    
 }

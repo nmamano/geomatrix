@@ -4,7 +4,6 @@
  */
 package geomatrix.business.models.binary;
 
-import geomatrix.utils.Direction;
 import java.util.Iterator;
 import java.util.List;
 
@@ -72,7 +71,7 @@ public interface Area
      * @param cells the cell set with which this cell set is to be applied the
      * symmetric difference.
      */   
-    void symmetricDifference(CellSet cells);
+    void symmetricDifference(CellSet other);
     
     /**
      * Returns the cardinality of this set.

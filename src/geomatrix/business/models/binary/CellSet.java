@@ -1,8 +1,11 @@
 
 package geomatrix.business.models.binary;
 
+import java.util.Iterator;
+
 /**
  * A class implementing this interface represents a set of grid cells.
+ * The remove method of the iterator is optional.
  * @author Nil
  */
 public interface CellSet 
@@ -16,32 +19,39 @@ public interface CellSet
     boolean contains(Cell cell);
     
     /**
-     * Returns whether all cells in cells are contained in this cell set.
-     * @param cells cell set with the cells whose presence in this set is to be
+     * Returns whether all other in other are contained in this cell set.
+     * @param other cell set with the other whose presence in this set is to be
      * tested.
-     * @return true if every cell in cells is contained in this cell set.
+     * @return true if every cell in other is contained in this cell set.
      */
-    boolean contains(CellSet cells);
+    boolean contains(CellSet other);
     
     /**
      * This cell set becomes the union of this cell set and cells. cells is not
      * modified.
      * @param cells the cell set with which this cell set is to be united.
      */
-    void union(CellSet cells);
+    void union(CellSet other);
     
     /**
      * This cell set becomes the intersection of this cell set and cells. cells
      * is not modified.
      * @param cells the cell set with which this cell set is to be intersected.
      */
-    void intersection(CellSet cells);
+    void intersection(CellSet other);
     
     /**
      * This cell set becomes the difference of this cell set minus cells. cells
      * is not modified.
      * @param cells the cell set to be rested to this cell set.
      */    
-    void difference(CellSet cells);
+    void difference(CellSet other);
+    
+    /**
+     * Returns an iterator through the contained cells.
+     * @return an iterator through the contained cells.
+     */
+    @Override
+    Iterator<Cell> iterator();
     
 }
