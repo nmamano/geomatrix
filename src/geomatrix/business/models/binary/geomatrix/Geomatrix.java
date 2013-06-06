@@ -14,9 +14,11 @@ import geomatrix.utils.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Area implementation of the master interface.
@@ -27,6 +29,12 @@ public class Geomatrix implements Area {
     private List<Point> vertexs;
     private List<VerticalEdge> verticalEdges;
     private List<HorizontalEdge> horizontalEdges;
+    
+    /**
+     * This list contains one arbitrary vertex from each path of this area.
+     * A path is a closed cicle of edges.
+     */
+    private List<Point> pathRepresentatives;
     
     /**
      * Given first x' value, permits fast access to all vertexs of the area
@@ -56,10 +64,14 @@ public class Geomatrix implements Area {
      * Empty constructor.
      */
     public Geomatrix() {
-        this(new ArrayList<Point>());
+        build(new ArrayList<Point>());
     }
     
-    private Geomatrix(ArrayList<Point> vertexs) {
+    /**
+     * Initializes the Geomatrix from the list of its vertexs.
+     * @param vertexs the vertexs that this geomatrix has to have.
+     */
+    private void build(List<Point> vertexs) {
         this.vertexs = new ArrayList<Point>(vertexs);
         initializeDataStructsFromVertexs();
     }
@@ -84,25 +96,90 @@ public class Geomatrix implements Area {
         assert(c instanceof Geomatrix);
         Geomatrix other = (Geomatrix) c;
         
-        //1) check whether at least one vertex is contained
+        if (other.isEmpty()) return true;
+        
+        //1) check whether one vertex of other is contained in this
         if (! contains(other.vertexs.get(0)))
             return false;
         
-        //2) check that no edge of the the area intersects with an edge of this
+        //2) check that no edge of other intersects with an edge of this
         //area
         if (doEdgesIntersect(other)) return false;
         
-        //3) check that no vertex of the implicit parameter is within the area
-        //of the polygon
-        for (Point vertex : vertexs)
+        //3) check that no path of this geomatrix is within other.
+        for (Point vertex : pathRepresentatives)
             if (other.contains(vertex)) return false;
 
         return true; 
     }
 
     @Override
-    public void union(CellSet other) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void union(CellSet c) {
+        assert(c instanceof Geomatrix);
+        Geomatrix other = (Geomatrix) c;
+        
+        if (isEmpty()) {
+            build(other.vertexs);
+            return;
+        }
+            
+        Set<Point> newAreaVertexs = new HashSet<Point>();
+                
+        //1) add intersections between this area and a, except double
+        //intersections
+        List<Point> intersectPoints = getEdgesIntersect(other);
+        for (Point v : intersectPoints) {
+            if (newAreaVertexs.contains(v))
+                newAreaVertexs.remove(v);
+            else
+                newAreaVertexs.add(v);
+        }     
+        
+        //2) find vextexs that have an odd number of adjacent contained squares
+        //in either area
+        for (Point myVertex : vertexs) {
+            List<Boolean> otherAdjCells = other.areAdjacentCellsContained(myVertex);
+            
+            if (noneTrue(otherAdjCells)) {
+                //if this vertex is disjoint from other, it is a vertex of the
+                //union
+                newAreaVertexs.add(myVertex);
+            }
+            //if this vertex is contained in other, it is not a vertex of
+            //the union
+            else if (!allTrue(otherAdjCells)) {
+                List<Boolean> thisAdjCells = areAdjacentCellsContained(myVertex);
+                int count = 0;
+                if (thisAdjCells.get(0) || otherAdjCells.get(0)) ++count;
+                if (thisAdjCells.get(1) || otherAdjCells.get(1)) ++count;
+                if (thisAdjCells.get(2) || otherAdjCells.get(2)) ++count;
+                if (thisAdjCells.get(3) || otherAdjCells.get(3)) ++count;
+                if (count%2 == 1) newAreaVertexs.add(myVertex);
+            }
+        }
+        
+        for (Point otherVertex : other.vertexs) {
+            List<Boolean> thisAdjCells = areAdjacentCellsContained(otherVertex);
+            
+            if (noneTrue(thisAdjCells)) {
+                //if otherVertex is disjoint from this area, it is a vertex of 
+                //the union
+                newAreaVertexs.add(otherVertex);
+            }
+            //if otherVertex is contained in this area, it is not a vertex of
+            //the union
+            else if (!allTrue(thisAdjCells)) {
+                List<Boolean> otherAdjCells = other.areAdjacentCellsContained(otherVertex);
+                int count = 0;
+                if (thisAdjCells.get(0) || otherAdjCells.get(0)) ++count;
+                if (thisAdjCells.get(1) || otherAdjCells.get(1)) ++count;
+                if (thisAdjCells.get(2) || otherAdjCells.get(2)) ++count;
+                if (thisAdjCells.get(3) || otherAdjCells.get(3)) ++count;
+                if (count%2 == 1) newAreaVertexs.add(otherVertex);
+            }
+        }
+        
+        build(new ArrayList(newAreaVertexs));
     }
 
     @Override
@@ -167,7 +244,7 @@ public class Geomatrix implements Area {
 
     private void initializeDataStructsFromVertexs() {
         initializeMapsOfVertexs();
-        initializeEdges();
+        initializeEdgesAndPathRepresentatives();
         sortVerticalEdges();
         initializeMapsOfEdges();
     }
@@ -191,12 +268,16 @@ public class Geomatrix implements Area {
     }
 
     /**
-     * Initializes the vertical and horizontal edges.
+     * Initializes the vertical and horizontal edges and path representatives.
+     * To initialize the path representatives, an arbitrary vertex from each
+     * path is stored in pathRepresentatives.
      * Pre: vertexsStoredByX and vertexsStoredByY have been initialized.
+     * 
      */
-    private void initializeEdges() {
+    private void initializeEdgesAndPathRepresentatives() {
         verticalEdges = new ArrayList<VerticalEdge>();
         horizontalEdges = new ArrayList<HorizontalEdge>();
+        pathRepresentatives = new ArrayList<Point>();
         Map<Point,Boolean> visitedVertexs = new HashMap<Point,Boolean>();
         for (Point vertex : vertexs) {
             visitedVertexs.put(vertex, Boolean.FALSE);
@@ -206,6 +287,10 @@ public class Geomatrix implements Area {
         while (it.hasNext()) {
             
             Point vertex = it.next();
+            if (! visitedVertexs.get(vertex)) {
+                pathRepresentatives.add(vertex);
+            }
+            
             while (! visitedVertexs.get(vertex)) {
                 //in each iteration of this loop, we add a vertical and a
                 //horizontal edge with a common associated vertex
@@ -544,15 +629,6 @@ public class Geomatrix implements Area {
     private List<Point> getEdgesIntersect(Geomatrix other) {
         List<Point> intersectionPoints = new ArrayList<Point>();
         
-        for (VerticalEdge myEdge : verticalEdges)
-            for (HorizontalEdge aEdge : other.horizontalEdges)
-                if (myEdge.intersects(aEdge))
-                    intersectionPoints.add(myEdge.getIntersection(aEdge));
-
-        for (VerticalEdge aEdge : other.verticalEdges)
-            for (HorizontalEdge myEdge : horizontalEdges)        
-                if (aEdge.intersects(myEdge))
-                    intersectionPoints.add(aEdge.getIntersection(myEdge));
         for (VerticalEdge myEdge : verticalEdges) {
             boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.yInterval.size(), other.horizontalEdges.size());
             if (! betterByCoords) {
@@ -594,6 +670,20 @@ public class Geomatrix implements Area {
         }
         
         return intersectionPoints;
+    }
+
+    private boolean isEmpty() {
+        return vertexs.isEmpty();
+    }
+
+    private boolean noneTrue(List<Boolean> booleans) {
+        for (Boolean b : booleans) if (b) return false;
+        return true;
+    }
+
+    private boolean allTrue(List<Boolean> booleans) {
+        for (Boolean b : booleans) if (! b) return false;
+        return true;
     }
 
 }
