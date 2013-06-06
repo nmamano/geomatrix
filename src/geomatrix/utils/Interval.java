@@ -29,13 +29,22 @@ public class Interval {
     }
 
     /**
-     * Returns if a number 'number' is contained in the interal.
-     * @param number the number tested to see if it is contained.
-     * @return true if number is contained in the interval.
+     * Returns if a number 'number' is contained in the interval.
+     * @param number the number to be tested to see if it is contained.
+     * @return true if number is contained in this interval.
      */
     public boolean contains(int number) {
         return low < number && high > number;
         //The ends are not contained in the interval
+    }
+    
+    /**
+     * Returns if an interval is contained in the interval.
+     * @param other the interval to be tested to see if it is contained.
+     * @return true if interval is contained in this interval.
+     */
+    public boolean contains(Interval other) {
+        return low <= other.low && high >= other.high;
     }
     
     /**
@@ -113,6 +122,10 @@ public class Interval {
     @Override
     public String toString() {
         return "(" + low + ".." + high + ')';
+    }
+
+    public int size() {
+        return high - low;
     }
     
     

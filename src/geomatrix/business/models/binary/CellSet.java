@@ -9,7 +9,7 @@ import java.util.Iterator;
  * @author Nil
  */
 public interface CellSet 
-    extends Iterable {
+    extends Iterable<Cell> {
     
     /**
      * Returns whether the cell cell is contained in the set.

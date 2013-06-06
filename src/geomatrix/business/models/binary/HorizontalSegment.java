@@ -49,6 +49,35 @@ public class HorizontalSegment {
         return new Pair<Point, Point>(new Point(y,xInterval.low), 
                new Point(y,xInterval.high));
     }
+
+    /**
+     * Returns whether the horizontal segment other is contained in this.
+     * @param other the horizontal segment to be tested if it is contained.
+     * @return true if other is contained in this. false otherwise.
+     */
+    public boolean contains(HorizontalSegment other) {
+        return other.y == this.y && this.xInterval.contains(other.xInterval);
+    }
+
+    /**
+     * Returns whether the vertical segment 'segment' and this intersect.
+     * @param segment
+     * @return 
+     */
+    public boolean intersects(VerticalSegment segment) {
+        return segment.yInterval.contains(y) && xInterval.contains(segment.x);
+    }
+    
+    /**
+     * Given that this segment and 'segment' intersect, returns the grid point
+     * where they intersect.
+     * @param segment
+     * @return 
+     */
+    public Point getIntersection(VerticalSegment segment) {
+        assert(intersects(segment));
+        return new Point(segment.x, y);
+    }
     
     /**
      * In netbeans we trust.

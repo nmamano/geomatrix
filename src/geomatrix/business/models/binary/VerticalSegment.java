@@ -51,6 +51,35 @@ public class VerticalSegment {
     }
     
     /**
+     * Returns whether the vertical segment other is contained in this.
+     * @param other the vertical segment to be tested if it is contained.
+     * @return true if other is contained in this. false otherwise.
+     */
+    public boolean contains(VerticalSegment other) {
+        return other.x == this.x && this.yInterval.contains(other.yInterval);
+    }
+ 
+    /**
+     * Returns whether the horizontal segment 'segment' and this intersect.
+     * @param segment
+     * @return 
+     */
+    public boolean intersects(HorizontalSegment segment) {
+        return segment.xInterval.contains(x) && yInterval.contains(segment.y);
+    }
+    
+    /**
+     * Given that this segment and 'segment' intersect, returns the grid point
+     * where they intersect.
+     * @param segment
+     * @return 
+     */
+    public Point getIntersection(HorizontalSegment segment) {
+        assert(intersects(segment));
+        return new Point(x, segment.y);
+    }
+    
+    /**
      * In netbeans we trust.
      * @return 
      */

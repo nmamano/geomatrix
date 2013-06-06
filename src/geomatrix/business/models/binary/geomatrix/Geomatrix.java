@@ -9,6 +9,7 @@ import geomatrix.business.models.binary.Cell;
 import geomatrix.business.models.binary.CellSet;
 import geomatrix.business.models.binary.Point;
 import geomatrix.business.models.binary.Rectangle;
+import geomatrix.business.models.binary.VerticalSegment;
 import geomatrix.utils.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Geomatrix implementation of the master interface.
+ * Area implementation of the master interface.
  * @author Nil
  */
 public class Geomatrix implements Area {
@@ -79,8 +80,24 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public boolean contains(CellSet other) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean contains(CellSet c) {
+        assert(c instanceof Geomatrix);
+        Geomatrix other = (Geomatrix) c;
+        
+        //1) check whether at least one vertex is contained
+        if (! contains(other.vertexs.get(0)))
+            return false;
+        
+        //2) check that no edge of the the area intersects with an edge of this
+        //area
+        if (doEdgesIntersect(other)) return false;
+        
+        //3) check that no vertex of the implicit parameter is within the area
+        //of the polygon
+        for (Point vertex : vertexs)
+            if (other.contains(vertex)) return false;
+
+        return true; 
     }
 
     @Override
@@ -357,6 +374,226 @@ public class Geomatrix implements Area {
                 horizontalEdgesStoredByY.put(e.y, new ArrayList<HorizontalEdge>());
             horizontalEdgesStoredByY.get(e.y).add(e);
         }
+    }
+    
+    /**
+     * Returns whether a given grid point is contained in the area.
+     * @param point the grid point which might be contained.
+     * @return true if point is contained in the area. false otherwise.
+     */
+    private boolean contains(Point point) {
+        List<Boolean> adjacentSquares = areAdjacentCellsContained(point);
+        for (Boolean b : adjacentSquares)
+            if (! b) return false; 
+        
+        return true;
+    }
+
+    /**
+     * Given a grid point, returns whether each of the four adjacent cells is
+     * contained.
+     * This is optimized acording to the following observation:
+     * to see if a cell is contained, if it is known whether an adjacent
+     * cell is contained or not, it must only be checked whether there
+     * is an edge between them.
+     * @param point the point the contention of the adjacent cells of which is
+     * to be checked.
+     * @return list with exactly 4 booleans indicating whether the top left 
+     * cell, top right cell, bottom left cell and bottom right cell are
+     * contained, in this order.
+     */
+    private List<Boolean> areAdjacentCellsContained(Point point) {
+                
+        // +-------------+-------------+
+        // |             |             |
+        // |             |             |
+        // |             u             |
+        // |   topLeft   p  topRight   |
+        // |             E             |
+        // |             |             |
+        // |             |             |
+        // +----leftE----p---rightE----+
+        // |             |             |
+        // |             d             |
+        // |             o             |
+        // | bottomLeft  w bottomRight |
+        // |             n             |
+        // |             E             |
+        // |             |             |
+        // +-------------+-------------+
+             
+        //one boolean for each adjacent cell: true if they are contained,
+        //false otherwise
+        boolean topLeft, topRight, bottomRight, bottomLeft;
+        //one boolean for each adjacent line segment: true if they are part
+        //of an edge, false otherwise
+        //upE is not needed: we will reach the top left cell through the bottom
+        //left cell
+        boolean rightE, downE, leftE;
+        rightE = downE = leftE = false;
+        
+        //find which line segments are edges
+        if (verticalEdgesStoredByX.containsKey(point.x)) {
+            for (VerticalEdge v : verticalEdgesStoredByX.get(point.x))
+                if (v.contains(new VerticalSegment(point.x, point.y+1, point.y)))
+                    downE = true;
+        }
+        if (horizontalEdgesStoredByY.containsKey(point.y)) {
+            for (HorizontalEdge v : horizontalEdgesStoredByY.get(point.y)) {
+                if (v.contains(new HorizontalEdge(point.y, point.x+1, point.x)))
+                    rightE = true;
+                if (v.contains(new HorizontalEdge(point.y, point.x, point.x-1)))
+                    leftE = true;
+            }
+        }
+        
+        //check if bottomRight is contained with usual method
+        bottomRight = contains(new Cell(point.x, point.y));
+        
+        //bottomLeftSq will be the same as bottomRightSq unless downE is true
+        if (downE) bottomLeft = ! bottomRight;
+        else bottomLeft = bottomRight;
+        
+        //topRightSq will be the same as bottomRightSq unless rightE is true
+        if (rightE) topRight = ! bottomRight;
+        else topRight = bottomRight;
+        
+        //topLeftSq will be the same as bottomLeftSq unless leftE is true
+        if (leftE) topLeft = ! bottomLeft;
+        else topLeft = bottomLeft;
+        
+        List<Boolean> result = new ArrayList<Boolean>();
+        result.add(topLeft);
+        result.add(topRight);
+        result.add(bottomLeft);
+        result.add(bottomRight);
+        
+        return result;
+    }
+    
+    /**
+     * Returns whether 2 edges of different areas intersect somewhere in the
+     * plane.
+     * @param other
+     * @return 
+     */
+    private boolean doEdgesIntersect(Geomatrix other) {
+        for (VerticalEdge myEdge : verticalEdges) {
+            boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.yInterval.size(), other.horizontalEdges.size());
+            if (! betterByCoords) {
+                for (HorizontalEdge otherEdge : other.horizontalEdges) {
+                    if (myEdge.intersects(otherEdge)) return true;
+                }
+            }
+            else {
+                for (int y = myEdge.yInterval.low+1; y < myEdge.yInterval.high; ++y) {
+                    for (HorizontalEdge otherEdge : other.horizontalEdgesStoredByY.get(y)) {
+                        if (myEdge.intersects(otherEdge)) return true;
+                    }
+                }
+            }
+        }
+        
+        for (VerticalEdge otherEdge : other.verticalEdges) {
+            boolean betterByCoords = shouldIterateEdgesByCoords(otherEdge.yInterval.size(), horizontalEdges.size());
+            if (! betterByCoords) {
+                for (HorizontalEdge myEdge : horizontalEdges) {
+                    if (otherEdge.intersects(myEdge)) return true;
+                }
+            }
+            else {
+                for (int y = otherEdge.yInterval.low+1; y < otherEdge.yInterval.high; ++y) {
+                    for (HorizontalEdge myEdge : horizontalEdgesStoredByY.get(y)) {
+                        if (otherEdge.intersects(myEdge)) return true;
+                    }
+                }                
+            }
+        }
+        
+        return false;    
+    }
+
+    /**
+     * In the context of finding the edge intersections of an edge e in respect
+     * to the set of edges S of the opposed kind, returns whether it is more
+     * efficient to check only the edges of S such that their fixed coordinate
+     * falls within the interval of coordinates of e (with the
+     * edgesSortedByCoordinate HashMaps) or to check all edges in S.
+     * This second case is preferable when e is very large in comparison
+     * to the size of S.
+     * The optimum choice depends on the particular distribution of the edges of
+     * S, so this method returns only an estimation. In particular, returns that
+     * it is preferable to iterate through the coordinate-matching edges instead
+     * of through all vertexs if the lentgh of e is smaller than 3/4 of the size
+     * of S
+     * @param edgeLength the lentgh of e.
+     * @param numberOfEdges the size of S.
+     * @return true if it is more efficient to check only the
+     * coordinate-matching edges instead of all edges.
+     */
+    private boolean shouldIterateEdgesByCoords(int edgeLength, int numberOfEdges) {
+        return edgeLength < (3*numberOfEdges)/4;
+    }
+        
+    /**
+     * Returns all grid points where 2 edges of this area and other intersect
+     * somewhere in the grid.
+     * @param other
+     * @return 
+     */
+    private List<Point> getEdgesIntersect(Geomatrix other) {
+        List<Point> intersectionPoints = new ArrayList<Point>();
+        
+        for (VerticalEdge myEdge : verticalEdges)
+            for (HorizontalEdge aEdge : other.horizontalEdges)
+                if (myEdge.intersects(aEdge))
+                    intersectionPoints.add(myEdge.getIntersection(aEdge));
+
+        for (VerticalEdge aEdge : other.verticalEdges)
+            for (HorizontalEdge myEdge : horizontalEdges)        
+                if (aEdge.intersects(myEdge))
+                    intersectionPoints.add(aEdge.getIntersection(myEdge));
+        for (VerticalEdge myEdge : verticalEdges) {
+            boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.yInterval.size(), other.horizontalEdges.size());
+            if (! betterByCoords) {
+                for (HorizontalEdge otherEdge : other.horizontalEdges) {
+                    if (myEdge.intersects(otherEdge)) {
+                        intersectionPoints.add(myEdge.getIntersection(otherEdge));
+                    }
+                }
+            }
+            else {
+                for (int y = myEdge.yInterval.low+1; y < myEdge.yInterval.high; ++y) {
+                    for (HorizontalEdge otherEdge : other.horizontalEdgesStoredByY.get(y)) {
+                        if (myEdge.intersects(otherEdge)) {
+                            intersectionPoints.add(myEdge.getIntersection(otherEdge));
+                        }
+                    }
+                }
+            }
+        }
+        
+        for (VerticalEdge otherEdge : other.verticalEdges) {
+            boolean betterByCoords = shouldIterateEdgesByCoords(otherEdge.yInterval.size(), horizontalEdges.size());
+            if (! betterByCoords) {
+                for (HorizontalEdge myEdge : horizontalEdges) {
+                    if (otherEdge.intersects(myEdge)) {
+                        intersectionPoints.add(myEdge.getIntersection(otherEdge));
+                    }
+                }
+            }
+            else {
+                for (int y = otherEdge.yInterval.low+1; y < otherEdge.yInterval.high; ++y) {
+                    for (HorizontalEdge myEdge : horizontalEdgesStoredByY.get(y)) {
+                        if (otherEdge.intersects(myEdge)) {
+                            intersectionPoints.add(myEdge.getIntersection(otherEdge));
+                        }
+                    }
+                }                
+            }
+        }
+        
+        return intersectionPoints;
     }
 
 }
