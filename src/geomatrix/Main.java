@@ -8,7 +8,7 @@ package geomatrix;
  *
  * @author Nil
  */
-public class Geomatrix {
+public class Main {
 
     /**
      * @param args the command line arguments

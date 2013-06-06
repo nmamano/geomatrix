@@ -5,27 +5,27 @@ import geomatrix.utils.Interval;
 import geomatrix.utils.Pair;
 
 /**
- * Represents a vertical segment.
+ * Represents a horizontal segment.
  * @author Nil
  */
-public class VerticalSegment {
-    public int x;
-    public Interval yInterval;
+public class HorizontalSegment {
+    public int y;
+    public Interval xInterval;
 
     /**
      * Constructor from x and y values.
-     * Pre: y1 != y2
-     * @param x
-     * @param y1
-     * @param y2 
+     * Pre: x1 != x2
+     * @param y
+     * @param x1
+     * @param x2 
      */
-    public VerticalSegment(int x, int y1, int y2) {
-        this(x, new Interval(y1, y2));
+    public HorizontalSegment(int y, int x1, int x2) {
+        this(y, new Interval(x1, x2));
     }
     
-    public VerticalSegment(int x, Interval yInterval) {
-        this.x = x;
-        this.yInterval = yInterval;
+    public HorizontalSegment(int y, Interval xInterval) {
+        this.y = y;
+        this.xInterval = xInterval;
     }
 
     /**
@@ -46,8 +46,8 @@ public class VerticalSegment {
      * @return a pair with both endpoints.
      */
     public Pair<Point, Point> getEndpoints() {
-        return new Pair<Point, Point>(new Point(x,yInterval.low), 
-               new Point(x,yInterval.high));
+        return new Pair<Point, Point>(new Point(y,xInterval.low), 
+               new Point(y,xInterval.high));
     }
     
     /**
@@ -57,8 +57,8 @@ public class VerticalSegment {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 89 * hash + this.x;
-        hash = 89 * hash + (this.yInterval != null ? this.yInterval.hashCode() : 0);
+        hash = 89 * hash + this.y;
+        hash = 89 * hash + (this.xInterval != null ? this.xInterval.hashCode() : 0);
         return hash;
     }
 
@@ -75,11 +75,11 @@ public class VerticalSegment {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final VerticalSegment other = (VerticalSegment) obj;
-        if (this.x != other.x) {
+        final HorizontalSegment other = (HorizontalSegment) obj;
+        if (this.y != other.y) {
             return false;
         }
-        if (this.yInterval != other.yInterval && (this.yInterval == null || !this.yInterval.equals(other.yInterval))) {
+        if (this.xInterval != other.xInterval && (this.xInterval == null || !this.xInterval.equals(other.xInterval))) {
             return false;
         }
         return true;

@@ -29,6 +29,10 @@ public class LinkedMatrix implements CellSet {
     LinkedCell first;
     LinkedCell last;
 
+    /**
+     * Constructor from another linked matrix.
+     * @param matrix linked matrix this matrix will be a copy of.
+     */
     private LinkedMatrix(LinkedMatrix matrix) {
         this(matrix.maxX, matrix.maxY);
         for (Object nextCell : matrix) {
@@ -37,6 +41,12 @@ public class LinkedMatrix implements CellSet {
         }
     }
     
+    /**
+     * Constructor of empty cell set. maxX and maxY determine the maximum size
+     * of the matrix thorough its life time.
+     * @param maxX
+     * @param maxY 
+     */
     public LinkedMatrix(int maxX, int maxY) {
         this.maxX = maxX;
         this.maxY = maxY;
@@ -172,6 +182,92 @@ public class LinkedMatrix implements CellSet {
             cellBoolean.previous.next = cellBoolean.next;
             cellBoolean.next.previous = cellBoolean.previous;     
         }
+    }
+    
+    /**
+     * Returns whether this linked matrix is consistent.
+     * A linked matrix is consistent if all its linked cells are consistent and
+     * the iteration goes trough them all.
+     * @return true if this linked matrix is consistent. false otherwise.
+     */
+    public boolean valid() {
+        return areCellsValid() && isListExhaustive();
+    }
+
+    /**
+     * Returns whether all linked cells are valid.
+     * @return true if all linked cells are valid. false otherwise.
+     */
+    private boolean areCellsValid() {
+        for (int i = 0; i < maxX; ++i) {
+            for (int j = 0; j < maxY; ++j) {
+                boolean isFirst = cellArray[i][j] == first;
+                boolean isLast = cellArray[i][j] == last;
+                if (! cellArray[i][j].valid(i, j, isFirst, isLast)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns whether the iteration visits all contained cells.
+     * It also returns false if the iteration happens to fall in a loop.
+     * @return true if the iteration visits all contained cells. False
+     * otherwise.
+     */
+    private boolean isListExhaustive() {
+        boolean[][] visitedCells;
+        try {
+            visitedCells = markVisitedCells();
+        }
+        catch (IteratorLoopException e) {
+            //list is cyclic
+            return false;
+        }
+        return doVisitedCellsMatch(visitedCells);  
+    }
+
+    /**
+     * Marks the cells visited by the iterator (that is, the contained cells) in
+     * a matrix of booleans.
+     * @return the matrix of booleans with the mapping of visited cells by the
+     * iterator.
+     * @throws IteratorLoopException 
+     */
+    private boolean[][] markVisitedCells() throws IteratorLoopException {
+        boolean[][] containedCells = new boolean[maxX][maxY];
+        for (Object nextCell : this) {
+            Cell cell = (Cell) nextCell;
+            int x = cell.x;
+            int y = cell.y;
+            if (containedCells[x][y]) {
+                //list has a cycle!
+                throw new IteratorLoopException();
+            }
+            containedCells[x][y] = true;
+        }
+        return containedCells;
+    }
+
+    /**
+     * Returns whether the cells marked by cellArray and containedCells are the
+     * same.
+     * @param visitedCells a matrix of booleans indicating the visited cells by
+     * the iterator.
+     * @return true if the visited cells and the contained cells match. false
+     * otherwise.
+     */
+    private boolean doVisitedCellsMatch(boolean[][] visitedCells) {
+        for (int i = 0; i < maxX; ++i) {
+            for (int j = 0; j < maxY; ++j) {
+                if (cellArray[i][j].contained != visitedCells[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

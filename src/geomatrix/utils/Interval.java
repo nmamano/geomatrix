@@ -7,12 +7,25 @@ package geomatrix.utils;
  * @author Nil
  */
 public class Interval {
-    int low;
-    int high;
+    public int low;
+    public int high;
 
-    public Interval(int low, int high) {
-        this.low = low;
-        this.high = high;
+    /**
+     * Constructor.
+     * Pre: end1 != end2
+     * @param end1 one of the ends of the interval.
+     * @param end2 the other end of the interval.
+     */
+    public Interval(int end1, int end2) {
+        assert(end1 != end2);
+        if (end1 < end2) {
+            low = end1;
+            high = end2;
+        }
+        else {
+            low = end2;
+            high = end1;
+        }
     }
 
     /**
