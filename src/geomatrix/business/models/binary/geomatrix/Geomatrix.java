@@ -11,6 +11,7 @@ import geomatrix.business.models.binary.Point;
 import geomatrix.business.models.binary.Rectangle;
 import geomatrix.utils.Pair;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -64,7 +65,17 @@ public class Geomatrix implements Area {
     
     @Override
     public boolean contains(Cell cell) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //apply ray-casting algorithm; direction: positive side of the x axis
+        int intersectionCount = 0;
+        LeftWideRay ray = new LeftWideRay(cell);
+        
+        for (VerticalEdge edge : verticalEdges) {
+            if (edge.intersects(ray)) ++intersectionCount;
+            if (edge.x > ray.origin.x) break;
+        }
+        
+        //return result according to the odd-even rule
+        return (intersectionCount % 2) == 1;
     }
 
     @Override
@@ -140,6 +151,7 @@ public class Geomatrix implements Area {
     private void initializeDataStructsFromVertexs() {
         initializeMapsOfVertexs();
         initializeEdges();
+        sortVerticalEdges();
         initializeMapsOfEdges();
     }
 
@@ -321,6 +333,13 @@ public class Geomatrix implements Area {
         return eastCount%2 == 1;
     }
 
+    /**
+     * Sorts vertical edges by their x coordinate.
+     */
+    private void sortVerticalEdges() {
+        Collections.sort(verticalEdges);
+    }
+        
     /**
      * Initializes verticalEdgesStoredByX and verticalEdgesStoredByY.
      */
