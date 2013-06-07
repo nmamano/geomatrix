@@ -42,6 +42,15 @@ class VerticalEdge extends VerticalSegment implements Comparable {
     }
 
     /**
+     * Returns whether the right wide ray 'ray' intersects with this edge.
+     * @param ray the ray whose intersection with this edge is to be tested.
+     * @return true if 'ray' intersects with this edge. 
+     */
+    boolean intersects(RightWideRay ray) {
+        return x > ray.origin.x && yInterval.low <= ray.origin.y && yInterval.high > ray.origin.y;
+    }
+    
+    /**
      * Compares this VerticalEdge with the specified edge for order.
      * Vertical edges are sorted by their x coordinate.
      * Returns -1, 0, or 1 as this object is less than, equal to, or greater

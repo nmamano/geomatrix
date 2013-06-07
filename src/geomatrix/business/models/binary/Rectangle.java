@@ -14,8 +14,8 @@ import geomatrix.utils.Interval;
  */
 public class Rectangle {
     
-    Point topLeft;
-    Point bottomRight;
+    public Point topLeft;
+    public Point bottomRight;
 
     public Rectangle(Point topLeft, Point bottomRight) {
         this.topLeft = topLeft;

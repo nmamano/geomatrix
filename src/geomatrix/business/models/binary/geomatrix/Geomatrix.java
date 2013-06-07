@@ -16,8 +16,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -29,6 +31,11 @@ public class Geomatrix implements Area {
     private List<Point> vertexs;
     private List<VerticalEdge> verticalEdges;
     private List<HorizontalEdge> horizontalEdges;
+    
+    /**
+     * The smallest rectangle that contains this area.
+     */
+    Rectangle boundingRectangle;
     
     /**
      * This list contains one arbitrary vertex from each path of this area.
@@ -217,7 +224,7 @@ public class Geomatrix implements Area {
 
     @Override
     public Iterator<Cell> iterator() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new GeomatrixIterator();
     }
     
         @Override
@@ -242,7 +249,7 @@ public class Geomatrix implements Area {
 
     @Override
     public Rectangle getBoundingRectangle() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return boundingRectangle;
     }
 
     @Override
@@ -276,19 +283,42 @@ public class Geomatrix implements Area {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String nl = System.getProperty("line.separator");
+
+        result.append("Area:" + nl);
+        result.append("List of vertexs:" + nl);
+        for (Point vertex : vertexs) {
+            result.append(vertex.toString() + "\t");
+        }
+
+        result.append(nl + "List of vertical segments:" + nl);
+        for (VerticalEdge edge : verticalEdges) {
+            result.append(edge.toString() + "\t");
+        }
+        result.append(nl);
+        return result.toString();
+    }
+        
     private void initializeDataStructsFromVertexs() {
-        initializeMapsOfVertexs();
+        initializeMapsOfVertexsAndBoundingRectangle();
         initializeEdgesAndPathRepresentatives();
         sortVerticalEdges();
         initializeMapsOfEdges();
     }
 
     /**
-     * Initializes vertexsStoredByX and vertexsStoredByY.
+     * Initializes vertexsStoredByX and vertexsStoredByY and the bounding
+     * rectangle in the same loop.
      */
-    private void initializeMapsOfVertexs() {
+    private void initializeMapsOfVertexsAndBoundingRectangle() {
         vertexsStoredByX = new HashMap<Integer,List<Point>>();
         vertexsStoredByY = new HashMap<Integer,List<Point>>();
+        
+        Integer maxX, minX, maxY, minY;
+        maxX = minX = maxY = minY = null;
         
         for (Point p : vertexs) {
             if (!vertexsStoredByX.containsKey(p.x))
@@ -298,7 +328,22 @@ public class Geomatrix implements Area {
             if (!vertexsStoredByY.containsKey(p.y))
                 vertexsStoredByY.put(p.y, new ArrayList<Point>());
             vertexsStoredByY.get(p.y).add(p);
+            
+            //part corresponding to the bounding box
+            if (maxX == null || p.x > maxX) {
+                maxX = p.x;
+            } else if (minX == null || p.x < minX) {
+                minX = p.x;
+            }
+            if (maxY == null || p.y > maxY) {
+                maxY = p.y;
+            } else if (minY == null || p.y < minY) {
+                minY = p.y;
+            }
         }
+        
+        if (maxX == null) boundingRectangle = new Rectangle(new Point(0,0), new Point(0,0));
+        else boundingRectangle = new Rectangle(new Point(minX, minY), new Point(maxX, maxY));
     }
 
     /**
@@ -719,5 +764,117 @@ public class Geomatrix implements Area {
         for (Boolean b : booleans) if (! b) return false;
         return true;
     }
+
+    private class GeomatrixIterator implements Iterator<Cell> {
+      
+        private Cell currentCell = null;
+        private int currentRow;
+        private RowIterator rowIterator;
+        
+        public GeomatrixIterator() {
+            currentRow = boundingRectangle.topLeft.y;
+            rowIterator = new RowIterator(currentRow);
+            advanceToNext();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentCell != null;
+        }
+
+        @Override
+        public Cell next() {
+            Cell beforeAdvancingCell = currentCell;
+            advanceToNext();
+            return beforeAdvancingCell;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove is not supported.");
+        }
+
+        private void advanceToNext() {
+            if (rowIterator.hasNext()) {
+                currentCell = rowIterator.next();
+            }
+            else {
+                while (currentRow < boundingRectangle.bottomRight.y) {
+                    ++currentRow;
+                    rowIterator = new RowIterator(currentRow);
+                    if (rowIterator.hasNext()) {
+                        currentCell = rowIterator.next();
+                        return;
+                    }
+                }
+                currentCell = null;
+            }
+        }
+        
+    }
+    
+    private class RowIterator implements Iterator<Cell> {
+        
+        private Queue<Integer> segments;
+        private int currentX;
+        private int y;
+        boolean endOfRow;
+        
+        public RowIterator(int row) {
+            y = row;
+            initializeSegments();
+            findFirstSegment();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return ! endOfRow;
+        }
+
+        @Override
+        public Cell next() {
+            Cell beforeAdvancingCell = new Cell(currentX, y);
+            advanceToNext();
+            return beforeAdvancingCell;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove is not supported.");
+        }
+        
+        private void initializeSegments() {  
+            segments = new LinkedList<Integer>(); 
+            RightWideRay ray = new RightWideRay(new Cell(boundingRectangle.topLeft.x-1, y));
+            for (VerticalEdge edge : verticalEdges)
+                if (edge.intersects(ray))
+                    segments.add(edge.x);
+        }
+
+        private void advanceToNext() {
+            if (currentX < segments.peek()-1) ++currentX;
+            else {
+                segments.remove();
+                if (segments.isEmpty()) {
+                    endOfRow = true;
+                }
+                else {
+                    currentX = segments.poll();
+                }
+            }
+        }
+
+        private void findFirstSegment() {
+            if (segments.isEmpty()) {
+                //there is no segment in this row
+                endOfRow = true;
+            }
+            else {
+                currentX = segments.poll();
+            }
+        }
+        
+    }
+
 
 }
