@@ -68,6 +68,17 @@ public class Geomatrix implements Area {
     }
     
     /**
+     * Returns a copy of original.
+     * @param original the geomatrix to be copied.
+     * @return a copy of original.
+     */
+    public static Geomatrix copy(Geomatrix original) {
+        Geomatrix g = new Geomatrix();
+        g.build(original.vertexs);
+        return g;
+    }
+    
+    /**
      * Initializes the Geomatrix from the list of its vertexs.
      * @param vertexs the vertexs that this geomatrix has to have.
      */
@@ -183,13 +194,25 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public void intersection(CellSet other) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void intersection(CellSet c) {
+        assert(c instanceof Geomatrix);
+        Geomatrix other = (Geomatrix) c;
+        
+        //A^B = (A XOR B) XOR A+B
+        Geomatrix thisUnionOther = copy(this);
+        thisUnionOther.union(other);
+        
+        symmetricDifference(other);
+        symmetricDifference(thisUnionOther); 
     }
 
     @Override
-    public void difference(CellSet other) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void difference(CellSet c) {
+        assert(c instanceof Geomatrix);
+        Geomatrix other = (Geomatrix) c;
+        
+        union(other);
+        symmetricDifference(other);
     }
 
     @Override
@@ -233,8 +256,19 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public void symmetricDifference(CellSet other) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void symmetricDifference(CellSet c) {
+        assert(c instanceof Geomatrix);
+        Geomatrix other = (Geomatrix) c;
+        
+        Set<Point> vertexsSet = new HashSet<Point>();
+        vertexsSet.addAll(vertexs);
+        
+        for (Point p : other.vertexs){
+            if (vertexsSet.contains(p)) vertexsSet.remove(p);
+            else vertexsSet.add(p);
+        }
+        
+        build(new ArrayList(vertexsSet)); 
     }
 
     @Override
