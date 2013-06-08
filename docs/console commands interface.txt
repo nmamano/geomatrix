@@ -1,0 +1,153 @@
+There can be only one interface.
+The interface has 2 elements:
+The panel, a list of the current existing areas.
+The grid, where the areas can be displayed graphically.
+An interface has 2 attributes: xSizy and ySize.
+
+There can be 0..10 areas.
+An area can be in one of 3 states: hidden, shown or selected.
+There is at most one area in state selected.
+There can't be shown areas without a selected area.
+An area has 2 attributes: an ID and a color.
+
+There are 10 colors in order.
+
+The panel:
+It is a vertical list of the current existing areas.
+For each one, the ID and color is displayed.
+When an area is deleted the areas below it are shifted upwards to fill the gap,
+but their ID or color doesn't change.
+The areas in state shown are brighten up.
+The area in state selected is marked.
+
+The grid:
+It is a grid where the areas in state shown and selected are displayed.
+For each displayed area:
+The vertexs are printed with the color of the area.
+If the area is consistent, the contained cells are shaded with the color of the area.
+If the area is not consistent, the lines that have an odd number of vertexs are
+brighten up with the color of the area.
+Question: what happens when 2 shown areas share an edge or vertex? what color is displayed?
+
+Commands:
+
+# grid 'xSize' 'ySize'
+pre:
+1. 60 >= ySize >= 30
+2. 100 >= xSize >= 5
+post:
+if there was no interface, it is created with the indicated size and no areas.
+if there was an interface, it is resized with the indicated size and all areas are deleted.
+
+# grid
+pre: -
+post:
+if there was no interface, it is created with size 60x30 and no areas.
+if there was an interface, all areas are deleted (size doesn't change).
+
+# add
+pre:
+1. there is an interface
+2. there are less than 10 areas
+post:
+a new area is created:
+state selected, ID equal to the last area created + 1, color equal to the first unused color.
+
+# remove 'id'
+pre:
+1. there is an interface
+2. there is an area with the indicated id
+post:
+the area with the indicated id is deleted.
+Its color is freed.
+
+# reset
+pre:
+1. there is an interface
+post:
+the ids of the areas mute into consecutive numbers starting from 1.
+
+# show 'id'
+pre:
+1. there is an interface
+2. there is an area A with the indicated id
+3. A is hidden
+post:
+A goes from hidden to shown
+
+# hide 'id'
+pre:
+1. there is an interface
+2. there is an area A with the indicated id
+3. A is not hidden
+post:
+if A is selected, A turns into hidden; the new selected area is the shown area with the lowest ID, if any.
+if A is shown, A turns into hidden;
+
+# select 'id'
+pre:
+1. there is an interface
+2. there is an area A with the indicated id
+3. A is not selected
+post:
+A turns into selected, the previous selected area turns into shown
+
+# vertex 'x' 'y'
+pre:
+1. there is an interface
+2. there is a selected area
+3. the vertex (x,y) is not a vertex of the selected area
+4. 0 < x < xSize
+5. 0 < y < ySize
+post:
+the vertex (x,y) is added to the selected area
+
+# clean 'x' 'y'
+pre:
+1. there is an interface
+2. there is a selected area
+3. the vertex (x,y) is a vertex of the selected area
+4. 0 <= x < xSize
+5. 0 <= y < ySize
+post:
+the vertex (x,y) is removed from this area
+
+# union 'id'
+pre:
+1. there is an interface
+2. there is a selected area
+3. there is an area with the indicated id that is not the selected area
+post:
+the selected area becomes the union of itself and the area with the indicated id
+
+# intersection 'id'
+pre:
+1. there is an interface
+2. there is a selected area
+3. there is an area with the indicated id that is not the selected area
+post:
+the selected area becomes the intersection of itself and the area with the indicated id
+
+# difference 'id'
+pre:
+1. there is an interface
+2. there is a selected area
+3. there is an area with the indicated id that is not the selected area
+post:
+the selected area becomes the difference of itself minus the area with the indicated id
+
+# next
+pre:
+1. there is an interface
+2. there is a selected area
+3. not all contained cells of the selected area have been shadowed (hasNext)
+post:
+the next non-shadowed cell according to the iteratior of the selected area is
+shadowed (to show it's been iterated over)
+
+# iterator
+pre:
+1. there is an interface
+2. there is a selected area
+post:
+any contained cell of the selected area that had been shadowed is not shadowed anymore.

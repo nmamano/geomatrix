@@ -229,22 +229,58 @@ public class Geomatrix implements Area {
     
         @Override
     public void translation(Point p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Point> newVertexs = new ArrayList<Point>();
+        for (Point v : vertexs) {
+            newVertexs.add(new Point(v.x + p.x, v.y + p.y));
+        }
+        build(newVertexs);
     }
 
     @Override
     public void verticalReflection() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Point> newVertexs = new ArrayList<Point>();
+        for (Point v : vertexs) {
+            newVertexs.add(new Point(-v.x, v.y));
+        }
+        build(newVertexs);
     }
 
     @Override
     public void horizontalReflection() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Point> newVertexs = new ArrayList<Point>();
+        for (Point v : vertexs) {
+            newVertexs.add(new Point(v.x, -v.y));
+        }
+        build(newVertexs);
     }
 
     @Override
     public void rotation(int degrees) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Point> newVertexs = new ArrayList<Point>();
+        
+        degrees = degrees % 360;
+        if (degrees < 0) degrees += 360;
+        
+        if (degrees == 90) {
+            for (Point v : vertexs) {
+                newVertexs.add(new Point(-v.y, v.x));
+            }
+        }
+        else if (degrees == 180) {
+            for (Point v : vertexs) {
+                newVertexs.add(new Point(-v.x, -v.y));
+            }            
+        }
+        else if (degrees == 270) {
+            for (Point v : vertexs) {
+                newVertexs.add(new Point(v.y, -v.x));
+            }            
+        }
+        else {
+            assert(degrees == 0);
+        }
+        
+        build(newVertexs);
     }
 
     @Override
