@@ -295,6 +295,33 @@ public class Geomatrix implements Area {
 
     @Override
     public Iterator<Point> iterator(Rectangle rectangle) {
+        /*
+         * Idea for algorithm:
+         * Compute area A.
+         * Iterate through the contained cells of A with the usual iterator, but
+         * return cells as points.
+         * 
+         * the area A is computed as follows:
+         * A is this area minus each area of a collection of areas CA.
+         * 
+         * The collection of areas CA is computed as follows: 
+         * There is an area in CA for each S
+         * 
+         * Where S is one of the following four possibilities:
+         * a vertical edge not intersected by any other edge with the contained
+         * adjacent cells to its right.
+         * a portiion of vertical edge intersected by another edge, between two
+         * intersections or endpoints such that the contained adjacent cells are
+         * found to its right.
+         * the equialent but for horizontal edges with the contained adjacent
+         * cells below it.
+         * 
+         * From each S, the associated area in CA is calculated as follows:
+         * if S is a vertical segment:
+         * S is enlarged upwards the height of rectangle -1.
+         * The area is a rectangle that has S as right edge, and width the width
+         * of rectangle -1 (all the edges can be deduced by this)
+         */
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -316,6 +343,51 @@ public class Geomatrix implements Area {
 
     @Override
     public int size() {
+        /*
+         * Idea for algorithm:
+         * put all edges in a collection CS of segments; in case of intersecting
+         * edges, put the part of the segment to each side of the intersection
+         * in CS separately.
+         * Now, for each concave vertex v (those with 3 adjacent contained cells)
+         * propagate a ray in the opposed directions of the direction where its
+         * associated edges are; add to CS the segments between v and the first
+         * intersection of the rays.
+         * 
+         * Now, find all the grid points where the ending point of two or more
+         * segments of CS meet, and indicate for each of them how many. Put the
+         * grid points in a collection CP
+         * 
+         * while CP is not empty:
+         * find a point p in CP that is endpoint of exactly 2 segments of CS.
+         * Create the rectangle characterized by the 2 segments (by deducing the
+         * remaining 2 segments) and put it in a collection of rectangles CR;
+         * delete p from CP and the 2 segments from CS;
+         * update the number of ending points for each point in CP now that 2
+         * segments have been deleted;
+         * if any point in CP is endpoint of exactly one segment, delete it from
+         * CP.
+         * 
+         * Build an area A as the union of all the areas defined by each
+         * rectangle in CR.
+         * 
+         * A = A\this area
+         * now A is the holes of this area
+         * 
+         * Fragment A in rectangles as done above in a collection of rectangles
+         * CA.
+         * 
+         * Now calculate the size as CR.totalSize() - CA.totalSize()
+         * 
+         * Where the size of a collection of rectangles is the sum of the size
+         * of the each rectangle (height*width).
+         * 
+         * 
+         * 
+         * Algorithm 2:
+         * return descomposition().totalSize()
+         * 
+         * Sadly, descomposition has not been implemented yet :(
+         */
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
