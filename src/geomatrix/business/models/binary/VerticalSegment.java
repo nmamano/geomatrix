@@ -1,31 +1,32 @@
 
 package geomatrix.business.models.binary;
 
+import geomatrix.utils.Direction;
 import geomatrix.utils.Interval;
 import geomatrix.utils.Pair;
 
 /**
- * Represents a vertical segment.
+ *
  * @author Nil
  */
-public class VerticalSegment {
+public class VerticalSegment implements Comparable {
     public int x;
     public Interval yInterval;
-
+    
     /**
      * Constructor from x and y values.
-     * Pre: y1 != y2
+     * Pre: rangeEnd1 != rangeEnd2
      * @param x
-     * @param y1
-     * @param y2 
+     * @param rangeEnd1
+     * @param rangeEnd2 
      */
-    public VerticalSegment(int x, int y1, int y2) {
-        this(x, new Interval(y1, y2));
+    public VerticalSegment(int fixed, int rangeEnd1, int rangeEnd2) {
+        this(fixed, new Interval(rangeEnd1, rangeEnd2));
     }
     
-    public VerticalSegment(int x, Interval yInterval) {
-        this.x = x;
-        this.yInterval = yInterval;
+    public VerticalSegment(int fixed, Interval interval) {
+        this.x = fixed;
+        this.yInterval = interval;
     }
 
     /**
@@ -51,32 +52,72 @@ public class VerticalSegment {
     }
     
     /**
-     * Returns whether the vertical segment other is contained in this.
-     * @param other the vertical segment to be tested if it is contained.
+     * Returns whether the segment other is contained in this.
+     * pre: this and other have the same direction (vertical or horizontal)
+     * @param other the segment to be tested if it is contained.
      * @return true if other is contained in this. false otherwise.
      */
     public boolean contains(VerticalSegment other) {
+        assert(this.getClass().equals(other.getClass()));
         return other.x == this.x && this.yInterval.contains(other.yInterval);
     }
  
     /**
-     * Returns whether the horizontal segment 'segment' and this intersect.
-     * @param segment
+     * Returns whether the segment 'segment' and this intersect.
+     * pre: this and other have different directions (vertical and horizontal)
+     * @param other
      * @return 
      */
-    public boolean intersects(HorizontalSegment segment) {
-        return segment.xInterval.contains(x) && yInterval.contains(segment.y);
+    public boolean intersects(VerticalSegment other) {
+        assert(! this.getClass().equals(other.getClass()));
+        return other.yInterval.contains(x) && yInterval.contains(other.x);
+    }
+    
+    /**
+     * Returns whether the wide ray 'ray' intersects with this edge.
+     * pre: ray propagates to east or west.
+     * @param ray the ray whose intersection with this edge is to be checked.
+     * @return true if the wide ray 'ray' intersects with this edge. false
+     * otherwise.
+     */
+    public boolean intersects(WideRay ray) {
+        assert(ray.direction == Direction.E || ray.direction == Direction.W);
+        if (ray.direction == Direction.E) {
+            return x > ray.origin.x && yInterval.low <= ray.origin.y &&
+                                       yInterval.high > ray.origin.y;
+        }
+        else {
+            return x <= ray.origin.x && yInterval.low <= ray.origin.y &&
+                                        yInterval.high > ray.origin.y;
+        }
     }
     
     /**
      * Given that this segment and 'segment' intersect, returns the grid point
      * where they intersect.
-     * @param segment
+     * pre: this and other intersect
+     * @param other
      * @return 
      */
-    public Point getIntersection(HorizontalSegment segment) {
-        assert(intersects(segment));
-        return new Point(x, segment.y);
+    public Point getIntersection(VerticalSegment other) {
+        assert(intersects(other));
+        return new Point(x, other.x);
+    }
+
+    /**
+     * Compares this VerticalEdge with the specified edge for order.
+     * Vertical edges are sorted by their x coordinate.
+     * Returns -1, 0, or 1 as this object is less than, equal to, or greater
+     * than the specified edge.
+     * @param o
+     * @return 
+     */
+    @Override
+    public int compareTo(Object o) {
+        VerticalSegment other = (VerticalSegment) o;
+        if (this.x < other.x) return -1;
+        else if (this.x > other.x) return 1;
+        return 0;
     }
     
     /**
@@ -85,9 +126,9 @@ public class VerticalSegment {
      */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + this.x;
-        hash = 89 * hash + (this.yInterval != null ? this.yInterval.hashCode() : 0);
+        int hash = 7;
+        hash = 79 * hash + this.x;
+        hash = 79 * hash + (this.yInterval != null ? this.yInterval.hashCode() : 0);
         return hash;
     }
 
@@ -114,7 +155,4 @@ public class VerticalSegment {
         return true;
     }
 
-
-    
-    
 }

@@ -7,9 +7,12 @@ package geomatrix.business.models.binary.geomatrix;
 import geomatrix.business.models.binary.Area;
 import geomatrix.business.models.binary.Cell;
 import geomatrix.business.models.binary.CellSet;
+import geomatrix.business.models.binary.HorizontalSegment;
 import geomatrix.business.models.binary.Point;
 import geomatrix.business.models.binary.Rectangle;
 import geomatrix.business.models.binary.VerticalSegment;
+import geomatrix.business.models.binary.WideRay;
+import geomatrix.utils.Direction;
 import geomatrix.utils.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,8 +32,8 @@ import java.util.Set;
 public class Geomatrix implements Area {
 
     private List<Point> vertexs;
-    private List<VerticalEdge> verticalEdges;
-    private List<HorizontalEdge> horizontalEdges;
+    private List<VerticalSegment> verticalEdges;
+    private List<HorizontalSegment> horizontalEdges;
     
     /**
      * The smallest rectangle that contains this area.
@@ -59,13 +62,13 @@ public class Geomatrix implements Area {
      * Given first x' value, permits fast access to all vertical edges of the area
      * of the form (x',y).
      */
-    private HashMap<Integer,List<VerticalEdge>> verticalEdgesStoredByX;
+    private HashMap<Integer,List<VerticalSegment>> verticalEdgesStoredByX;
  
     /**
      * Given first y' value, permits fast access to all horizontal edges of the area
      * of the form (x,y').
      */
-    private HashMap<Integer,List<HorizontalEdge>> horizontalEdgesStoredByY;
+    private HashMap<Integer,List<HorizontalSegment>> horizontalEdgesStoredByY;
     
     /**
      * Empty constructor.
@@ -96,13 +99,13 @@ public class Geomatrix implements Area {
     
     @Override
     public boolean contains(Cell cell) {
-        //apply ray-casting algorithm; direction: positive side of the x axis
-        int intersectionCount = 0;
-        LeftWideRay ray = new LeftWideRay(cell);
+        //apply ray-casting algorithm; direction: negative side of the x axis
+        WideRay ray = new WideRay(cell, Direction.W);
         
-        for (VerticalEdge edge : verticalEdges) {
+        int intersectionCount = 0;
+        for (VerticalSegment edge : verticalEdges) {
             if (edge.intersects(ray)) ++intersectionCount;
-            if (edge.x > ray.origin.x) break;
+            if (edge.x > cell.x) break;
         }
         
         //return result according to the odd-even rule
@@ -120,7 +123,7 @@ public class Geomatrix implements Area {
         if (! contains(other.vertexs.get(0)))
             return false;
         
-        //2) check that no edge of other intersects with an edge of this
+        //2) check that no edge of other intersectsLeftWideRay with an edge of this
         //area
         if (doEdgesIntersect(other)) return false;
         
@@ -227,7 +230,7 @@ public class Geomatrix implements Area {
         return new GeomatrixIterator();
     }
     
-        @Override
+    @Override
     public void translation(Point p) {
         List<Point> newVertexs = new ArrayList<Point>();
         for (Point v : vertexs) {
@@ -390,6 +393,28 @@ public class Geomatrix implements Area {
          */
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    /**
+     * Returns whether this geomatrix is consistent.
+     * pre: the method initializeDataStructsFromVertexs works
+     * @return true if this geomatrix is consistent. false otherwise.
+     */
+    public boolean valid() {
+        HashSet<Integer> verticalLines = new HashSet<Integer>();
+        HashSet<Integer> horizontalLines = new HashSet<Integer>();
+        
+        for (Point vertex : vertexs) {
+            if (verticalLines.contains(vertex.x))
+                verticalLines.remove(vertex.x);
+            else verticalLines.add(vertex.x);
+            if (horizontalLines.contains(vertex.y))
+                horizontalLines.remove(vertex.y);
+            else horizontalLines.add(vertex.y);
+        }
+        
+        boolean result = verticalLines.isEmpty() && horizontalLines.isEmpty();
+        return result;
+    }
 
     @Override
     public String toString() {
@@ -403,7 +428,7 @@ public class Geomatrix implements Area {
         }
 
         result.append(nl + "List of vertical segments:" + nl);
-        for (VerticalEdge edge : verticalEdges) {
+        for (VerticalSegment edge : verticalEdges) {
             result.append(edge.toString() + "\t");
         }
         result.append(nl);
@@ -411,6 +436,7 @@ public class Geomatrix implements Area {
     }
         
     private void initializeDataStructsFromVertexs() {
+        assert(valid());
         initializeMapsOfVertexsAndBoundingRectangle();
         initializeEdgesAndPathRepresentatives();
         sortVerticalEdges();
@@ -462,8 +488,8 @@ public class Geomatrix implements Area {
      * 
      */
     private void initializeEdgesAndPathRepresentatives() {
-        verticalEdges = new ArrayList<VerticalEdge>();
-        horizontalEdges = new ArrayList<HorizontalEdge>();
+        verticalEdges = new ArrayList<VerticalSegment>();
+        horizontalEdges = new ArrayList<HorizontalSegment>();
         pathRepresentatives = new ArrayList<Point>();
         Map<Point,Boolean> visitedVertexs = new HashMap<Point,Boolean>();
         for (Point vertex : vertexs) {
@@ -483,12 +509,12 @@ public class Geomatrix implements Area {
                 //horizontal edge with a common associated vertex
                 
                 visitedVertexs.put(vertex, Boolean.TRUE);                
-                VerticalEdge verticalEdge = findVerticalEdge(vertex);
+                VerticalSegment verticalEdge = findVerticalEdge(vertex);
                 verticalEdges.add(verticalEdge);
                 vertex = verticalEdge.getOtherEndpoint(vertex);
                 
                 visitedVertexs.put(vertex, Boolean.TRUE);
-                HorizontalEdge horizontalEdge = findHorizontalEdge(vertex);
+                HorizontalSegment horizontalEdge = findHorizontalEdge(vertex);
                 horizontalEdges.add(horizontalEdge);
                 vertex = horizontalEdge.getOtherEndpoint(vertex);
             }           
@@ -502,16 +528,16 @@ public class Geomatrix implements Area {
      * @param vertex
      * @return 
      */
-    private VerticalEdge findVerticalEdge(Point vertex) {
+    private VerticalSegment findVerticalEdge(Point vertex) {
         Pair<Integer, Pair<Point, Point>> result = countVertexsSouthAndGetClosestSouthAndNorth(vertex);
         int southCount = result.first;
         Point closestSouth = result.second.first;
         Point closestNorth = result.second.second;
         if (isTopEndpoint(southCount)) {
-            return new VerticalEdge(vertex.x, vertex.y, closestSouth.y);
+            return new VerticalSegment(vertex.x, vertex.y, closestSouth.y);
         }
         else {
-            return new VerticalEdge(vertex.x, vertex.y, closestNorth.y);
+            return new VerticalSegment(vertex.x, vertex.y, closestNorth.y);
         }
     }
         
@@ -565,16 +591,16 @@ public class Geomatrix implements Area {
      * @param vertex
      * @return 
      */
-    private HorizontalEdge findHorizontalEdge(Point vertex) {
+    private HorizontalSegment findHorizontalEdge(Point vertex) {
         Pair<Integer, Pair<Point, Point>> result = countVertexsEastAndGetClosestEastAndWest(vertex);
         int eastCount = result.first;
         Point closestEast = result.second.first;
         Point closestWest = result.second.second;
         if (isLeftEndpoint(eastCount)) {
-            return new HorizontalEdge(vertex.y, vertex.x, closestEast.x);
+            return new HorizontalSegment(vertex.y, vertex.x, closestEast.x);
         }
         else {
-            return new HorizontalEdge(vertex.y, vertex.x, closestWest.x);
+            return new HorizontalSegment(vertex.y, vertex.x, closestWest.x);
         }
     }
 
@@ -633,17 +659,17 @@ public class Geomatrix implements Area {
      * Initializes verticalEdgesStoredByX and verticalEdgesStoredByY.
      */
     private void initializeMapsOfEdges() {
-        verticalEdgesStoredByX = new HashMap<Integer,List<VerticalEdge>>();
-        horizontalEdgesStoredByY = new HashMap<Integer,List<HorizontalEdge>>();
+        verticalEdgesStoredByX = new HashMap<Integer,List<VerticalSegment>>();
+        horizontalEdgesStoredByY = new HashMap<Integer,List<HorizontalSegment>>();
         
-        for (VerticalEdge e : verticalEdges) {
+        for (VerticalSegment e : verticalEdges) {
             if (!verticalEdgesStoredByX.containsKey(e.x))
-                verticalEdgesStoredByX.put(e.x, new ArrayList<VerticalEdge>());
+                verticalEdgesStoredByX.put(e.x, new ArrayList<VerticalSegment>());
             verticalEdgesStoredByX.get(e.x).add(e);
         }
-        for (HorizontalEdge e : horizontalEdges) {
+        for (HorizontalSegment e : horizontalEdges) {
             if (!horizontalEdgesStoredByY.containsKey(e.y))
-                horizontalEdgesStoredByY.put(e.y, new ArrayList<HorizontalEdge>());
+                horizontalEdgesStoredByY.put(e.y, new ArrayList<HorizontalSegment>());
             horizontalEdgesStoredByY.get(e.y).add(e);
         }
     }
@@ -706,15 +732,15 @@ public class Geomatrix implements Area {
         
         //find which line segments are edges
         if (verticalEdgesStoredByX.containsKey(point.x)) {
-            for (VerticalEdge v : verticalEdgesStoredByX.get(point.x))
+            for (VerticalSegment v : verticalEdgesStoredByX.get(point.x))
                 if (v.contains(new VerticalSegment(point.x, point.y+1, point.y)))
                     downE = true;
         }
         if (horizontalEdgesStoredByY.containsKey(point.y)) {
-            for (HorizontalEdge v : horizontalEdgesStoredByY.get(point.y)) {
-                if (v.contains(new HorizontalEdge(point.y, point.x+1, point.x)))
+            for (HorizontalSegment v : horizontalEdgesStoredByY.get(point.y)) {
+                if (v.contains(new HorizontalSegment(point.y, point.x+1, point.x)))
                     rightE = true;
-                if (v.contains(new HorizontalEdge(point.y, point.x, point.x-1)))
+                if (v.contains(new HorizontalSegment(point.y, point.x, point.x-1)))
                     leftE = true;
             }
         }
@@ -750,32 +776,32 @@ public class Geomatrix implements Area {
      * @return 
      */
     private boolean doEdgesIntersect(Geomatrix other) {
-        for (VerticalEdge myEdge : verticalEdges) {
+        for (VerticalSegment myEdge : verticalEdges) {
             boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.yInterval.size(), other.horizontalEdges.size());
             if (! betterByCoords) {
-                for (HorizontalEdge otherEdge : other.horizontalEdges) {
+                for (HorizontalSegment otherEdge : other.horizontalEdges) {
                     if (myEdge.intersects(otherEdge)) return true;
                 }
             }
             else {
                 for (int y = myEdge.yInterval.low+1; y < myEdge.yInterval.high; ++y) {
-                    for (HorizontalEdge otherEdge : other.horizontalEdgesStoredByY.get(y)) {
+                    for (HorizontalSegment otherEdge : other.horizontalEdgesStoredByY.get(y)) {
                         if (myEdge.intersects(otherEdge)) return true;
                     }
                 }
             }
         }
         
-        for (VerticalEdge otherEdge : other.verticalEdges) {
+        for (VerticalSegment otherEdge : other.verticalEdges) {
             boolean betterByCoords = shouldIterateEdgesByCoords(otherEdge.yInterval.size(), horizontalEdges.size());
             if (! betterByCoords) {
-                for (HorizontalEdge myEdge : horizontalEdges) {
+                for (HorizontalSegment myEdge : horizontalEdges) {
                     if (otherEdge.intersects(myEdge)) return true;
                 }
             }
             else {
                 for (int y = otherEdge.yInterval.low+1; y < otherEdge.yInterval.high; ++y) {
-                    for (HorizontalEdge myEdge : horizontalEdgesStoredByY.get(y)) {
+                    for (HorizontalSegment myEdge : horizontalEdgesStoredByY.get(y)) {
                         if (otherEdge.intersects(myEdge)) return true;
                     }
                 }                
@@ -789,7 +815,7 @@ public class Geomatrix implements Area {
      * In the context of finding the edge intersections of an edge e in respect
      * to the set of edges S of the opposed kind, returns whether it is more
      * efficient to check only the edges of S such that their fixed coordinate
-     * falls within the interval of coordinates of e (with the
+     * falls within the yInterval of coordinates of e (with the
      * edgesSortedByCoordinate HashMaps) or to check all edges in S.
      * This second case is preferable when e is very large in comparison
      * to the size of S.
@@ -816,10 +842,10 @@ public class Geomatrix implements Area {
     private List<Point> getEdgesIntersect(Geomatrix other) {
         List<Point> intersectionPoints = new ArrayList<Point>();
         
-        for (VerticalEdge myEdge : verticalEdges) {
+        for (VerticalSegment myEdge : verticalEdges) {
             boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.yInterval.size(), other.horizontalEdges.size());
             if (! betterByCoords) {
-                for (HorizontalEdge otherEdge : other.horizontalEdges) {
+                for (HorizontalSegment otherEdge : other.horizontalEdges) {
                     if (myEdge.intersects(otherEdge)) {
                         intersectionPoints.add(myEdge.getIntersection(otherEdge));
                     }
@@ -827,7 +853,7 @@ public class Geomatrix implements Area {
             }
             else {
                 for (int y = myEdge.yInterval.low+1; y < myEdge.yInterval.high; ++y) {
-                    for (HorizontalEdge otherEdge : other.horizontalEdgesStoredByY.get(y)) {
+                    for (HorizontalSegment otherEdge : other.horizontalEdgesStoredByY.get(y)) {
                         if (myEdge.intersects(otherEdge)) {
                             intersectionPoints.add(myEdge.getIntersection(otherEdge));
                         }
@@ -836,10 +862,10 @@ public class Geomatrix implements Area {
             }
         }
         
-        for (VerticalEdge otherEdge : other.verticalEdges) {
+        for (VerticalSegment otherEdge : other.verticalEdges) {
             boolean betterByCoords = shouldIterateEdgesByCoords(otherEdge.yInterval.size(), horizontalEdges.size());
             if (! betterByCoords) {
-                for (HorizontalEdge myEdge : horizontalEdges) {
+                for (HorizontalSegment myEdge : horizontalEdges) {
                     if (otherEdge.intersects(myEdge)) {
                         intersectionPoints.add(myEdge.getIntersection(otherEdge));
                     }
@@ -847,7 +873,7 @@ public class Geomatrix implements Area {
             }
             else {
                 for (int y = otherEdge.yInterval.low+1; y < otherEdge.yInterval.high; ++y) {
-                    for (HorizontalEdge myEdge : horizontalEdgesStoredByY.get(y)) {
+                    for (HorizontalSegment myEdge : horizontalEdgesStoredByY.get(y)) {
                         if (otherEdge.intersects(myEdge)) {
                             intersectionPoints.add(myEdge.getIntersection(otherEdge));
                         }
@@ -953,8 +979,9 @@ public class Geomatrix implements Area {
         
         private void initializeSegments() {  
             segments = new LinkedList<Integer>(); 
-            RightWideRay ray = new RightWideRay(new Cell(boundingRectangle.topLeft.x-1, y));
-            for (VerticalEdge edge : verticalEdges)
+            Cell wideRayOrigin = new Cell(boundingRectangle.topLeft.x-1, y);
+            WideRay ray = new WideRay(wideRayOrigin, Direction.E);
+            for (VerticalSegment edge : verticalEdges)
                 if (edge.intersects(ray))
                     segments.add(edge.x);
         }

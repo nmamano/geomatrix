@@ -8,7 +8,7 @@ import geomatrix.utils.Pair;
  * Represents a horizontal segment.
  * @author Nil
  */
-public class HorizontalSegment {
+public class HorizontalSegment extends VerticalSegment {
     public int y;
     public Interval xInterval;
 
@@ -24,6 +24,7 @@ public class HorizontalSegment {
     }
     
     public HorizontalSegment(int y, Interval xInterval) {
+        super(y, xInterval);
         this.y = y;
         this.xInterval = xInterval;
     }
@@ -34,38 +35,21 @@ public class HorizontalSegment {
      * @param endpoint the endpoint of the edge.
      * @return the other endpoint of the edge.
      */
+    @Override
     public Point getOtherEndpoint(Point endpoint) {
-        Pair<Point, Point> endpoints = getEndpoints();
-        assert(endpoint == endpoints.first || endpoint == endpoints.second);
-        if (endpoint == endpoints.first) return endpoints.second;
-        else return endpoints.first;
+        return super.getOtherEndpoint(endpoint.revert()).revert();
     }
     
     /**
      * Returns the endpoints of the edge.
      * @return a pair with both endpoints.
      */
+    @Override
     public Pair<Point, Point> getEndpoints() {
-        return new Pair<Point, Point>(new Point(y,xInterval.low), 
-               new Point(y,xInterval.high));
-    }
-
-    /**
-     * Returns whether the horizontal segment other is contained in this.
-     * @param other the horizontal segment to be tested if it is contained.
-     * @return true if other is contained in this. false otherwise.
-     */
-    public boolean contains(HorizontalSegment other) {
-        return other.y == this.y && this.xInterval.contains(other.xInterval);
-    }
-
-    /**
-     * Returns whether the vertical segment 'segment' and this intersect.
-     * @param segment
-     * @return 
-     */
-    public boolean intersects(VerticalSegment segment) {
-        return segment.yInterval.contains(y) && xInterval.contains(segment.x);
+        Pair<Point, Point> result = super.getEndpoints();
+        result.first.revert();
+        result.second.revert();
+        return result;
     }
     
     /**
@@ -74,47 +58,9 @@ public class HorizontalSegment {
      * @param segment
      * @return 
      */
+    @Override
     public Point getIntersection(VerticalSegment segment) {
-        assert(intersects(segment));
-        return new Point(segment.x, y);
+        return super.getIntersection(segment).revert();
     }
-    
-    /**
-     * In netbeans we trust.
-     * @return 
-     */
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + this.y;
-        hash = 89 * hash + (this.xInterval != null ? this.xInterval.hashCode() : 0);
-        return hash;
-    }
-
-    /**
-     * In netbeans we trust.
-     * @param obj
-     * @return 
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final HorizontalSegment other = (HorizontalSegment) obj;
-        if (this.y != other.y) {
-            return false;
-        }
-        if (this.xInterval != other.xInterval && (this.xInterval == null || !this.xInterval.equals(other.xInterval))) {
-            return false;
-        }
-        return true;
-    }
-
-
-    
-    
+       
 }

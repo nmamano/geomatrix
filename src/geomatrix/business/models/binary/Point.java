@@ -22,6 +22,14 @@ public class Point {
     }
     
     /**
+     * Returns a point with the inverted coordinates of this.
+     * @return a point with the inverted coordinates of this.
+     */
+    public Point revert() {
+        return new Point(y, x);
+    }
+    
+    /**
      * In netbeans we trust.
      * @return 
      */

@@ -1,17 +1,19 @@
 
-package geomatrix.business.models.binary.geomatrix;
+package geomatrix.business.models.binary;
 
-import geomatrix.business.models.binary.Cell;
+import geomatrix.utils.Direction;
 
 /**
- * Represents a wide ray of the GridPlane that propagates the left.
+ *
  * @author Nil
  */
-public class LeftWideRay {
+public class WideRay {
     public Cell origin;
+    public Direction direction;
 
-    public LeftWideRay(Cell origin) {
+    public WideRay(Cell origin, Direction direction) {
         this.origin = origin;
+        this.direction = direction;
     }
 
     /**
@@ -20,8 +22,9 @@ public class LeftWideRay {
      */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + (this.origin != null ? this.origin.hashCode() : 0);
+        int hash = 7;
+        hash = 37 * hash + (this.origin != null ? this.origin.hashCode() : 0);
+        hash = 37 * hash + (this.direction != null ? this.direction.hashCode() : 0);
         return hash;
     }
 
@@ -38,11 +41,15 @@ public class LeftWideRay {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final LeftWideRay other = (LeftWideRay) obj;
+        final WideRay other = (WideRay) obj;
         if (this.origin != other.origin && (this.origin == null || !this.origin.equals(other.origin))) {
+            return false;
+        }
+        if (this.direction != other.direction) {
             return false;
         }
         return true;
     }
+    
     
 }
