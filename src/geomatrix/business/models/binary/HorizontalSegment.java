@@ -62,5 +62,11 @@ public class HorizontalSegment extends VerticalSegment {
     public Point getIntersection(VerticalSegment segment) {
         return super.getIntersection(segment).revert();
     }
+
+    @Override
+    public boolean intersects(WideRay ray) {
+        throw new UnsupportedOperationException("Horizontal Segment can't check"
+                + "if it intersectes a wide ray");
+    }
        
 }

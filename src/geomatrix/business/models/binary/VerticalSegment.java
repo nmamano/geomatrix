@@ -17,16 +17,16 @@ public class VerticalSegment implements Comparable {
      * Constructor from x and y values.
      * Pre: rangeEnd1 != rangeEnd2
      * @param x
-     * @param rangeEnd1
-     * @param rangeEnd2 
+     * @param y1
+     * @param y2 
      */
-    public VerticalSegment(int fixed, int rangeEnd1, int rangeEnd2) {
-        this(fixed, new Interval(rangeEnd1, rangeEnd2));
+    public VerticalSegment(int x, int y1, int y2) {
+        this(x, new Interval(y1, y2));
     }
     
-    public VerticalSegment(int fixed, Interval interval) {
-        this.x = fixed;
-        this.yInterval = interval;
+    public VerticalSegment(int x, Interval yInterval) {
+        this.x = x;
+        this.yInterval = yInterval;
     }
 
     /**
