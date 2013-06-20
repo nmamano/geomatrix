@@ -6,11 +6,12 @@ import geomatrix.utils.Pair;
 
 /**
  * Represents a horizontal segment.
+ * In essence, all the logic is the same of a vertical segment, but inverting
+ * the order of the coordinates where necessary. This is why it extends
+ * VerticalSegment.
  * @author Nil
  */
 public class HorizontalSegment extends VerticalSegment {
-    public int y;
-    public Interval xInterval;
 
     /**
      * Constructor from x and y values.
@@ -20,13 +21,11 @@ public class HorizontalSegment extends VerticalSegment {
      * @param x2 
      */
     public HorizontalSegment(int y, int x1, int x2) {
-        this(y, new Interval(x1, x2));
+        super(y, new Interval(x1, x2));
     }
     
     public HorizontalSegment(int y, Interval xInterval) {
         super(y, xInterval);
-        this.y = y;
-        this.xInterval = xInterval;
     }
 
     /**
@@ -67,6 +66,10 @@ public class HorizontalSegment extends VerticalSegment {
     public boolean intersects(WideRay ray) {
         throw new UnsupportedOperationException("Horizontal Segment can't check"
                 + "if it intersectes a wide ray");
+    }
+
+    public Integer getY() {
+        return super.x;
     }
        
 }

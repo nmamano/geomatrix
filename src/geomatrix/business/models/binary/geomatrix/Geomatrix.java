@@ -668,9 +668,9 @@ public class Geomatrix implements Area {
             verticalEdgesStoredByX.get(e.x).add(e);
         }
         for (HorizontalSegment e : horizontalEdges) {
-            if (!horizontalEdgesStoredByY.containsKey(e.y))
-                horizontalEdgesStoredByY.put(e.y, new ArrayList<HorizontalSegment>());
-            horizontalEdgesStoredByY.get(e.y).add(e);
+            if (!horizontalEdgesStoredByY.containsKey(e.getY()))
+                horizontalEdgesStoredByY.put(e.getY(), new ArrayList<HorizontalSegment>());
+            horizontalEdgesStoredByY.get(e.getY()).add(e);
         }
     }
     

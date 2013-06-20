@@ -6,8 +6,10 @@ package geomatrix.presentation.swing;
 
 import geomatrix.business.controllers.AreaController;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
@@ -38,13 +40,16 @@ public class MapPanel extends JPanel {
      * @param swingController 
      */
     public MapPanel(SwingController swingController) {
+        
+        setPreferredSize(new Dimension(10*GRID_WIDTH, 10*GRID_DEPTH));
+        
         this.areaController = swingController.getBusinessController(AreaController.class);
         selectedArea = 1;
         isArea1Displayed = true;
         isArea2Displayed = true;
         isArea3Displayed = true;
         this.addMouseListener(new SelectGridPointListener());
-        
+        repaint();
         
     }
 
@@ -57,10 +62,10 @@ public class MapPanel extends JPanel {
     private void drawGrid(Graphics2D g) {        
         g.setColor(COLOR_GRID);
         
-        for(int i = 0; i < GRID_WIDTH; ++i)
+        for(int i = 0; i < GRID_WIDTH; i += numberOfPixelsBetweenVertexs())
             g.drawLine(i, 0, i, GRID_DEPTH);
         
-        for(int i = 0; i < GRID_DEPTH; ++i)
+        for(int i = 0; i < GRID_DEPTH; i += numberOfPixelsBetweenVertexs())
             g.drawLine(0, i, GRID_WIDTH, i);
     }
         
@@ -102,19 +107,38 @@ public class MapPanel extends JPanel {
         if (areaNumber == 1) isArea1Displayed = shouldBeDisplayed;
         else if (areaNumber == 2) isArea2Displayed = shouldBeDisplayed;
         else isArea3Displayed = shouldBeDisplayed;
+        
+        repaint();
     }
-
-    private static class SelectGridPointListener extends MouseAdapter {
+    
+    private int numberOfPixelsBetweenVertexs() {
+        return this.getWidth()/GRID_WIDTH;
+    } 
+    
+    private class SelectGridPointListener extends MouseAdapter {
 
         public SelectGridPointListener() {
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            
+            Point clickedVertex = getClosestVertex(e.getPoint());
+            if (areaController.areaContainsVertex(selectedArea, clickedVertex)) {
+                areaController.removeVertexFromArea(selectedArea, clickedVertex);
+            }
+            else {
+                areaController.addVertexToArea(selectedArea, clickedVertex);
+            }
+            
+            repaint();
         }
 
-    }
-    
+        private Point getClosestVertex(Point point) {
+            return new Point(point.x/numberOfPixelsBetweenVertexs(),
+                             point.y/numberOfPixelsBetweenVertexs());
+        }
+
+    }   
     
 }
