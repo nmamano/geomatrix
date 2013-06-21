@@ -30,8 +30,7 @@ public class MainFrame extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel2 = new javax.swing.JPanel();
@@ -49,42 +48,36 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select"));
 
-        selectArea1.setBackground(java.awt.Color.red);
+        selectArea1.setBackground(java.awt.Color.yellow);
         buttonGroup1.add(selectArea1);
         selectArea1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectArea1.setSelected(true);
         selectArea1.setText("Area 1");
         selectArea1.setToolTipText("Set Area 1 as selected area");
-        selectArea1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        selectArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectArea1ActionPerformed(evt);
             }
         });
 
-        selectArea2.setBackground(new java.awt.Color(0, 51, 255));
+        selectArea2.setBackground(java.awt.Color.cyan);
         buttonGroup1.add(selectArea2);
         selectArea2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectArea2.setText("Area 2");
         selectArea2.setToolTipText("Set Area 2 as selected area");
-        selectArea2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        selectArea2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectArea2ActionPerformed(evt);
             }
         });
 
-        selectArea3.setBackground(new java.awt.Color(0, 204, 0));
+        selectArea3.setBackground(java.awt.Color.magenta);
         buttonGroup1.add(selectArea3);
         selectArea3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectArea3.setText("Area 3");
         selectArea3.setToolTipText("Set Area 3 as selected area");
-        selectArea3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        selectArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectArea3ActionPerformed(evt);
             }
         });
@@ -118,38 +111,32 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display"));
 
-        displayArea1.setForeground(java.awt.Color.red);
+        displayArea1.setForeground(java.awt.Color.yellow);
         displayArea1.setSelected(true);
         displayArea1.setText("Area 1");
         displayArea1.setToolTipText("Display Area 1");
-        displayArea1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        displayArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 displayArea1ActionPerformed(evt);
             }
         });
 
-        displayArea2.setForeground(new java.awt.Color(0, 51, 255));
+        displayArea2.setForeground(java.awt.Color.cyan);
         displayArea2.setSelected(true);
         displayArea2.setText("Area 2");
         displayArea2.setToolTipText("Display area 2");
-        displayArea2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        displayArea2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 displayArea2ActionPerformed(evt);
             }
         });
 
-        displayArea3.setForeground(new java.awt.Color(0, 153, 0));
+        displayArea3.setForeground(java.awt.Color.magenta);
         displayArea3.setSelected(true);
         displayArea3.setText("Area 3");
         displayArea3.setToolTipText("Display area 3");
-        displayArea3.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        displayArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 displayArea3ActionPerformed(evt);
             }
         });
@@ -197,7 +184,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.LINE_START);
