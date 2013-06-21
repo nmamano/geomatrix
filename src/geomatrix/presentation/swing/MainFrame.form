@@ -9,11 +9,13 @@
         <Property name="text" type="java.lang.String" value="jMenuItem4"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator6">
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Area1"/>
+            <Property name="text" type="java.lang.String" value="Area 1"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <SubComponents>
@@ -29,12 +31,12 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
@@ -51,7 +53,7 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem5ActionPerformed"/>
@@ -59,7 +61,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
@@ -71,12 +73,12 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
@@ -88,12 +90,12 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem9">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem10">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
@@ -105,12 +107,12 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem11">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem12">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
@@ -127,14 +129,125 @@
                 <Property name="text" type="java.lang.String" value="Show bounding rectangle"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Area 2"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem35">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="New"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem35ActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <Menu class="javax.swing.JMenu" name="jMenu3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Clone"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem36">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem37">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator10">
+            </MenuItem>
+            <Menu class="javax.swing.JMenu" name="jMenu21">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Union"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem38">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem39">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenu22">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Intersection"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem40">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem41">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenu23">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Difference"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem42">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem43">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenu24">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Symmetric difference"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem44">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem45">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Area 3"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator11">
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem8">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Show rectangle decomposition"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem7">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Show bounding rectangle"/>
+              </Properties>
             </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu9">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Area2"/>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="text" type="java.lang.String" value="Area 3"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem13">
@@ -149,16 +262,13 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem14">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem15">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem15ActionPerformed"/>
-                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -171,7 +281,7 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem16">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem16ActionPerformed"/>
@@ -179,7 +289,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem17">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
@@ -191,12 +301,12 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem18">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem19">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
@@ -208,13 +318,16 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem20">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem21">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem21ActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -225,15 +338,12 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem22">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
+                    <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem22ActionPerformed"/>
-                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem23">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Area3"/>
+                    <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
@@ -249,131 +359,6 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show bounding rectangle"/>
               </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator6">
-            </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu15">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Area3"/>
-            <Property name="toolTipText" type="java.lang.String" value=""/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem24">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="New"/>
-              </Properties>
-            </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu16">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Clone"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem25">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem26">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem26ActionPerformed"/>
-                  </Events>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
-            </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu17">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Union"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem27">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem27ActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem28">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
-                  </Properties>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu18">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Intersection"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem29">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem30">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
-                  </Properties>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu19">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Difference"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem31">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem32">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
-                  </Properties>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu20">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Symmetric difference"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem33">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area1"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem33ActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem34">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Area2"/>
-                  </Properties>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator8">
-            </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem5">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Show rectangle decomposition"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem6">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Show bounding rectangle"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator9">
             </MenuItem>
           </SubComponents>
         </Menu>

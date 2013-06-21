@@ -34,6 +34,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         selectArea1 = new javax.swing.JRadioButton();
@@ -65,7 +66,27 @@ public class MainFrame extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem35 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem36 = new javax.swing.JMenuItem();
+        jMenuItem37 = new javax.swing.JMenuItem();
+        jSeparator10 = new javax.swing.JPopupMenu.Separator();
+        jMenu21 = new javax.swing.JMenu();
+        jMenuItem38 = new javax.swing.JMenuItem();
+        jMenuItem39 = new javax.swing.JMenuItem();
+        jMenu22 = new javax.swing.JMenu();
+        jMenuItem40 = new javax.swing.JMenuItem();
+        jMenuItem41 = new javax.swing.JMenuItem();
+        jMenu23 = new javax.swing.JMenu();
+        jMenuItem42 = new javax.swing.JMenuItem();
+        jMenuItem43 = new javax.swing.JMenuItem();
+        jMenu24 = new javax.swing.JMenu();
+        jMenuItem44 = new javax.swing.JMenuItem();
+        jMenuItem45 = new javax.swing.JMenuItem();
+        jSeparator11 = new javax.swing.JPopupMenu.Separator();
+        jCheckBoxMenuItem8 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem7 = new javax.swing.JCheckBoxMenuItem();
         jMenu9 = new javax.swing.JMenu();
         jMenuItem13 = new javax.swing.JMenuItem();
         jMenu10 = new javax.swing.JMenu();
@@ -87,29 +108,6 @@ public class MainFrame extends javax.swing.JFrame {
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         jCheckBoxMenuItem3 = new javax.swing.JCheckBoxMenuItem();
         jCheckBoxMenuItem4 = new javax.swing.JCheckBoxMenuItem();
-        jSeparator6 = new javax.swing.JPopupMenu.Separator();
-        jMenu15 = new javax.swing.JMenu();
-        jMenuItem24 = new javax.swing.JMenuItem();
-        jMenu16 = new javax.swing.JMenu();
-        jMenuItem25 = new javax.swing.JMenuItem();
-        jMenuItem26 = new javax.swing.JMenuItem();
-        jSeparator7 = new javax.swing.JPopupMenu.Separator();
-        jMenu17 = new javax.swing.JMenu();
-        jMenuItem27 = new javax.swing.JMenuItem();
-        jMenuItem28 = new javax.swing.JMenuItem();
-        jMenu18 = new javax.swing.JMenu();
-        jMenuItem29 = new javax.swing.JMenuItem();
-        jMenuItem30 = new javax.swing.JMenuItem();
-        jMenu19 = new javax.swing.JMenu();
-        jMenuItem31 = new javax.swing.JMenuItem();
-        jMenuItem32 = new javax.swing.JMenuItem();
-        jMenu20 = new javax.swing.JMenu();
-        jMenuItem33 = new javax.swing.JMenuItem();
-        jMenuItem34 = new javax.swing.JMenuItem();
-        jSeparator8 = new javax.swing.JPopupMenu.Separator();
-        jCheckBoxMenuItem5 = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem6 = new javax.swing.JCheckBoxMenuItem();
-        jSeparator9 = new javax.swing.JPopupMenu.Separator();
 
         jMenuItem4.setText("jMenuItem4");
 
@@ -259,7 +257,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.LINE_START);
 
-        jMenu1.setText("Area1");
+        jMenu1.setText("Area 1");
         jMenu1.setToolTipText("");
 
         jMenuItem1.setText("New");
@@ -267,10 +265,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenu4.setText("Clone");
 
-        jMenuItem2.setText("Area2");
+        jMenuItem2.setText("Area 2");
         jMenu4.add(jMenuItem2);
 
-        jMenuItem3.setText("Area3");
+        jMenuItem3.setText("Area 3");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -283,7 +281,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenu5.setText("Union");
 
-        jMenuItem5.setText("Area2");
+        jMenuItem5.setText("Area 2");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem5ActionPerformed(evt);
@@ -291,37 +289,37 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenu5.add(jMenuItem5);
 
-        jMenuItem6.setText("Area3");
+        jMenuItem6.setText("Area 3");
         jMenu5.add(jMenuItem6);
 
         jMenu1.add(jMenu5);
 
         jMenu6.setText("Intersection");
 
-        jMenuItem7.setText("Area2");
+        jMenuItem7.setText("Area 2");
         jMenu6.add(jMenuItem7);
 
-        jMenuItem8.setText("Area3");
+        jMenuItem8.setText("Area 3");
         jMenu6.add(jMenuItem8);
 
         jMenu1.add(jMenu6);
 
         jMenu7.setText("Difference");
 
-        jMenuItem9.setText("Area2");
+        jMenuItem9.setText("Area 2");
         jMenu7.add(jMenuItem9);
 
-        jMenuItem10.setText("Area3");
+        jMenuItem10.setText("Area 3");
         jMenu7.add(jMenuItem10);
 
         jMenu1.add(jMenu7);
 
         jMenu8.setText("Symmetric difference");
 
-        jMenuItem11.setText("Area2");
+        jMenuItem11.setText("Area 2");
         jMenu8.add(jMenuItem11);
 
-        jMenuItem12.setText("Area3");
+        jMenuItem12.setText("Area 3");
         jMenu8.add(jMenuItem12);
 
         jMenu1.add(jMenu8);
@@ -332,27 +330,90 @@ public class MainFrame extends javax.swing.JFrame {
 
         jCheckBoxMenuItem2.setText("Show bounding rectangle");
         jMenu1.add(jCheckBoxMenuItem2);
-        jMenu1.add(jSeparator3);
 
         jMenuBar1.add(jMenu1);
 
-        jMenu9.setText("Area2");
-        jMenu9.setToolTipText("");
+        jMenu2.setText("Area 2");
+
+        jMenuItem35.setText("New");
+        jMenuItem35.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem35ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem35);
+
+        jMenu3.setText("Clone");
+
+        jMenuItem36.setText("Area 1");
+        jMenu3.add(jMenuItem36);
+
+        jMenuItem37.setText("Area 3");
+        jMenu3.add(jMenuItem37);
+
+        jMenu2.add(jMenu3);
+        jMenu2.add(jSeparator10);
+
+        jMenu21.setText("Union");
+
+        jMenuItem38.setText("Area 1");
+        jMenu21.add(jMenuItem38);
+
+        jMenuItem39.setText("Area 3");
+        jMenu21.add(jMenuItem39);
+
+        jMenu2.add(jMenu21);
+
+        jMenu22.setText("Intersection");
+
+        jMenuItem40.setText("Area 1");
+        jMenu22.add(jMenuItem40);
+
+        jMenuItem41.setText("Area 3");
+        jMenu22.add(jMenuItem41);
+
+        jMenu2.add(jMenu22);
+
+        jMenu23.setText("Difference");
+
+        jMenuItem42.setText("Area 1");
+        jMenu23.add(jMenuItem42);
+
+        jMenuItem43.setText("Area 3");
+        jMenu23.add(jMenuItem43);
+
+        jMenu2.add(jMenu23);
+
+        jMenu24.setText("Symmetric difference");
+
+        jMenuItem44.setText("Area 1");
+        jMenu24.add(jMenuItem44);
+
+        jMenuItem45.setText("Area 3");
+        jMenu24.add(jMenuItem45);
+
+        jMenu2.add(jMenu24);
+        jMenu2.add(jSeparator11);
+
+        jCheckBoxMenuItem8.setText("Show rectangle decomposition");
+        jMenu2.add(jCheckBoxMenuItem8);
+
+        jCheckBoxMenuItem7.setText("Show bounding rectangle");
+        jMenu2.add(jCheckBoxMenuItem7);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu9.setText("Area 3");
 
         jMenuItem13.setText("New");
         jMenu9.add(jMenuItem13);
 
         jMenu10.setText("Clone");
 
-        jMenuItem14.setText("Area1");
+        jMenuItem14.setText("Area 1");
         jMenu10.add(jMenuItem14);
 
-        jMenuItem15.setText("Area3");
-        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem15ActionPerformed(evt);
-            }
-        });
+        jMenuItem15.setText("Area 2");
         jMenu10.add(jMenuItem15);
 
         jMenu9.add(jMenu10);
@@ -360,7 +421,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenu11.setText("Union");
 
-        jMenuItem16.setText("Area1");
+        jMenuItem16.setText("Area 1");
         jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem16ActionPerformed(evt);
@@ -368,42 +429,42 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenu11.add(jMenuItem16);
 
-        jMenuItem17.setText("Area3");
+        jMenuItem17.setText("Area 2");
         jMenu11.add(jMenuItem17);
 
         jMenu9.add(jMenu11);
 
         jMenu12.setText("Intersection");
 
-        jMenuItem18.setText("Area1");
+        jMenuItem18.setText("Area 1");
         jMenu12.add(jMenuItem18);
 
-        jMenuItem19.setText("Area3");
+        jMenuItem19.setText("Area 2");
         jMenu12.add(jMenuItem19);
 
         jMenu9.add(jMenu12);
 
         jMenu13.setText("Difference");
 
-        jMenuItem20.setText("Area1");
+        jMenuItem20.setText("Area 1");
         jMenu13.add(jMenuItem20);
 
-        jMenuItem21.setText("Area3");
+        jMenuItem21.setText("Area 2");
+        jMenuItem21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem21ActionPerformed(evt);
+            }
+        });
         jMenu13.add(jMenuItem21);
 
         jMenu9.add(jMenu13);
 
         jMenu14.setText("Symmetric difference");
 
-        jMenuItem22.setText("Area1");
-        jMenuItem22.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem22ActionPerformed(evt);
-            }
-        });
+        jMenuItem22.setText("Area 1");
         jMenu14.add(jMenuItem22);
 
-        jMenuItem23.setText("Area3");
+        jMenuItem23.setText("Area 2");
         jMenu14.add(jMenuItem23);
 
         jMenu9.add(jMenu14);
@@ -414,91 +475,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         jCheckBoxMenuItem4.setText("Show bounding rectangle");
         jMenu9.add(jCheckBoxMenuItem4);
-        jMenu9.add(jSeparator6);
 
         jMenuBar1.add(jMenu9);
-
-        jMenu15.setText("Area3");
-        jMenu15.setToolTipText("");
-
-        jMenuItem24.setText("New");
-        jMenu15.add(jMenuItem24);
-
-        jMenu16.setText("Clone");
-
-        jMenuItem25.setText("Area1");
-        jMenu16.add(jMenuItem25);
-
-        jMenuItem26.setText("Area2");
-        jMenuItem26.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem26ActionPerformed(evt);
-            }
-        });
-        jMenu16.add(jMenuItem26);
-
-        jMenu15.add(jMenu16);
-        jMenu15.add(jSeparator7);
-
-        jMenu17.setText("Union");
-
-        jMenuItem27.setText("Area1");
-        jMenuItem27.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem27ActionPerformed(evt);
-            }
-        });
-        jMenu17.add(jMenuItem27);
-
-        jMenuItem28.setText("Area2");
-        jMenu17.add(jMenuItem28);
-
-        jMenu15.add(jMenu17);
-
-        jMenu18.setText("Intersection");
-
-        jMenuItem29.setText("Area1");
-        jMenu18.add(jMenuItem29);
-
-        jMenuItem30.setText("Area2");
-        jMenu18.add(jMenuItem30);
-
-        jMenu15.add(jMenu18);
-
-        jMenu19.setText("Difference");
-
-        jMenuItem31.setText("Area1");
-        jMenu19.add(jMenuItem31);
-
-        jMenuItem32.setText("Area2");
-        jMenu19.add(jMenuItem32);
-
-        jMenu15.add(jMenu19);
-
-        jMenu20.setText("Symmetric difference");
-
-        jMenuItem33.setText("Area1");
-        jMenuItem33.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem33ActionPerformed(evt);
-            }
-        });
-        jMenu20.add(jMenuItem33);
-
-        jMenuItem34.setText("Area2");
-        jMenu20.add(jMenuItem34);
-
-        jMenu15.add(jMenu20);
-        jMenu15.add(jSeparator8);
-
-        jCheckBoxMenuItem5.setText("Show rectangle decomposition");
-        jMenu15.add(jCheckBoxMenuItem5);
-
-        jCheckBoxMenuItem6.setText("Show bounding rectangle");
-        jMenu15.add(jCheckBoxMenuItem6);
-        jMenu15.add(jSeparator9);
-
-        jMenuBar1.add(jMenu15);
 
         setJMenuBar(jMenuBar1);
 
@@ -561,29 +539,17 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
-    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+    private void jMenuItem35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem35ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem15ActionPerformed
+    }//GEN-LAST:event_jMenuItem35ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
-    private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
+    private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem22ActionPerformed
-
-    private void jMenuItem26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem26ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem26ActionPerformed
-
-    private void jMenuItem27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem27ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem27ActionPerformed
-
-    private void jMenuItem33ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem33ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem33ActionPerformed
+    }//GEN-LAST:event_jMenuItem21ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -594,20 +560,20 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem3;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem4;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem5;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem6;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem7;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem8;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenu jMenu11;
     private javax.swing.JMenu jMenu12;
     private javax.swing.JMenu jMenu13;
     private javax.swing.JMenu jMenu14;
-    private javax.swing.JMenu jMenu15;
-    private javax.swing.JMenu jMenu16;
-    private javax.swing.JMenu jMenu17;
-    private javax.swing.JMenu jMenu18;
-    private javax.swing.JMenu jMenu19;
-    private javax.swing.JMenu jMenu20;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu21;
+    private javax.swing.JMenu jMenu22;
+    private javax.swing.JMenu jMenu23;
+    private javax.swing.JMenu jMenu24;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
@@ -631,19 +597,19 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem23;
-    private javax.swing.JMenuItem jMenuItem24;
-    private javax.swing.JMenuItem jMenuItem25;
-    private javax.swing.JMenuItem jMenuItem26;
-    private javax.swing.JMenuItem jMenuItem27;
-    private javax.swing.JMenuItem jMenuItem28;
-    private javax.swing.JMenuItem jMenuItem29;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem30;
-    private javax.swing.JMenuItem jMenuItem31;
-    private javax.swing.JMenuItem jMenuItem32;
-    private javax.swing.JMenuItem jMenuItem33;
-    private javax.swing.JMenuItem jMenuItem34;
+    private javax.swing.JMenuItem jMenuItem35;
+    private javax.swing.JMenuItem jMenuItem36;
+    private javax.swing.JMenuItem jMenuItem37;
+    private javax.swing.JMenuItem jMenuItem38;
+    private javax.swing.JMenuItem jMenuItem39;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem40;
+    private javax.swing.JMenuItem jMenuItem41;
+    private javax.swing.JMenuItem jMenuItem42;
+    private javax.swing.JMenuItem jMenuItem43;
+    private javax.swing.JMenuItem jMenuItem44;
+    private javax.swing.JMenuItem jMenuItem45;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
@@ -653,14 +619,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator10;
+    private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
-    private javax.swing.JPopupMenu.Separator jSeparator6;
-    private javax.swing.JPopupMenu.Separator jSeparator7;
-    private javax.swing.JPopupMenu.Separator jSeparator8;
-    private javax.swing.JPopupMenu.Separator jSeparator9;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JRadioButton selectArea1;
     private javax.swing.JRadioButton selectArea2;
     private javax.swing.JRadioButton selectArea3;
