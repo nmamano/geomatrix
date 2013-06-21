@@ -19,7 +19,7 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+            <MenuItem class="javax.swing.JMenuItem" name="area1New">
               <Properties>
                 <Property name="text" type="java.lang.String" value="New"/>
               </Properties>
@@ -27,7 +27,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1New"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu4">
+            <Menu class="javax.swing.JMenu" name="area1Clone">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Clone"/>
               </Properties>
@@ -154,10 +154,13 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1ShowRectangleDecompositionActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem2">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area1ShowBoundingRectangle">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show bounding rectangle"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1ShowBoundingRectangleActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -166,7 +169,7 @@
             <Property name="text" type="java.lang.String" value="Area 2"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem35">
+            <MenuItem class="javax.swing.JMenuItem" name="area2New">
               <Properties>
                 <Property name="text" type="java.lang.String" value="New"/>
               </Properties>
@@ -174,7 +177,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2New"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu3">
+            <Menu class="javax.swing.JMenu" name="area2Clone">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Clone"/>
               </Properties>
@@ -301,10 +304,13 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2ShowRectangleDecompositionActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem7">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area2ShowBoundingRectangle">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show bounding rectangle"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2ShowBoundingRectangleActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -448,10 +454,13 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3ShowRectangleDecompositionActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem4">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area3ShowBoundingRectangle">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show bounding rectangle"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3ShowBoundingRectangleActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

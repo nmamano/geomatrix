@@ -6,6 +6,8 @@ package geomatrix.presentation.swing;
 
 import geomatrix.utils.Line;
 import geomatrix.business.controllers.AreaController;
+import geomatrix.utils.Direction;
+import geomatrix.utils.Segment;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -98,6 +100,7 @@ public class MapPanel extends JPanel {
         paintVertexs(g2D);
         paintInvalidLines(g2D);
         paintAreas(g2D);
+        paintBoundingRectangles(g2D);
     }
 
     private void paintVertexs(Graphics2D g) {
@@ -373,7 +376,7 @@ public class MapPanel extends JPanel {
     }
 
     private void paintEdges(Graphics2D g) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        //edges are not painted for now. It is not necessary.
     }
 
     private void updateSetOperationMenusActivation(int modifiedAreaNumber) {
@@ -459,8 +462,121 @@ public class MapPanel extends JPanel {
         updateSetOperationMenusActivation(destinationAreaNumber);
         repaint();
     }
+
+    void showBoundingRectangle(int areaNumber, boolean enable) {
+        getArea(areaNumber).isBoundingRectangleDisplayed = enable;
         
-    
+        repaint();
+    }
+
+    private void paintBoundingRectangles(Graphics2D g) {
+        List<Segment> area1BoundingRectangleEdges, area2BoundingRectangleEdges,
+                area3BoundingRectangleEdges;
+        
+        if (shouldPaintBoundingRectangle(1)) {
+            area1BoundingRectangleEdges = areaController.getBoundingRectangleEdges(area1.vertexs);
+        }
+        else {
+            area1BoundingRectangleEdges = new ArrayList<Segment>();
+        }
+        if (shouldPaintBoundingRectangle(2)) {
+            area2BoundingRectangleEdges = areaController.getBoundingRectangleEdges(area2.vertexs);
+        }
+        else {
+            area2BoundingRectangleEdges = new ArrayList<Segment>();
+        }
+        if (shouldPaintBoundingRectangle(3)) {
+            area3BoundingRectangleEdges = areaController.getBoundingRectangleEdges(area3.vertexs);
+        }
+        else {
+            area3BoundingRectangleEdges = new ArrayList<Segment>();
+        }
+        paintSegments(area1BoundingRectangleEdges, area2BoundingRectangleEdges, area3BoundingRectangleEdges, g);
+    }
+        
+    private boolean shouldPaintBoundingRectangle(int areaNumber) {
+        return getArea(areaNumber).isDisplayed &&
+               getArea(areaNumber).isBoundingRectangleDisplayed &&
+               areaController.isValidArea(getArea(areaNumber).vertexs);
+    }
+
+    private void paintSegments(List<Segment> area1Segments,
+            List<Segment> area2Segments, List<Segment> area3Segments, Graphics2D g) {
+        
+        List<Segment> area1UnitarySegments = breakDownToUnitarySegments(area1Segments);
+        List<Segment> area2UnitarySegments = breakDownToUnitarySegments(area2Segments);
+        List<Segment> area3UnitarySegments = breakDownToUnitarySegments(area3Segments);
+        Map<Segment, Color> lineColors = findUnitarySegmentColors(
+                area1Segments, area2Segments, area3Segments);
+        
+        for (Segment segment : lineColors.keySet()) {
+            paintSegment(segment, lineColors.get(segment), g);
+        }
+    }
+
+    private void paintSegment(Segment segment, Color color, Graphics2D g) {
+        g.setColor(color);
+        Point gridEndPoint1 = findCoordinates(segment.endPoint1);
+        Point gridEndPoint2 = findCoordinates(segment.endPoint2);
+        g.drawLine(gridEndPoint1.x, gridEndPoint1.y, gridEndPoint2.x, gridEndPoint2.y);
+    }
+
+    private List<Segment> breakDownToUnitarySegments(List<Segment> segments) {
+        List<Segment> unitarySegments = new ArrayList<Segment>();
+        
+        for (Segment segment : segments) {
+            Direction direction = segment.getDirection();
+            Point point = segment.endPoint1;
+            while (! point.equals(segment.endPoint2)) {
+                Point next = (Point) point.clone();
+                advance(next, direction);
+                unitarySegments.add(new Segment(point, next));
+                point = (Point) next.clone();
+            }
+        }
+        
+        return unitarySegments;
+    }
+
+    private Map<Segment, Color> findUnitarySegmentColors(
+            List<Segment> area1Segments, List<Segment> area2Segments,
+            List<Segment> area3Segments) {
+        
+        Map<Segment, Color> segmentColors = new HashMap<Segment, Color>();
+        for (Segment segment : area1Segments) {
+            segmentColors.put(segment, area1.color);
+        }
+        for (Segment segment : area2Segments) {
+            if (segmentColors.containsKey(segment)) {
+                segmentColors.put(segment, OVERLAPPED_LINES_COLOR);
+            }
+            else {
+                segmentColors.put(segment, area2.color);
+            }
+        }
+        for (Segment segment : area3Segments) {
+            if (segmentColors.containsKey(segment)) {
+                if (segmentColors.get(segment) == OVERLAPPED_LINES_COLOR) {
+                    segmentColors.put(segment, DOUBLY_OVERLAPPED_LINES_COLOR);
+                }
+                else {
+                    segmentColors.put(segment, OVERLAPPED_LINES_COLOR);
+                }
+            }
+            else {
+                segmentColors.put(segment, area3.color);
+            }
+        }
+        return segmentColors;
+    }
+
+    private void advance(Point point, Direction direction) {
+        if (direction == Direction.N) --point.y;
+        else if (direction == Direction.S) ++point.y;
+        else if (direction == Direction.W) --point.x;
+        else ++point.x;
+    }
+            
     private class SelectGridPointListener extends MouseAdapter {
 
         public SelectGridPointListener() {

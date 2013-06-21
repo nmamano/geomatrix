@@ -6,9 +6,11 @@ package geomatrix.business.controllers;
 
 import geomatrix.business.models.binary.Cell;
 import geomatrix.business.models.binary.GridPoint;
+import geomatrix.business.models.binary.Rectangle;
 import geomatrix.business.models.binary.geomatrix.Geomatrix;
 import geomatrix.presentation.swing.GridCell;
 import geomatrix.utils.Line;
+import geomatrix.utils.Segment;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -110,5 +112,23 @@ public class AreaController extends BusinessController {
         Geomatrix area2 = new Geomatrix(area2Vertexs);
         area1.symmetricDifference(area2);
         return gridPointsToPoints(area1.getVertexs()); 
+    }
+
+    public List<Segment> getBoundingRectangleEdges(Set<Point> vertexs) {
+        assert(isValidArea(vertexs));
+        
+        Geomatrix area = new Geomatrix(vertexs);
+        Rectangle r = area.getBoundingRectangle();
+        return getEdges(r);
+        
+    }
+
+    private List<Segment> getEdges(Rectangle r) {
+        List<Segment> edges = new ArrayList<Segment>();
+        edges.add(new Segment(new Point(r.topLeft.x, r.topLeft.y), new Point(r.topLeft.x, r.bottomRight.y)));
+        edges.add(new Segment(new Point(r.topLeft.x, r.topLeft.y), new Point(r.bottomRight.x, r.topLeft.y)));
+        edges.add(new Segment(new Point(r.topLeft.x, r.bottomRight.y), new Point(r.bottomRight.x, r.bottomRight.y)));
+        edges.add(new Segment(new Point(r.bottomRight.x, r.topLeft.y), new Point(r.bottomRight.x, r.bottomRight.y)));
+        return edges;
     }
 }

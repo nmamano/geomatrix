@@ -18,11 +18,13 @@ public class PresentationArea {
     protected boolean isDisplayed;
     protected Color color;
     protected Set<Point> vertexs;
+    protected boolean isBoundingRectangleDisplayed;
 
     public PresentationArea(boolean isDisplayed, Color color) {
         this.isDisplayed = isDisplayed;
         this.color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 128);
         vertexs = new HashSet<Point>();
+        isBoundingRectangleDisplayed = false;
     }
 
     boolean containsVertex(Point vertex) {

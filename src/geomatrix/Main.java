@@ -7,6 +7,7 @@ package geomatrix;
 import geomatrix.business.controllers.AreaController;
 import geomatrix.presentation.swing.MainFrame;
 import manticore.Application;
+import manticore.Debug;
 import manticore.data.DataController;
 import manticore.data.JAXBDataController;
 import manticore.presentation.PresentationController;
@@ -17,11 +18,12 @@ import manticore.presentation.SwingController;
  * @author Nil
  */
 public class Main {
-
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Debug.enable();
         
         // Create a new Application
         Application app = new Application();
