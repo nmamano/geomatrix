@@ -211,31 +211,34 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void displayArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayArea1ActionPerformed
         try {
-            if (displayArea1.isEnabled()) mapPanel.setDisplayed(1, true);
+            if (displayArea1.isSelected()) mapPanel.setDisplayed(1, true);
             else mapPanel.setDisplayed(1, false);
         }
         catch (HideSelectedAreaException e) {
-            //ignore exception
+            //do not allow to hide selected area
+            displayArea1.setSelected(true);
         }
     }//GEN-LAST:event_displayArea1ActionPerformed
 
     private void displayArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayArea2ActionPerformed
         try {
-            if (displayArea1.isEnabled()) mapPanel.setDisplayed(2, true);
+            if (displayArea2.isSelected()) mapPanel.setDisplayed(2, true);
             else mapPanel.setDisplayed(2, false);
         }
         catch (HideSelectedAreaException e) {
-            //ignore exception
+            //do not allow to hide selected area
+            displayArea2.setSelected(true);
         }
     }//GEN-LAST:event_displayArea2ActionPerformed
 
     private void displayArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayArea3ActionPerformed
         try {
-            if (displayArea1.isEnabled()) mapPanel.setDisplayed(3, true);
+            if (displayArea3.isSelected()) mapPanel.setDisplayed(3, true);
             else mapPanel.setDisplayed(3, false);
         }
         catch (HideSelectedAreaException e) {
-            //ignore exception
+            //do not allow to hide selected area
+            displayArea3.setSelected(true);
         }
     }//GEN-LAST:event_displayArea3ActionPerformed
 
