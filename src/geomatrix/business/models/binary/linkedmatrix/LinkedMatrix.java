@@ -165,16 +165,16 @@ public class LinkedMatrix implements CellSet {
         cellBoolean.contained = false;
 
         //case: cell is the only element
-        if (cellBoolean == first && cellBoolean == last) {
+        if (cellBoolean.equals(first) && cellBoolean.equals(last)) {
             last = first = null;
         }
         //case: cell is the first element
-        else if (cellBoolean == first) {
+        else if (cellBoolean.equals(first)) {
             first = first.next;
             first.previous = null;
         }
         //case: cell is the last element
-        else if (cellBoolean == last) {
+        else if (cellBoolean.equals(last)) {
             last = last.previous;
             last.next = null;
         }
@@ -201,8 +201,8 @@ public class LinkedMatrix implements CellSet {
     private boolean areCellsValid() {
         for (int i = 0; i < maxX; ++i) {
             for (int j = 0; j < maxY; ++j) {
-                boolean isFirst = cellArray[i][j] == first;
-                boolean isLast = cellArray[i][j] == last;
+                boolean isFirst = cellArray[i][j].equals(first);
+                boolean isLast = cellArray[i][j].equals(last);
                 if (! cellArray[i][j].valid(i, j, isFirst, isLast)) {
                     return false;
                 }

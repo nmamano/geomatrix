@@ -34,10 +34,10 @@ public class HorizontalSegment extends VerticalSegment {
      * @param endpoint the endpoint of the edge.
      * @return the other endpoint of the edge.
      */
-    @Override
-    public GridPoint getOtherEndpoint(GridPoint endpoint) {
-        return super.getOtherEndpoint(endpoint.revert()).revert();
-    }
+//    @Override
+//    public GridPoint getOtherEndpoint(GridPoint endpoint) {
+//        return super.getOtherEndpoint(endpoint.revert()).revert();
+//    }
     
     /**
      * Returns the endpoints of the edge.
@@ -45,10 +45,9 @@ public class HorizontalSegment extends VerticalSegment {
      */
     @Override
     public Pair<GridPoint, GridPoint> getEndpoints() {
-        Pair<GridPoint, GridPoint> result = super.getEndpoints();
-        result.first.revert();
-        result.second.revert();
-        return result;
+        return new Pair<GridPoint, GridPoint>(
+                super.getEndpoints().first.revert(),
+                super.getEndpoints().second.revert());
     }
     
     /**

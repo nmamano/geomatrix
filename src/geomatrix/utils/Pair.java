@@ -75,4 +75,9 @@ public class Pair<A,B> {
 
     }
 
+    @Override
+    public String toString() {
+        return "<" + first + ", " + second + '>';
+    }
+
 }

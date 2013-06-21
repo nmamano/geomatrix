@@ -37,8 +37,12 @@ public class VerticalSegment implements Comparable {
      */
     public GridPoint getOtherEndpoint(GridPoint endpoint) {
         Pair<GridPoint, GridPoint> endpoints = getEndpoints();
-        assert(endpoint == endpoints.first || endpoint == endpoints.second);
-        if (endpoint == endpoints.first) return endpoints.second;
+        assert(endpoint.equals(endpoints.first) || endpoint.equals(endpoints.second)) :
+                "Endpoints: " + endpoints.first.toString() + ", " +
+                endpoints.second.toString() + "\n" + "Parameter: " +
+                endpoint.toString();
+        
+        if (endpoint.equals(endpoints.first)) return endpoints.second;
         else return endpoints.first;
     }
     
@@ -81,8 +85,8 @@ public class VerticalSegment implements Comparable {
      * otherwise.
      */
     public boolean intersects(WideRay ray) {
-        assert(ray.direction == Direction.E || ray.direction == Direction.W);
-        if (ray.direction == Direction.E) {
+        assert(ray.direction.equals(Direction.E) || ray.direction.equals(Direction.W));
+        if (ray.direction.equals(Direction.E)) {
             return x > ray.origin.x && yInterval.low <= ray.origin.y &&
                                        yInterval.high > ray.origin.y;
         }
