@@ -48,7 +48,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select"));
 
-        selectArea1.setBackground(java.awt.Color.yellow);
+        selectArea1.setBackground(java.awt.Color.red);
         buttonGroup1.add(selectArea1);
         selectArea1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectArea1.setSelected(true);
@@ -60,7 +60,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        selectArea2.setBackground(java.awt.Color.cyan);
+        selectArea2.setBackground(new java.awt.Color(0, 51, 255));
         buttonGroup1.add(selectArea2);
         selectArea2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectArea2.setText("Area 2");
@@ -71,7 +71,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        selectArea3.setBackground(java.awt.Color.magenta);
+        selectArea3.setBackground(new java.awt.Color(0, 204, 0));
         buttonGroup1.add(selectArea3);
         selectArea3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectArea3.setText("Area 3");
@@ -111,7 +111,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display"));
 
-        displayArea1.setForeground(java.awt.Color.yellow);
+        displayArea1.setForeground(java.awt.Color.red);
         displayArea1.setSelected(true);
         displayArea1.setText("Area 1");
         displayArea1.setToolTipText("Display Area 1");
@@ -121,7 +121,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        displayArea2.setForeground(java.awt.Color.cyan);
+        displayArea2.setForeground(new java.awt.Color(0, 51, 255));
         displayArea2.setSelected(true);
         displayArea2.setText("Area 2");
         displayArea2.setToolTipText("Display area 2");
@@ -131,7 +131,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        displayArea3.setForeground(java.awt.Color.magenta);
+        displayArea3.setForeground(new java.awt.Color(0, 153, 0));
         displayArea3.setSelected(true);
         displayArea3.setText("Area 3");
         displayArea3.setToolTipText("Display area 3");

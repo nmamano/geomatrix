@@ -12,7 +12,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import javax.swing.JPanel;
 import manticore.presentation.SwingController;
 
@@ -34,7 +36,7 @@ public class MapPanel extends JPanel {
     private static final int GRID_DEPTH = 20;
     
     private static final int CELL_SIDE_PIXEL_LENGTH = 20;
-    private static final int VERTEX_PIXEL_DIAMETER = 6;
+    private static final int VERTEX_PIXEL_DIAMETER = 9;
     private static final Color AREA_1_COLOR = Color.RED;
     private static final Color AREA_2_COLOR = Color.BLUE;
     private static final Color AREA_3_COLOR = Color.GREEN;
@@ -91,37 +93,45 @@ public class MapPanel extends JPanel {
     
     private void paintPoint(Point point, Graphics2D g) {        
         Point coordinates = findCoordinates(point);
-        g.setColor(getColor(point));
+        List<Color> colors = getColors(point);
         for (int i = 0; i <= VERTEX_PIXEL_DIAMETER; ++i) {
+            g.setColor(colors.get(i%colors.size()));
             g.drawOval(coordinates.x - i/2, coordinates.y - i/2, i, i);
         }
     }
     
-    private Color getColor(Point point) {
-        boolean isArea1Vertex = area1.containsVertex(point);
-        boolean isArea2Vertex = area2.containsVertex(point);
-        boolean isArea3Vertex = area3.containsVertex(point);       
-        assert(isArea1Vertex || isArea2Vertex || isArea3Vertex);
-        
-        //area 1 is yellow
-        //area 2 is cyan
-        //area 3 is magenta
-            
-        if (! isArea1Vertex && isArea2Vertex && isArea3Vertex)
-            return Color.BLUE;
-        if (isArea1Vertex && ! isArea2Vertex && isArea3Vertex)
-            return Color.RED;
-        if (isArea1Vertex && isArea2Vertex && ! isArea3Vertex)
-            return Color.GREEN;
-        if (! isArea1Vertex && ! isArea2Vertex && isArea3Vertex)
-            return Color.MAGENTA;
-        if (! isArea1Vertex && isArea2Vertex && ! isArea3Vertex)
-            return Color.CYAN;
-        if (isArea1Vertex && ! isArea2Vertex && ! isArea3Vertex)
-            return Color.YELLOW;
-                    
-        return Color.BLACK; //vertex from all areas case
+    private List<Color> getColors(Point point) {
+        List<Color> colors = new ArrayList<Color>();
+        if (area1.containsVertex(point)) colors.add(area1.color);
+        if (area2.containsVertex(point)) colors.add(area2.color);
+        if (area3.containsVertex(point)) colors.add(area3.color);
+        return colors;
     }
+        
+//        boolean isArea1Vertex = area1.containsVertex(point);
+//        boolean isArea2Vertex = area2.containsVertex(point);
+//        boolean isArea3Vertex = area3.containsVertex(point);       
+//        assert(isArea1Vertex || isArea2Vertex || isArea3Vertex);
+//        
+//        //area 1 is yellow
+//        //area 2 is cyan
+//        //area 3 is magenta
+//            
+//        if (! isArea1Vertex && isArea2Vertex && isArea3Vertex)
+//            return Color.BLUE;
+//        if (isArea1Vertex && ! isArea2Vertex && isArea3Vertex)
+//            return Color.RED;
+//        if (isArea1Vertex && isArea2Vertex && ! isArea3Vertex)
+//            return Color.GREEN;
+//        if (! isArea1Vertex && ! isArea2Vertex && isArea3Vertex)
+//            return Color.MAGENTA;
+//        if (! isArea1Vertex && isArea2Vertex && ! isArea3Vertex)
+//            return Color.CYAN;
+//        if (isArea1Vertex && ! isArea2Vertex && ! isArea3Vertex)
+//            return Color.YELLOW;
+//                    
+//        return Color.BLACK; //vertex from all areas case
+//    }
     
     private boolean shouldPaint(Point point) {
         boolean isArea1Vertex = area1.containsVertex(point);
