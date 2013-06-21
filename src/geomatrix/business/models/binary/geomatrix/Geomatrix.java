@@ -8,11 +8,12 @@ import geomatrix.business.models.binary.Area;
 import geomatrix.business.models.binary.Cell;
 import geomatrix.business.models.binary.CellSet;
 import geomatrix.business.models.binary.HorizontalSegment;
-import geomatrix.business.models.binary.Point;
+import geomatrix.business.models.binary.GridPoint;
 import geomatrix.business.models.binary.Rectangle;
 import geomatrix.business.models.binary.VerticalSegment;
 import geomatrix.business.models.binary.WideRay;
 import geomatrix.utils.Direction;
+import geomatrix.utils.Line;
 import geomatrix.utils.Pair;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +32,7 @@ import java.util.Set;
  */
 public class Geomatrix implements Area {
 
-    private List<Point> vertexs;
+    private List<GridPoint> vertexs;
     private List<VerticalSegment> verticalEdges;
     private List<HorizontalSegment> horizontalEdges;
     
@@ -44,19 +45,19 @@ public class Geomatrix implements Area {
      * This list contains one arbitrary vertex from each path of this area.
      * A path is a closed cicle of edges.
      */
-    private List<Point> pathRepresentatives;
+    private List<GridPoint> pathRepresentatives;
     
     /**
      * Given first x' value, permits fast access to all vertexs of the area
      * of the form (x',y).
      */
-    private HashMap<Integer,List<Point>> vertexsStoredByX;
+    private HashMap<Integer,List<GridPoint>> vertexsStoredByX;
     
     /**
      * Given first y' value, permits fast access to all vertexs of the area
      * of the form (x,y').
      */
-    private HashMap<Integer,List<Point>> vertexsStoredByY;
+    private HashMap<Integer,List<GridPoint>> vertexsStoredByY;
     
     /**
      * Given first x' value, permits fast access to all vertical edges of the area
@@ -74,7 +75,7 @@ public class Geomatrix implements Area {
      * Empty constructor.
      */
     public Geomatrix() {
-        build(new ArrayList<Point>());
+        build(new ArrayList<GridPoint>());
     }
     
     /**
@@ -92,8 +93,8 @@ public class Geomatrix implements Area {
      * Initializes the Geomatrix from the list of its vertexs.
      * @param vertexs the vertexs that this geomatrix has to have.
      */
-    private void build(List<Point> vertexs) {
-        this.vertexs = new ArrayList<Point>(vertexs);
+    private void build(List<GridPoint> vertexs) {
+        this.vertexs = new ArrayList<GridPoint>(vertexs);
         initializeDataStructsFromVertexs();
     }
     
@@ -128,7 +129,7 @@ public class Geomatrix implements Area {
         if (doEdgesIntersect(other)) return false;
         
         //3) check that no path of this geomatrix is within other.
-        for (Point vertex : pathRepresentatives)
+        for (GridPoint vertex : pathRepresentatives)
             if (other.contains(vertex)) return false;
 
         return true; 
@@ -144,12 +145,12 @@ public class Geomatrix implements Area {
             return;
         }
             
-        Set<Point> newAreaVertexs = new HashSet<Point>();
+        Set<GridPoint> newAreaVertexs = new HashSet<GridPoint>();
                 
         //1) add intersections between this area and a, except double
         //intersections
-        List<Point> intersectPoints = getEdgesIntersect(other);
-        for (Point v : intersectPoints) {
+        List<GridPoint> intersectPoints = getEdgesIntersect(other);
+        for (GridPoint v : intersectPoints) {
             if (newAreaVertexs.contains(v))
                 newAreaVertexs.remove(v);
             else
@@ -158,7 +159,7 @@ public class Geomatrix implements Area {
         
         //2) find vextexs that have an odd number of adjacent contained squares
         //in either area
-        for (Point myVertex : vertexs) {
+        for (GridPoint myVertex : vertexs) {
             List<Boolean> otherAdjCells = other.areAdjacentCellsContained(myVertex);
             
             if (noneTrue(otherAdjCells)) {
@@ -179,7 +180,7 @@ public class Geomatrix implements Area {
             }
         }
         
-        for (Point otherVertex : other.vertexs) {
+        for (GridPoint otherVertex : other.vertexs) {
             List<Boolean> thisAdjCells = areAdjacentCellsContained(otherVertex);
             
             if (noneTrue(thisAdjCells)) {
@@ -231,52 +232,52 @@ public class Geomatrix implements Area {
     }
     
     @Override
-    public void translation(Point p) {
-        List<Point> newVertexs = new ArrayList<Point>();
-        for (Point v : vertexs) {
-            newVertexs.add(new Point(v.x + p.x, v.y + p.y));
+    public void translation(GridPoint p) {
+        List<GridPoint> newVertexs = new ArrayList<GridPoint>();
+        for (GridPoint v : vertexs) {
+            newVertexs.add(new GridPoint(v.x + p.x, v.y + p.y));
         }
         build(newVertexs);
     }
 
     @Override
     public void verticalReflection() {
-        List<Point> newVertexs = new ArrayList<Point>();
-        for (Point v : vertexs) {
-            newVertexs.add(new Point(-v.x, v.y));
+        List<GridPoint> newVertexs = new ArrayList<GridPoint>();
+        for (GridPoint v : vertexs) {
+            newVertexs.add(new GridPoint(-v.x, v.y));
         }
         build(newVertexs);
     }
 
     @Override
     public void horizontalReflection() {
-        List<Point> newVertexs = new ArrayList<Point>();
-        for (Point v : vertexs) {
-            newVertexs.add(new Point(v.x, -v.y));
+        List<GridPoint> newVertexs = new ArrayList<GridPoint>();
+        for (GridPoint v : vertexs) {
+            newVertexs.add(new GridPoint(v.x, -v.y));
         }
         build(newVertexs);
     }
 
     @Override
     public void rotation(int degrees) {
-        List<Point> newVertexs = new ArrayList<Point>();
+        List<GridPoint> newVertexs = new ArrayList<GridPoint>();
         
         degrees = degrees % 360;
         if (degrees < 0) degrees += 360;
         
         if (degrees == 90) {
-            for (Point v : vertexs) {
-                newVertexs.add(new Point(-v.y, v.x));
+            for (GridPoint v : vertexs) {
+                newVertexs.add(new GridPoint(-v.y, v.x));
             }
         }
         else if (degrees == 180) {
-            for (Point v : vertexs) {
-                newVertexs.add(new Point(-v.x, -v.y));
+            for (GridPoint v : vertexs) {
+                newVertexs.add(new GridPoint(-v.x, -v.y));
             }            
         }
         else if (degrees == 270) {
-            for (Point v : vertexs) {
-                newVertexs.add(new Point(v.y, -v.x));
+            for (GridPoint v : vertexs) {
+                newVertexs.add(new GridPoint(v.y, -v.x));
             }            
         }
         else {
@@ -297,7 +298,7 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public Iterator<Point> iterator(Rectangle rectangle) {
+    public Iterator<GridPoint> iterator(Rectangle rectangle) {
         /*
          * Idea for algorithm:
          * Compute area A.
@@ -333,10 +334,10 @@ public class Geomatrix implements Area {
         assert(c instanceof Geomatrix);
         Geomatrix other = (Geomatrix) c;
         
-        Set<Point> vertexsSet = new HashSet<Point>();
+        Set<GridPoint> vertexsSet = new HashSet<GridPoint>();
         vertexsSet.addAll(vertexs);
         
-        for (Point p : other.vertexs){
+        for (GridPoint p : other.vertexs){
             if (vertexsSet.contains(p)) vertexsSet.remove(p);
             else vertexsSet.add(p);
         }
@@ -403,7 +404,7 @@ public class Geomatrix implements Area {
         HashSet<Integer> verticalLines = new HashSet<Integer>();
         HashSet<Integer> horizontalLines = new HashSet<Integer>();
         
-        for (Point vertex : vertexs) {
+        for (GridPoint vertex : vertexs) {
             if (verticalLines.contains(vertex.x))
                 verticalLines.remove(vertex.x);
             else verticalLines.add(vertex.x);
@@ -415,6 +416,25 @@ public class Geomatrix implements Area {
         boolean result = verticalLines.isEmpty() && horizontalLines.isEmpty();
         return result;
     }
+    
+    public static List<Line> getInvalidLines(Set<GridPoint> vertexs) {
+        HashSet<Line> lines = new HashSet<Line>();
+        
+        for (GridPoint vertex : vertexs) {
+            Line verticalLine = new Line(true, vertex.x);
+            if (lines.contains(verticalLine))
+                lines.remove(verticalLine);
+            else lines.add(verticalLine);
+            
+            Line horizontalLine = new Line(false, vertex.y);
+            if (lines.contains(horizontalLine))
+                lines.remove(horizontalLine);
+            else lines.add(horizontalLine);
+        }
+
+        List<Line> result = new ArrayList<Line>(lines);
+        return result;        
+    }
 
     @Override
     public String toString() {
@@ -423,7 +443,7 @@ public class Geomatrix implements Area {
 
         result.append("Area:" + nl);
         result.append("List of vertexs:" + nl);
-        for (Point vertex : vertexs) {
+        for (GridPoint vertex : vertexs) {
             result.append(vertex.toString() + "\t");
         }
 
@@ -448,19 +468,19 @@ public class Geomatrix implements Area {
      * rectangle in the same loop.
      */
     private void initializeMapsOfVertexsAndBoundingRectangle() {
-        vertexsStoredByX = new HashMap<Integer,List<Point>>();
-        vertexsStoredByY = new HashMap<Integer,List<Point>>();
+        vertexsStoredByX = new HashMap<Integer,List<GridPoint>>();
+        vertexsStoredByY = new HashMap<Integer,List<GridPoint>>();
         
         Integer maxX, minX, maxY, minY;
         maxX = minX = maxY = minY = null;
         
-        for (Point p : vertexs) {
+        for (GridPoint p : vertexs) {
             if (!vertexsStoredByX.containsKey(p.x))
-                vertexsStoredByX.put(p.x, new ArrayList<Point>());
+                vertexsStoredByX.put(p.x, new ArrayList<GridPoint>());
             vertexsStoredByX.get(p.x).add(p);
             
             if (!vertexsStoredByY.containsKey(p.y))
-                vertexsStoredByY.put(p.y, new ArrayList<Point>());
+                vertexsStoredByY.put(p.y, new ArrayList<GridPoint>());
             vertexsStoredByY.get(p.y).add(p);
             
             //part corresponding to the bounding box
@@ -476,8 +496,8 @@ public class Geomatrix implements Area {
             }
         }
         
-        if (maxX == null) boundingRectangle = new Rectangle(new Point(0,0), new Point(0,0));
-        else boundingRectangle = new Rectangle(new Point(minX, minY), new Point(maxX, maxY));
+        if (maxX == null) boundingRectangle = new Rectangle(new GridPoint(0,0), new GridPoint(0,0));
+        else boundingRectangle = new Rectangle(new GridPoint(minX, minY), new GridPoint(maxX, maxY));
     }
 
     /**
@@ -490,16 +510,16 @@ public class Geomatrix implements Area {
     private void initializeEdgesAndPathRepresentatives() {
         verticalEdges = new ArrayList<VerticalSegment>();
         horizontalEdges = new ArrayList<HorizontalSegment>();
-        pathRepresentatives = new ArrayList<Point>();
-        Map<Point,Boolean> visitedVertexs = new HashMap<Point,Boolean>();
-        for (Point vertex : vertexs) {
+        pathRepresentatives = new ArrayList<GridPoint>();
+        Map<GridPoint,Boolean> visitedVertexs = new HashMap<GridPoint,Boolean>();
+        for (GridPoint vertex : vertexs) {
             visitedVertexs.put(vertex, Boolean.FALSE);
         }
 
-        Iterator<Point> it = vertexs.iterator();
+        Iterator<GridPoint> it = vertexs.iterator();
         while (it.hasNext()) {
             
-            Point vertex = it.next();
+            GridPoint vertex = it.next();
             if (! visitedVertexs.get(vertex)) {
                 pathRepresentatives.add(vertex);
             }
@@ -528,11 +548,11 @@ public class Geomatrix implements Area {
      * @param vertex
      * @return 
      */
-    private VerticalSegment findVerticalEdge(Point vertex) {
-        Pair<Integer, Pair<Point, Point>> result = countVertexsSouthAndGetClosestSouthAndNorth(vertex);
+    private VerticalSegment findVerticalEdge(GridPoint vertex) {
+        Pair<Integer, Pair<GridPoint, GridPoint>> result = countVertexsSouthAndGetClosestSouthAndNorth(vertex);
         int southCount = result.first;
-        Point closestSouth = result.second.first;
-        Point closestNorth = result.second.second;
+        GridPoint closestSouth = result.second.first;
+        GridPoint closestNorth = result.second.second;
         if (isTopEndpoint(southCount)) {
             return new VerticalSegment(vertex.x, vertex.y, closestSouth.y);
         }
@@ -548,12 +568,12 @@ public class Geomatrix implements Area {
      * @return the number of vertexs directly south of 'vertex' and the closest
      * vertexs directly south and north of 'vertex' or null if there is none.
      */
-    private Pair<Integer, Pair<Point, Point>> countVertexsSouthAndGetClosestSouthAndNorth(Point vertex) {
+    private Pair<Integer, Pair<GridPoint, GridPoint>> countVertexsSouthAndGetClosestSouthAndNorth(GridPoint vertex) {
                                               
         int southCount = 0;
-        Point closestSouth = null;
-        Point closestNorth = null;
-        for(Point p : vertexsStoredByX.get(vertex.x)) {
+        GridPoint closestSouth = null;
+        GridPoint closestNorth = null;
+        for(GridPoint p : vertexsStoredByX.get(vertex.x)) {
             if (p.y > vertex.y) {
                 ++southCount;
                 if (closestSouth == null || closestSouth.y > p.y) {
@@ -566,8 +586,8 @@ public class Geomatrix implements Area {
                 }
             }
         }
-        return new Pair<Integer, Pair<Point, Point>>(southCount,
-                new Pair<Point, Point>(closestSouth, closestNorth));
+        return new Pair<Integer, Pair<GridPoint, GridPoint>>(southCount,
+                new Pair<GridPoint, GridPoint>(closestSouth, closestNorth));
     }
     
     /**
@@ -591,11 +611,11 @@ public class Geomatrix implements Area {
      * @param vertex
      * @return 
      */
-    private HorizontalSegment findHorizontalEdge(Point vertex) {
-        Pair<Integer, Pair<Point, Point>> result = countVertexsEastAndGetClosestEastAndWest(vertex);
+    private HorizontalSegment findHorizontalEdge(GridPoint vertex) {
+        Pair<Integer, Pair<GridPoint, GridPoint>> result = countVertexsEastAndGetClosestEastAndWest(vertex);
         int eastCount = result.first;
-        Point closestEast = result.second.first;
-        Point closestWest = result.second.second;
+        GridPoint closestEast = result.second.first;
+        GridPoint closestWest = result.second.second;
         if (isLeftEndpoint(eastCount)) {
             return new HorizontalSegment(vertex.y, vertex.x, closestEast.x);
         }
@@ -611,12 +631,12 @@ public class Geomatrix implements Area {
      * @return the number of vertexs direectly east of 'vertex' and the closest
      * vertexs directly east and west of 'vertex' or null if there is none.
      */
-    private Pair<Integer, Pair<Point, Point>> countVertexsEastAndGetClosestEastAndWest(Point vertex) {
+    private Pair<Integer, Pair<GridPoint, GridPoint>> countVertexsEastAndGetClosestEastAndWest(GridPoint vertex) {
                                               
         int eastCount = 0;
-        Point closestEast = null;
-        Point closestWest = null;
-        for(Point p : vertexsStoredByY.get(vertex.y)) {
+        GridPoint closestEast = null;
+        GridPoint closestWest = null;
+        for(GridPoint p : vertexsStoredByY.get(vertex.y)) {
             if (p.x > vertex.x) {
                 ++eastCount;
                 if (closestEast == null || closestEast.x > p.x) {
@@ -629,8 +649,8 @@ public class Geomatrix implements Area {
                 }
             }
         }
-        return new Pair<Integer, Pair<Point, Point>>(eastCount,
-                new Pair<Point, Point>(closestEast, closestWest));
+        return new Pair<Integer, Pair<GridPoint, GridPoint>>(eastCount,
+                new Pair<GridPoint, GridPoint>(closestEast, closestWest));
     }
 
     /**
@@ -679,7 +699,7 @@ public class Geomatrix implements Area {
      * @param point the grid point which might be contained.
      * @return true if point is contained in the area. false otherwise.
      */
-    private boolean contains(Point point) {
+    private boolean contains(GridPoint point) {
         List<Boolean> adjacentSquares = areAdjacentCellsContained(point);
         for (Boolean b : adjacentSquares)
             if (! b) return false; 
@@ -700,7 +720,7 @@ public class Geomatrix implements Area {
      * cell, top right cell, bottom left cell and bottom right cell are
      * contained, in this order.
      */
-    private List<Boolean> areAdjacentCellsContained(Point point) {
+    private List<Boolean> areAdjacentCellsContained(GridPoint point) {
                 
         // +-------------+-------------+
         // |             |             |
@@ -839,8 +859,8 @@ public class Geomatrix implements Area {
      * @param other
      * @return 
      */
-    private List<Point> getEdgesIntersect(Geomatrix other) {
-        List<Point> intersectionPoints = new ArrayList<Point>();
+    private List<GridPoint> getEdgesIntersect(Geomatrix other) {
+        List<GridPoint> intersectionPoints = new ArrayList<GridPoint>();
         
         for (VerticalSegment myEdge : verticalEdges) {
             boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.yInterval.size(), other.horizontalEdges.size());

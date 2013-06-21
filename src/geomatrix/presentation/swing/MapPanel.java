@@ -4,6 +4,7 @@
  */
 package geomatrix.presentation.swing;
 
+import geomatrix.utils.Line;
 import geomatrix.business.controllers.AreaController;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -35,8 +36,9 @@ public class MapPanel extends JPanel {
     private static final int GRID_WIDTH = 20;
     private static final int GRID_DEPTH = 20;
     
-    private static final int CELL_SIDE_PIXEL_LENGTH = 20;
+    private static final int PREFERRED_CELL_PIXEL_LENGTH = 20;
     private static final int VERTEX_PIXEL_RADIUS = 9;
+    
     private static final Color AREA_1_COLOR = Color.RED;
     private static final Color AREA_2_COLOR = Color.BLUE;
     private static final Color AREA_3_COLOR = Color.GREEN;
@@ -52,8 +54,8 @@ public class MapPanel extends JPanel {
      */
     public MapPanel(SwingController swingController) {
         
-        setPreferredSize(new Dimension(GRID_WIDTH*CELL_SIDE_PIXEL_LENGTH,
-                                       GRID_DEPTH*CELL_SIDE_PIXEL_LENGTH));
+        setPreferredSize(new Dimension(GRID_WIDTH*PREFERRED_CELL_PIXEL_LENGTH,
+                                       GRID_DEPTH*PREFERRED_CELL_PIXEL_LENGTH));
         
         this.areaController = swingController.getBusinessController(AreaController.class);
         selectedAreaNumber = 1;
@@ -74,26 +76,19 @@ public class MapPanel extends JPanel {
         
         Graphics2D g2D = (Graphics2D) g;
         drawGrid(g2D);
-//        if (area1.isDisplayed) paintArea(area1, g2D);
-//        if (area2.isDisplayed) paintArea(area2, g2D);
-//        if (area3.isDisplayed) paintArea(area3, g2D);
-        paintAreas(g2D);
+        paintVertexs(g2D);
+        paintArea(g2D);
     }
 
-    private void paintAreas(Graphics2D g) {
+    private void paintVertexs(Graphics2D g) {
         for (int i = 0; i < GRID_DEPTH; ++i) {
             for (int j = 0; j < GRID_WIDTH; ++j) {
-                Point point = new Point(i, j);
-                if (shouldPaint(point)) {
-                    paintPoint(point, g);
-                }
+                paintPoint(new Point(i, j), g);
             }
         }
     }
     
     private void paintPoint(Point point, Graphics2D g) {
-        assert(shouldPaint(point));
-        
         Point coordinates = findCoordinates(point);
         List<Color> colors = getColors(point);
         if (colors.size() == 1) {
@@ -108,7 +103,6 @@ public class MapPanel extends JPanel {
             paintSphere(coordinates, colors.get(1), (VERTEX_PIXEL_RADIUS+2)*2/3, g);
             paintSphere(coordinates, colors.get(2), (VERTEX_PIXEL_RADIUS+2)/3, g);
         }
-        
     }
     
     private void paintSphere(Point center, Color color, int radius, Graphics2D g) {
@@ -125,42 +119,7 @@ public class MapPanel extends JPanel {
         if (area3.containsVertex(point) && area3.isDisplayed) colors.add(area3.color);
         return colors;
     }
-        
-//        boolean isArea1Vertex = area1.containsVertex(point);
-//        boolean isArea2Vertex = area2.containsVertex(point);
-//        boolean isArea3Vertex = area3.containsVertex(point);       
-//        assert(isArea1Vertex || isArea2Vertex || isArea3Vertex);
-//        
-//        //area 1 is yellow
-//        //area 2 is cyan
-//        //area 3 is magenta
-//            
-//        if (! isArea1Vertex && isArea2Vertex && isArea3Vertex)
-//            return Color.BLUE;
-//        if (isArea1Vertex && ! isArea2Vertex && isArea3Vertex)
-//            return Color.RED;
-//        if (isArea1Vertex && isArea2Vertex && ! isArea3Vertex)
-//            return Color.GREEN;
-//        if (! isArea1Vertex && ! isArea2Vertex && isArea3Vertex)
-//            return Color.MAGENTA;
-//        if (! isArea1Vertex && isArea2Vertex && ! isArea3Vertex)
-//            return Color.CYAN;
-//        if (isArea1Vertex && ! isArea2Vertex && ! isArea3Vertex)
-//            return Color.YELLOW;
-//                    
-//        return Color.BLACK; //vertex from all areas case
-//    }
-    
-    private boolean shouldPaint(Point point) {
-        boolean isArea1Vertex = area1.containsVertex(point);
-        boolean isArea2Vertex = area2.containsVertex(point);
-        boolean isArea3Vertex = area3.containsVertex(point);
-        return (isArea1Vertex && area1.isDisplayed) ||
-               (isArea2Vertex && area2.isDisplayed) ||
-               (isArea3Vertex && area3.isDisplayed);
-    }
-    
-    
+      
     private void drawGrid(Graphics2D g) {        
         g.setColor(COLOR_GRID);
         
@@ -170,21 +129,6 @@ public class MapPanel extends JPanel {
         for(int i = 0; i < getHeight(); i += cellSize())
             g.drawLine(0, i, getWidth(), i);
     }
-    
-//    void paintArea(PresentationArea area, Graphics2D g) {
-//        for (Point p : area.vertexs) {
-//            displayPoint(p, area.color, g);
-//        }
-//    }
-//
-//    private void displayPoint(Point p, Color color, Graphics2D g) {
-//        Point coordinates = findCoordinates(p);
-//        g.setColor(color);
-//        for (int i = 0; i <= VERTEX_PIXEL_DIAMETER; ++i) {
-//            g.drawOval(coordinates.x - i/2, coordinates.y - i/2, i, i);
-//        }
-//    }
-    
         
     /**
      * Sets the indicated area as selected.
@@ -243,6 +187,10 @@ public class MapPanel extends JPanel {
         return area3;
     }
 
+    private void paintArea(Graphics2D g2D) {
+        List<Line> area1invalidLines = areaController.getInvalidLines(area1.vertexs);
+    }
+
     private class SelectGridPointListener extends MouseAdapter {
 
         public SelectGridPointListener() {
@@ -265,8 +213,8 @@ public class MapPanel extends JPanel {
         }
 
         private Point getClosestVertex(Point point) {
-            return new Point((point.x+CELL_SIDE_PIXEL_LENGTH/2)/cellSize(),
-                             (point.y+CELL_SIDE_PIXEL_LENGTH/2)/cellSize());
+            return new Point((point.x+PREFERRED_CELL_PIXEL_LENGTH/2)/cellSize(),
+                             (point.y+PREFERRED_CELL_PIXEL_LENGTH/2)/cellSize());
         }
 
     }   

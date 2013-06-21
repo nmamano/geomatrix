@@ -20,7 +20,7 @@ public interface Area
      * y direction.
      * @param p the point with the distances the area has to be translated.
      */
-    void translation(Point p);
+    void translation(GridPoint p);
     
     /**
      * This area is reflected in the y axis. In other words, this area will
@@ -63,7 +63,7 @@ public interface Area
      * @param cells
      * @return 
      */
-    Iterator<Point> iterator(Rectangle rectangle);
+    Iterator<GridPoint> iterator(Rectangle rectangle);
     
     /**
      * This cell set becomes the symmetric difference of this cell set and

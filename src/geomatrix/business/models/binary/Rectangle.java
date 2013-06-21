@@ -14,10 +14,10 @@ import geomatrix.utils.Interval;
  */
 public class Rectangle {
     
-    public Point topLeft;
-    public Point bottomRight;
+    public GridPoint topLeft;
+    public GridPoint bottomRight;
 
-    public Rectangle(Point topLeft, Point bottomRight) {
+    public Rectangle(GridPoint topLeft, GridPoint bottomRight) {
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
     }
@@ -31,7 +31,7 @@ public class Rectangle {
     public static float distance(Rectangle r1, Rectangle r2) {
         int xOffset = r1.getXinterval().distance(r2.getXinterval());
         int yOffset = r1.getYinterval().distance(r2.getYinterval());
-        return Point.distance(new Point(0,0), new Point(xOffset, yOffset));
+        return GridPoint.distance(new GridPoint(0,0), new GridPoint(xOffset, yOffset));
     }
     
     /**

@@ -35,8 +35,8 @@ public class VerticalSegment implements Comparable {
      * @param endpoint the endpoint of the edge.
      * @return the other endpoint of the edge.
      */
-    public Point getOtherEndpoint(Point endpoint) {
-        Pair<Point, Point> endpoints = getEndpoints();
+    public GridPoint getOtherEndpoint(GridPoint endpoint) {
+        Pair<GridPoint, GridPoint> endpoints = getEndpoints();
         assert(endpoint == endpoints.first || endpoint == endpoints.second);
         if (endpoint == endpoints.first) return endpoints.second;
         else return endpoints.first;
@@ -46,9 +46,9 @@ public class VerticalSegment implements Comparable {
      * Returns the endpoints of the edge.
      * @return a pair with both endpoints.
      */
-    public Pair<Point, Point> getEndpoints() {
-        return new Pair<Point, Point>(new Point(x,yInterval.low), 
-               new Point(x,yInterval.high));
+    public Pair<GridPoint, GridPoint> getEndpoints() {
+        return new Pair<GridPoint, GridPoint>(new GridPoint(x,yInterval.low), 
+               new GridPoint(x,yInterval.high));
     }
     
     /**
@@ -99,9 +99,9 @@ public class VerticalSegment implements Comparable {
      * @param other
      * @return 
      */
-    public Point getIntersection(VerticalSegment other) {
+    public GridPoint getIntersection(VerticalSegment other) {
         assert(intersects(other));
-        return new Point(x, other.x);
+        return new GridPoint(x, other.x);
     }
 
     /**

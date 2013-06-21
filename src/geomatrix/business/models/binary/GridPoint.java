@@ -5,16 +5,16 @@ package geomatrix.business.models.binary;
  * Represents a grid point.
  * @author Nil
  */
-public class Point {
+public class GridPoint {
     public int x;
     public int y;
 
-    public Point(int x, int y) {
+    public GridPoint(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public static float distance(Point p1, Point p2) {
+    public static float distance(GridPoint p1, GridPoint p2) {
         float xOffset = Math.abs(p1.x - p2.x);
         //-1 because squares are 1 unit wide
         float yOffset = Math.abs(p1.y - p2.y);
@@ -25,8 +25,8 @@ public class Point {
      * Returns a point with the inverted coordinates of this.
      * @return a point with the inverted coordinates of this.
      */
-    public Point revert() {
-        return new Point(y, x);
+    public GridPoint revert() {
+        return new GridPoint(y, x);
     }
     
     /**
@@ -54,7 +54,7 @@ public class Point {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Point other = (Point) obj;
+        final GridPoint other = (GridPoint) obj;
         if (this.x != other.x) {
             return false;
         }
