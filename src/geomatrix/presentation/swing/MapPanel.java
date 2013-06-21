@@ -427,8 +427,8 @@ public class MapPanel extends JPanel {
         assert(areaController.isValidArea(destinationAreaVertexs) &&
                areaController.isValidArea(otherAreaVertexs));
         
-        getArea(destinationAreaNumber).vertexs = areaController.union(destinationAreaVertexs,
-                                                      otherAreaVertexs);
+        getArea(destinationAreaNumber).vertexs = areaController.intersection(
+                destinationAreaVertexs, otherAreaVertexs);
         
         updateSetOperationMenusActivation(destinationAreaNumber);
         repaint();

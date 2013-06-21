@@ -321,6 +321,11 @@ public class MainFrame extends javax.swing.JFrame {
         area1Intersection.add(area1IntersectionArea2);
 
         area1IntersectionArea3.setText("Area 3");
+        area1IntersectionArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1IntersectionArea3ActionPerformed(evt);
+            }
+        });
         area1Intersection.add(area1IntersectionArea3);
 
         jMenu1.add(area1Intersection);
@@ -408,9 +413,19 @@ public class MainFrame extends javax.swing.JFrame {
         area2Intersection.setText("Intersection");
 
         area2IntersectionArea1.setText("Area 1");
+        area2IntersectionArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2IntersectionArea1ActionPerformed(evt);
+            }
+        });
         area2Intersection.add(area2IntersectionArea1);
 
         area2IntersectionArea3.setText("Area 3");
+        area2IntersectionArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2IntersectionArea3ActionPerformed(evt);
+            }
+        });
         area2Intersection.add(area2IntersectionArea3);
 
         jMenu2.add(area2Intersection);
@@ -498,9 +513,19 @@ public class MainFrame extends javax.swing.JFrame {
         area3Intersection.setText("Intersection");
 
         area3IntersectionArea1.setText("Area 1");
+        area3IntersectionArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3IntersectionArea1ActionPerformed(evt);
+            }
+        });
         area3Intersection.add(area3IntersectionArea1);
 
         area3IntersectionArea2.setText("Area 2");
+        area3IntersectionArea2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3IntersectionArea2ActionPerformed(evt);
+            }
+        });
         area3Intersection.add(area3IntersectionArea2);
 
         jMenu9.add(area3Intersection);
@@ -659,6 +684,26 @@ public class MainFrame extends javax.swing.JFrame {
     private void area1IntersectionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1IntersectionArea2ActionPerformed
         mapPanel.intersectionArea(1,2);
     }//GEN-LAST:event_area1IntersectionArea2ActionPerformed
+
+    private void area1IntersectionArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1IntersectionArea3ActionPerformed
+         mapPanel.intersectionArea(1,3);
+    }//GEN-LAST:event_area1IntersectionArea3ActionPerformed
+
+    private void area2IntersectionArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2IntersectionArea1ActionPerformed
+         mapPanel.intersectionArea(2,1);
+    }//GEN-LAST:event_area2IntersectionArea1ActionPerformed
+
+    private void area2IntersectionArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2IntersectionArea3ActionPerformed
+         mapPanel.intersectionArea(2,3);
+    }//GEN-LAST:event_area2IntersectionArea3ActionPerformed
+
+    private void area3IntersectionArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3IntersectionArea1ActionPerformed
+         mapPanel.intersectionArea(3,1);
+    }//GEN-LAST:event_area3IntersectionArea1ActionPerformed
+
+    private void area3IntersectionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3IntersectionArea2ActionPerformed
+         mapPanel.intersectionArea(3,2);
+    }//GEN-LAST:event_area3IntersectionArea2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu area1Difference;

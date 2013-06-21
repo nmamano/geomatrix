@@ -55,16 +55,6 @@ public class AreaController extends BusinessController {
         }
         return containedCells;        
     }
-
-    public Set<Point> union(Set<Point> area1Vertexs, Set<Point> area2Vertexs) {
-        
-        assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
-        
-        Geomatrix area1 = new Geomatrix(area1Vertexs);
-        Geomatrix area2 = new Geomatrix(area2Vertexs);
-        area1.union(area2);
-        return gridPointsToPoints(area1.getVertexs());    
-    }
     
     private Set<GridPoint> pointsToGridPoints(Collection<Point> points) {
         Set<GridPoint> gridPoints = new HashSet<GridPoint>();
@@ -80,5 +70,25 @@ public class AreaController extends BusinessController {
             points.add(new Point(p.x, p.y));
         }
         return points;
+    }
+
+    public Set<Point> union(Set<Point> area1Vertexs, Set<Point> area2Vertexs) {
+        
+        assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
+        
+        Geomatrix area1 = new Geomatrix(area1Vertexs);
+        Geomatrix area2 = new Geomatrix(area2Vertexs);
+        area1.union(area2);
+        return gridPointsToPoints(area1.getVertexs());    
+    }
+        
+    public Set<Point> intersection(Set<Point> area1Vertexs, Set<Point> area2Vertexs) {
+
+        assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
+        
+        Geomatrix area1 = new Geomatrix(area1Vertexs);
+        Geomatrix area2 = new Geomatrix(area2Vertexs);
+        area1.intersection(area2);
+        return gridPointsToPoints(area1.getVertexs()); 
     }
 }
