@@ -36,7 +36,7 @@ public class MapPanel extends JPanel {
     private static final int GRID_DEPTH = 20;
     
     private static final int CELL_SIDE_PIXEL_LENGTH = 20;
-    private static final int VERTEX_PIXEL_DIAMETER = 9;
+    private static final int VERTEX_PIXEL_RADIUS = 9;
     private static final Color AREA_1_COLOR = Color.RED;
     private static final Color AREA_2_COLOR = Color.BLUE;
     private static final Color AREA_3_COLOR = Color.GREEN;
@@ -91,20 +91,38 @@ public class MapPanel extends JPanel {
         }
     }
     
-    private void paintPoint(Point point, Graphics2D g) {        
+    private void paintPoint(Point point, Graphics2D g) {
+        assert(shouldPaint(point));
+        
         Point coordinates = findCoordinates(point);
         List<Color> colors = getColors(point);
-        for (int i = 0; i <= VERTEX_PIXEL_DIAMETER; ++i) {
-            g.setColor(colors.get(i%colors.size()));
-            g.drawOval(coordinates.x - i/2, coordinates.y - i/2, i, i);
+        if (colors.size() == 1) {
+            paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS, g);
+        }
+        else if (colors.size() == 2) {
+            paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS+1, g);
+            paintSphere(coordinates, colors.get(1), (VERTEX_PIXEL_RADIUS+1)/2, g);
+        }
+        else if (colors.size() == 3) {
+            paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS+2, g);
+            paintSphere(coordinates, colors.get(1), (VERTEX_PIXEL_RADIUS+2)*2/3, g);
+            paintSphere(coordinates, colors.get(2), (VERTEX_PIXEL_RADIUS+2)/3, g);
+        }
+        
+    }
+    
+    private void paintSphere(Point center, Color color, int radius, Graphics2D g) {
+        g.setColor(color);
+        for (int i = 0; i <= radius; ++i) {
+            g.drawOval(center.x - i/2, center.y - i/2, i, i);
         }
     }
     
     private List<Color> getColors(Point point) {
         List<Color> colors = new ArrayList<Color>();
-        if (area1.containsVertex(point)) colors.add(area1.color);
-        if (area2.containsVertex(point)) colors.add(area2.color);
-        if (area3.containsVertex(point)) colors.add(area3.color);
+        if (area1.containsVertex(point) && area1.isDisplayed) colors.add(area1.color);
+        if (area2.containsVertex(point) && area2.isDisplayed) colors.add(area2.color);
+        if (area3.containsVertex(point) && area3.isDisplayed) colors.add(area3.color);
         return colors;
     }
         
@@ -137,7 +155,9 @@ public class MapPanel extends JPanel {
         boolean isArea1Vertex = area1.containsVertex(point);
         boolean isArea2Vertex = area2.containsVertex(point);
         boolean isArea3Vertex = area3.containsVertex(point);
-        return isArea1Vertex || isArea2Vertex || isArea3Vertex;
+        return (isArea1Vertex && area1.isDisplayed) ||
+               (isArea2Vertex && area2.isDisplayed) ||
+               (isArea3Vertex && area3.isDisplayed);
     }
     
     
