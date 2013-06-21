@@ -6,7 +6,6 @@ package geomatrix.presentation.swing;
 
 import geomatrix.utils.Line;
 import geomatrix.business.controllers.AreaController;
-import geomatrix.utils.Pair;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,7 +18,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.swing.JPanel;
 import manticore.presentation.SwingController;
 
@@ -364,6 +362,11 @@ public class MapPanel extends JPanel {
 
     private void paintEdges(Graphics2D g) {
         //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void resetArea(int areaNumber) {
+        getArea(areaNumber).vertexs = new HashSet<Point>();
+        repaint();
     }
     
     private class SelectGridPointListener extends MouseAdapter {

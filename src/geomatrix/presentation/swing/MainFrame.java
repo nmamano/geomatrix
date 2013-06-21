@@ -261,6 +261,11 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu1.setToolTipText("");
 
         jMenuItem1.setText("New");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1New(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenu4.setText("Clone");
@@ -338,7 +343,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuItem35.setText("New");
         jMenuItem35.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem35ActionPerformed(evt);
+                area2New(evt);
             }
         });
         jMenu2.add(jMenuItem35);
@@ -406,6 +411,11 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu9.setText("Area 3");
 
         jMenuItem13.setText("New");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3New(evt);
+            }
+        });
         jMenu9.add(jMenuItem13);
 
         jMenu10.setText("Clone");
@@ -539,9 +549,9 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
-    private void jMenuItem35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem35ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem35ActionPerformed
+    private void area2New(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2New
+        mapPanel.resetArea(2);
+    }//GEN-LAST:event_area2New
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
@@ -550,6 +560,14 @@ public class MainFrame extends javax.swing.JFrame {
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem21ActionPerformed
+
+    private void area3New(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3New
+        mapPanel.resetArea(3);
+    }//GEN-LAST:event_area3New
+
+    private void area1New(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1New
+        mapPanel.resetArea(1);
+    }//GEN-LAST:event_area1New
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
