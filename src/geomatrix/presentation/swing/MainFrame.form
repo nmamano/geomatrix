@@ -36,13 +36,16 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1CloneArea2"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1CloneArea3"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
@@ -156,11 +159,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2CloneArea1"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem37">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2CloneArea3"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -270,11 +279,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3CloneArea1"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem15">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3CloneArea2"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

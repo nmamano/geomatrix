@@ -271,12 +271,17 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu4.setText("Clone");
 
         jMenuItem2.setText("Area 2");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1CloneArea2(evt);
+            }
+        });
         jMenu4.add(jMenuItem2);
 
         jMenuItem3.setText("Area 3");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                area1CloneArea3(evt);
             }
         });
         jMenu4.add(jMenuItem3);
@@ -351,9 +356,19 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu3.setText("Clone");
 
         jMenuItem36.setText("Area 1");
+        jMenuItem36.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2CloneArea1(evt);
+            }
+        });
         jMenu3.add(jMenuItem36);
 
         jMenuItem37.setText("Area 3");
+        jMenuItem37.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2CloneArea3(evt);
+            }
+        });
         jMenu3.add(jMenuItem37);
 
         jMenu2.add(jMenu3);
@@ -421,9 +436,19 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu10.setText("Clone");
 
         jMenuItem14.setText("Area 1");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3CloneArea1(evt);
+            }
+        });
         jMenu10.add(jMenuItem14);
 
         jMenuItem15.setText("Area 2");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3CloneArea2(evt);
+            }
+        });
         jMenu10.add(jMenuItem15);
 
         jMenu9.add(jMenu10);
@@ -541,9 +566,9 @@ public class MainFrame extends javax.swing.JFrame {
         displayArea3.setSelected(true); //a selected area is always displayed
     }//GEN-LAST:event_selectArea3ActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void area1CloneArea3(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1CloneArea3
+        mapPanel.cloneArea(1,3);
+    }//GEN-LAST:event_area1CloneArea3
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
@@ -568,6 +593,26 @@ public class MainFrame extends javax.swing.JFrame {
     private void area1New(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1New
         mapPanel.resetArea(1);
     }//GEN-LAST:event_area1New
+
+    private void area1CloneArea2(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1CloneArea2
+        mapPanel.cloneArea(1,2);
+    }//GEN-LAST:event_area1CloneArea2
+
+    private void area2CloneArea1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2CloneArea1
+        mapPanel.cloneArea(2,1);
+    }//GEN-LAST:event_area2CloneArea1
+
+    private void area2CloneArea3(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2CloneArea3
+        mapPanel.cloneArea(2,3);
+    }//GEN-LAST:event_area2CloneArea3
+
+    private void area3CloneArea1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3CloneArea1
+        mapPanel.cloneArea(3,1);
+    }//GEN-LAST:event_area3CloneArea1
+
+    private void area3CloneArea2(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3CloneArea2
+        mapPanel.cloneArea(2,3);
+    }//GEN-LAST:event_area3CloneArea2
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

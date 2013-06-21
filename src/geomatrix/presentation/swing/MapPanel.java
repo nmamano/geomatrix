@@ -368,6 +368,16 @@ public class MapPanel extends JPanel {
         getArea(areaNumber).vertexs = new HashSet<Point>();
         repaint();
     }
+
+    void cloneArea(int destinationAreaNumber, int toBeClonedAreaNumber) {
+        assert(destinationAreaNumber != toBeClonedAreaNumber);
+        
+        getArea(destinationAreaNumber).vertexs = new HashSet<Point>();
+        for (Point vertex : getArea(toBeClonedAreaNumber).vertexs) {
+            getArea(destinationAreaNumber).vertexs.add(vertex);
+        }
+        repaint();
+    }
     
     private class SelectGridPointListener extends MouseAdapter {
 
