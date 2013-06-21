@@ -6,6 +6,7 @@ package geomatrix.presentation.swing;
 
 import geomatrix.utils.Line;
 import geomatrix.business.controllers.AreaController;
+import geomatrix.utils.Pair;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,8 +15,11 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.JPanel;
 import manticore.presentation.SwingController;
 
@@ -44,7 +48,9 @@ public class MapPanel extends JPanel {
     private static final Color AREA_3_COLOR = Color.GREEN;
     private static final Color BACKGROUND_GRID_COLOR = Color.white;
     private static final Color COLOR_GRID = Color.decode("#EEEEEE");
-
+    private static final Color OVERLAPPED_LINES_COLOR = Color.GRAY;
+    private static final Color DOUBLY_OVERLAPPED_LINES_COLOR = Color.BLACK;
+    
     /**
      * Initialization.
      * All areas have no vertexs.
@@ -187,8 +193,83 @@ public class MapPanel extends JPanel {
         return area3;
     }
 
-    private void paintArea(Graphics2D g2D) {
-        List<Line> area1invalidLines = areaController.getInvalidLines(area1.vertexs);
+    private void paintArea(Graphics2D g) {
+        List<Line> area1InvalidLines, area2InvalidLines, area3InvalidLines;
+        if (area1.isDisplayed) {
+            area1InvalidLines = areaController.getInvalidLines(area1.vertexs);
+        }
+        else {
+            area1InvalidLines = new ArrayList<Line>();
+        }
+        if (area2.isDisplayed) {
+            area2InvalidLines = areaController.getInvalidLines(area2.vertexs);
+        }
+        else {
+            area2InvalidLines = new ArrayList<Line>();
+        }
+        if (area3.isDisplayed) {
+            area3InvalidLines = areaController.getInvalidLines(area3.vertexs);
+        }
+        else {
+            area3InvalidLines = new ArrayList<Line>();
+        }
+        paintInvalidLines(area1InvalidLines, area2InvalidLines, area3InvalidLines, g);
+    }
+
+    private void paintInvalidLines(List<Line> area1InvalidLines,
+            List<Line> area2InvalidLines, List<Line> area3InvalidLines, Graphics2D g) {
+        
+        Map<Line, Color> colorOfInvalidLines = findColorOfInvalidLines(
+                area1InvalidLines, area2InvalidLines, area3InvalidLines);
+        
+        for (Line line : colorOfInvalidLines.keySet()) {
+            paintLine(line, colorOfInvalidLines.get(line), g);
+        }
+    }
+
+    private Map<Line, Color> findColorOfInvalidLines(List<Line> area1InvalidLines,
+            List<Line> area2InvalidLines, List<Line> area3InvalidLines) {
+        
+        Map<Line, Color> colorOfInvalidLines = new HashMap<Line, Color>();
+        for (Line line : area1InvalidLines) {
+            colorOfInvalidLines.put(line, area1.color);
+        }
+        for (Line line : area2InvalidLines) {
+            if (colorOfInvalidLines.containsKey(line)) {
+                colorOfInvalidLines.put(line, OVERLAPPED_LINES_COLOR);
+            }
+            else {
+                colorOfInvalidLines.put(line, area2.color);
+            }
+        }
+        for (Line line : area3InvalidLines) {
+            if (colorOfInvalidLines.containsKey(line)) {
+                if (colorOfInvalidLines.get(line) == OVERLAPPED_LINES_COLOR) {
+                    colorOfInvalidLines.put(line, DOUBLY_OVERLAPPED_LINES_COLOR);
+                }
+                else {
+                    colorOfInvalidLines.put(line, OVERLAPPED_LINES_COLOR);
+                }
+            }
+            else {
+                colorOfInvalidLines.put(line, area3.color);
+            }
+        }
+        return colorOfInvalidLines;
+    }
+
+    private void paintLine(Line line, Color color, Graphics2D g) {
+        g.setColor(color);
+        if (line.vertical) {
+            Point lineOrigin = new Point(line.fixedCoordinate, 0);
+            int xValue = findCoordinates(lineOrigin).x;
+            g.drawLine(xValue, 0, xValue, getHeight());
+        }
+        else {
+            Point lineOrigin = new Point(0, line.fixedCoordinate);
+            int yValue = findCoordinates(lineOrigin).y;
+            g.drawLine(0, yValue, getWidth(), yValue);
+        }
     }
 
     private class SelectGridPointListener extends MouseAdapter {
