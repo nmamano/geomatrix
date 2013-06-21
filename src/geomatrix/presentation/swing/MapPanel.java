@@ -418,8 +418,6 @@ public class MapPanel extends JPanel {
         repaint();
     }
     
-
-
     void intersectionArea(int destinationAreaNumber, int otherAreaNumber) {
         assert(destinationAreaNumber != otherAreaNumber);
         Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
@@ -428,6 +426,34 @@ public class MapPanel extends JPanel {
                areaController.isValidArea(otherAreaVertexs));
         
         getArea(destinationAreaNumber).vertexs = areaController.intersection(
+                destinationAreaVertexs, otherAreaVertexs);
+        
+        updateSetOperationMenusActivation(destinationAreaNumber);
+        repaint();
+    }
+
+    void differenceArea(int destinationAreaNumber, int otherAreaNumber) {
+        assert(destinationAreaNumber != otherAreaNumber);
+        Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
+        Set<Point> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
+        assert(areaController.isValidArea(destinationAreaVertexs) &&
+               areaController.isValidArea(otherAreaVertexs));
+        
+        getArea(destinationAreaNumber).vertexs = areaController.difference(
+                destinationAreaVertexs, otherAreaVertexs);
+        
+        updateSetOperationMenusActivation(destinationAreaNumber);
+        repaint();
+    }
+
+    void symmetricDifferenceArea(int destinationAreaNumber, int otherAreaNumber) {
+        assert(destinationAreaNumber != otherAreaNumber);
+        Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
+        Set<Point> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
+        assert(areaController.isValidArea(destinationAreaVertexs) &&
+               areaController.isValidArea(otherAreaVertexs));
+        
+        getArea(destinationAreaNumber).vertexs = areaController.symmetricDifference(
                 destinationAreaVertexs, otherAreaVertexs);
         
         updateSetOperationMenusActivation(destinationAreaNumber);

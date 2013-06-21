@@ -333,9 +333,19 @@ public class MainFrame extends javax.swing.JFrame {
         area1Difference.setText("Difference");
 
         area1DifferenceArea2.setText("Area 2");
+        area1DifferenceArea2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1DifferenceArea2ActionPerformed(evt);
+            }
+        });
         area1Difference.add(area1DifferenceArea2);
 
         area1DifferenceArea3.setText("Area 3");
+        area1DifferenceArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1DifferenceArea3ActionPerformed(evt);
+            }
+        });
         area1Difference.add(area1DifferenceArea3);
 
         jMenu1.add(area1Difference);
@@ -343,9 +353,19 @@ public class MainFrame extends javax.swing.JFrame {
         area1SymmetricDifference.setText("Symmetric difference");
 
         area1SymmetricDifferenceArea2.setText("Area 2");
+        area1SymmetricDifferenceArea2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1SymmetricDifferenceArea2ActionPerformed(evt);
+            }
+        });
         area1SymmetricDifference.add(area1SymmetricDifferenceArea2);
 
         area1SymmetricDifferenceArea3.setText("Area 3");
+        area1SymmetricDifferenceArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1SymmetricDifferenceArea3ActionPerformed(evt);
+            }
+        });
         area1SymmetricDifference.add(area1SymmetricDifferenceArea3);
 
         jMenu1.add(area1SymmetricDifference);
@@ -433,9 +453,19 @@ public class MainFrame extends javax.swing.JFrame {
         area2Difference.setText("Difference");
 
         area2DifferenceArea1.setText("Area 1");
+        area2DifferenceArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2DifferenceArea1ActionPerformed(evt);
+            }
+        });
         area2Difference.add(area2DifferenceArea1);
 
         area2DifferenceArea3.setText("Area 3");
+        area2DifferenceArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2DifferenceArea3ActionPerformed(evt);
+            }
+        });
         area2Difference.add(area2DifferenceArea3);
 
         jMenu2.add(area2Difference);
@@ -443,9 +473,19 @@ public class MainFrame extends javax.swing.JFrame {
         area2SymmetricDifference.setText("Symmetric difference");
 
         area2SymmetricDifferenceArea1.setText("Area 1");
+        area2SymmetricDifferenceArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2SymmetricDifferenceArea1ActionPerformed(evt);
+            }
+        });
         area2SymmetricDifference.add(area2SymmetricDifferenceArea1);
 
         area2SymmetricDifferenceArea3.setText("Area 3");
+        area2SymmetricDifferenceArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2SymmetricDifferenceArea3ActionPerformed(evt);
+            }
+        });
         area2SymmetricDifference.add(area2SymmetricDifferenceArea3);
 
         jMenu2.add(area2SymmetricDifference);
@@ -533,6 +573,11 @@ public class MainFrame extends javax.swing.JFrame {
         area3Difference.setText("Difference");
 
         area3DifferenceArea1.setText("Area 1");
+        area3DifferenceArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3DifferenceArea1ActionPerformed(evt);
+            }
+        });
         area3Difference.add(area3DifferenceArea1);
 
         area3DifferenceArea2.setText("Area 2");
@@ -548,9 +593,19 @@ public class MainFrame extends javax.swing.JFrame {
         area3SymmetricDifference.setText("Symmetric difference");
 
         area3SymmetricDifferenceArea1.setText("Area 1");
+        area3SymmetricDifferenceArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3SymmetricDifferenceArea1ActionPerformed(evt);
+            }
+        });
         area3SymmetricDifference.add(area3SymmetricDifferenceArea1);
 
         area3SymmetricDifferenceArea2.setText("Area 2");
+        area3SymmetricDifferenceArea2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3SymmetricDifferenceArea2ActionPerformed(evt);
+            }
+        });
         area3SymmetricDifference.add(area3SymmetricDifferenceArea2);
 
         jMenu9.add(area3SymmetricDifference);
@@ -634,7 +689,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_area3UnionArea1ActionPerformed
 
     private void area3DifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3DifferenceArea2ActionPerformed
-        // TODO add your handling code here:
+        mapPanel.differenceArea(3,2);
     }//GEN-LAST:event_area3DifferenceArea2ActionPerformed
 
     private void area3New(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3New
@@ -704,6 +759,50 @@ public class MainFrame extends javax.swing.JFrame {
     private void area3IntersectionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3IntersectionArea2ActionPerformed
          mapPanel.intersectionArea(3,2);
     }//GEN-LAST:event_area3IntersectionArea2ActionPerformed
+
+    private void area1DifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1DifferenceArea2ActionPerformed
+        mapPanel.differenceArea(1,2);
+    }//GEN-LAST:event_area1DifferenceArea2ActionPerformed
+
+    private void area1DifferenceArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1DifferenceArea3ActionPerformed
+        mapPanel.differenceArea(1,3);
+    }//GEN-LAST:event_area1DifferenceArea3ActionPerformed
+
+    private void area2DifferenceArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2DifferenceArea1ActionPerformed
+        mapPanel.differenceArea(2,1);
+    }//GEN-LAST:event_area2DifferenceArea1ActionPerformed
+
+    private void area2DifferenceArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2DifferenceArea3ActionPerformed
+        mapPanel.differenceArea(2,3);
+    }//GEN-LAST:event_area2DifferenceArea3ActionPerformed
+
+    private void area3DifferenceArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3DifferenceArea1ActionPerformed
+        mapPanel.differenceArea(3,1);
+    }//GEN-LAST:event_area3DifferenceArea1ActionPerformed
+
+    private void area1SymmetricDifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1SymmetricDifferenceArea2ActionPerformed
+        mapPanel.symmetricDifferenceArea(1,2);
+    }//GEN-LAST:event_area1SymmetricDifferenceArea2ActionPerformed
+
+    private void area1SymmetricDifferenceArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1SymmetricDifferenceArea3ActionPerformed
+        mapPanel.symmetricDifferenceArea(1,3);
+    }//GEN-LAST:event_area1SymmetricDifferenceArea3ActionPerformed
+
+    private void area2SymmetricDifferenceArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2SymmetricDifferenceArea1ActionPerformed
+        mapPanel.symmetricDifferenceArea(2,1);
+    }//GEN-LAST:event_area2SymmetricDifferenceArea1ActionPerformed
+
+    private void area2SymmetricDifferenceArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2SymmetricDifferenceArea3ActionPerformed
+        mapPanel.symmetricDifferenceArea(2,3);
+    }//GEN-LAST:event_area2SymmetricDifferenceArea3ActionPerformed
+
+    private void area3SymmetricDifferenceArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3SymmetricDifferenceArea1ActionPerformed
+        mapPanel.symmetricDifferenceArea(3,1);
+    }//GEN-LAST:event_area3SymmetricDifferenceArea1ActionPerformed
+
+    private void area3SymmetricDifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3SymmetricDifferenceArea2ActionPerformed
+        mapPanel.symmetricDifferenceArea(3,2);
+    }//GEN-LAST:event_area3SymmetricDifferenceArea2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu area1Difference;

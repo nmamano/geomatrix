@@ -107,11 +107,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1DifferenceArea2ActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="area1DifferenceArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1DifferenceArea3ActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -124,11 +130,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1SymmetricDifferenceArea2ActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="area1SymmetricDifferenceArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1SymmetricDifferenceArea3ActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -239,11 +251,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2DifferenceArea1ActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="area2DifferenceArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2DifferenceArea3ActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -256,11 +274,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2SymmetricDifferenceArea1ActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="area2SymmetricDifferenceArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2SymmetricDifferenceArea3ActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -371,6 +395,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3DifferenceArea1ActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="area3DifferenceArea2">
                   <Properties>
@@ -391,11 +418,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3SymmetricDifferenceArea1ActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="area3SymmetricDifferenceArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3SymmetricDifferenceArea2ActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

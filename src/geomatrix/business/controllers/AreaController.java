@@ -91,4 +91,24 @@ public class AreaController extends BusinessController {
         area1.intersection(area2);
         return gridPointsToPoints(area1.getVertexs()); 
     }
+
+    public Set<Point> difference(Set<Point> area1Vertexs, Set<Point> area2Vertexs) {
+
+        assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
+        
+        Geomatrix area1 = new Geomatrix(area1Vertexs);
+        Geomatrix area2 = new Geomatrix(area2Vertexs);
+        area1.difference(area2);
+        return gridPointsToPoints(area1.getVertexs()); 
+    }
+
+    public Set<Point> symmetricDifference(Set<Point> area1Vertexs, Set<Point> area2Vertexs) {
+
+        assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
+        
+        Geomatrix area1 = new Geomatrix(area1Vertexs);
+        Geomatrix area2 = new Geomatrix(area2Vertexs);
+        area1.symmetricDifference(area2);
+        return gridPointsToPoints(area1.getVertexs()); 
+    }
 }
