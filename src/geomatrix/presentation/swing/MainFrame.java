@@ -194,6 +194,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void selectArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArea1ActionPerformed
         mapPanel.setSelected(1);
+        displayArea1.setSelected(true); //a selected area is always displayed
     }//GEN-LAST:event_selectArea1ActionPerformed
 
     private void displayArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayArea1ActionPerformed
@@ -231,10 +232,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void selectArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArea2ActionPerformed
         mapPanel.setSelected(2);
+        displayArea2.setSelected(true); //a selected area is always displayed
     }//GEN-LAST:event_selectArea2ActionPerformed
 
     private void selectArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArea3ActionPerformed
         mapPanel.setSelected(3);
+        displayArea3.setSelected(true); //a selected area is always displayed
     }//GEN-LAST:event_selectArea3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
