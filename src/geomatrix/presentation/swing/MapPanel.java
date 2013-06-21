@@ -24,18 +24,18 @@ public class MapPanel extends JPanel {
     
     private AreaController areaController;
     
-    private int selectedArea;
-    private boolean isArea1Displayed;
-    private boolean isArea2Displayed;
-    private boolean isArea3Displayed;
+    private int selectedAreaNumber;
     
-    private static final int GRID_WIDTH = 30;
-    private static final int GRID_DEPTH = 30;
+    private static final int GRID_WIDTH = 24;
+    private static final int GRID_DEPTH = 24;
     
     private static final int CELL_SIDE_PIXEL_LENGTH = 16;
     private static final int VERTEX_PIXEL_DIAMETER = 4;
     
-    
+    private PresentationArea area1;
+    private PresentationArea area2;
+    private PresentationArea area3;
+
     private static final Color AREA_1_COLOR = Color.RED;
     private static final Color AREA_2_COLOR = Color.BLUE;
     private static final Color AREA_3_COLOR = Color.GREEN;
@@ -55,10 +55,12 @@ public class MapPanel extends JPanel {
                                        GRID_DEPTH*CELL_SIDE_PIXEL_LENGTH));
         
         this.areaController = swingController.getBusinessController(AreaController.class);
-        selectedArea = 1;
-        isArea1Displayed = true;
-        isArea2Displayed = true;
-        isArea3Displayed = true;
+        selectedAreaNumber = 1;
+        
+        area1 = new PresentationArea(true, AREA_1_COLOR);
+        area2 = new PresentationArea(true, AREA_2_COLOR);
+        area3 = new PresentationArea(true, AREA_3_COLOR);
+        
         this.addMouseListener(new SelectGridPointListener());
         repaint();
         
@@ -71,9 +73,9 @@ public class MapPanel extends JPanel {
         
         Graphics2D g2D = (Graphics2D) g;
         drawGrid(g2D);
-        if (isArea1Displayed) displayArea(1, g2D);
-        if (isArea2Displayed) displayArea(2, g2D);
-        if (isArea3Displayed) displayArea(3, g2D);
+        if (area1.isDisplayed) paintArea(area1, g2D);
+        if (area2.isDisplayed) paintArea(area2, g2D);
+        if (area3.isDisplayed) paintArea(area3, g2D);
     }
 
     private void drawGrid(Graphics2D g) {        
@@ -85,6 +87,21 @@ public class MapPanel extends JPanel {
         for(int i = 0; i < getHeight(); i += cellSize())
             g.drawLine(0, i, getWidth(), i);
     }
+    
+    void paintArea(PresentationArea area, Graphics2D g) {
+        for (Point p : area.vertexs) {
+            displayPoint(p, area.color, g);
+        }
+    }
+
+    private void displayPoint(Point p, Color color, Graphics2D g) {
+        Point coordinates = findCoordinates(p);
+        g.setColor(color);
+        g.drawOval(coordinates.x - VERTEX_PIXEL_DIAMETER/2,
+                   coordinates.y - VERTEX_PIXEL_DIAMETER/2,
+                   VERTEX_PIXEL_DIAMETER, VERTEX_PIXEL_DIAMETER);
+    }
+    
         
     /**
      * Sets the indicated area as selected.
@@ -95,7 +112,7 @@ public class MapPanel extends JPanel {
         
         assert(areaNumber >= 1 && areaNumber <= 3);
         
-        selectedArea = areaNumber;
+        selectedAreaNumber = areaNumber;
         try {
             setDisplayed(areaNumber, true);
         }
@@ -118,48 +135,29 @@ public class MapPanel extends JPanel {
         
         assert(areaNumber >= 1 && areaNumber <= 3);
         
-        if (areaNumber == selectedArea && ! shouldBeDisplayed) {
+        if (areaNumber == selectedAreaNumber && ! shouldBeDisplayed) {
             throw new HideSelectedAreaException();
         }
-        if (areaNumber == 1) isArea1Displayed = shouldBeDisplayed;
-        else if (areaNumber == 2) isArea2Displayed = shouldBeDisplayed;
-        else isArea3Displayed = shouldBeDisplayed;
-        
+        getArea(areaNumber).isDisplayed = shouldBeDisplayed;
+       
         repaint();
     }
     
     private int cellSize() {
         return Math.max(this.getWidth() / GRID_WIDTH,
                         this.getHeight() / GRID_DEPTH);
-    } 
-
-    private void displayArea(int areaNumber, Graphics2D g) {
-        assert(areaNumber >= 1 && areaNumber <= 3);
-        
-        HashSet<Point> vertexs = areaController.getVertexs(areaNumber);
-        for (Point p : vertexs) {
-            displayPoint(p, getColor(areaNumber), g);
-        }
-    }
-    
-    private Color getColor(int areaNumber) {
-        assert(areaNumber >= 1 && areaNumber <= 3);
-        
-        if (areaNumber == 1) return AREA_1_COLOR;
-        if (areaNumber == 2) return AREA_2_COLOR;
-        return AREA_3_COLOR;
-    }
-
-    private void displayPoint(Point p, Color color, Graphics2D g) {
-        Point coordinates = findCoordinates(p);
-        g.setColor(color);
-        g.drawOval(coordinates.x - VERTEX_PIXEL_DIAMETER/2,
-                   coordinates.y - VERTEX_PIXEL_DIAMETER/2,
-                   VERTEX_PIXEL_DIAMETER, VERTEX_PIXEL_DIAMETER);
     }
 
     private Point findCoordinates(Point p) {
         return new Point(p.x*cellSize(), p.y*cellSize());
+    }
+
+    private PresentationArea getArea(int areaNumber) {
+        assert(areaNumber >= 1 && areaNumber <= 3);
+        
+        if (areaNumber == 1) return area1;
+        if (areaNumber == 2) return area2;
+        return area3;
     }
     
     private class SelectGridPointListener extends MouseAdapter {
@@ -171,11 +169,13 @@ public class MapPanel extends JPanel {
         public void mouseClicked(MouseEvent e) {
             
             Point clickedVertex = getClosestVertex(e.getPoint());
-            if (areaController.areaContainsVertex(selectedArea, clickedVertex)) {
-                areaController.removeVertexFromArea(selectedArea, clickedVertex);
+            
+            PresentationArea selectedArea = getArea(selectedAreaNumber);
+            if (selectedArea.containsVertex(clickedVertex)) {
+                selectedArea.removeVertexFromArea(clickedVertex);
             }
             else {
-                areaController.addVertexToArea(selectedArea, clickedVertex);
+                selectedArea.addVertexToArea(clickedVertex);
             }
             
             repaint();
