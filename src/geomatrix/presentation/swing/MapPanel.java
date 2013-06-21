@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
 import javax.swing.JPanel;
 import manticore.presentation.SwingController;
 
@@ -20,6 +21,7 @@ import manticore.presentation.SwingController;
  * @author Nil
  */
 public class MapPanel extends JPanel {
+    
     private AreaController areaController;
     
     private int selectedArea;
@@ -27,9 +29,17 @@ public class MapPanel extends JPanel {
     private boolean isArea2Displayed;
     private boolean isArea3Displayed;
     
-    private static final int GRID_WIDTH = 40;
-    private static final int GRID_DEPTH = 40;
+    private static final int GRID_WIDTH = 30;
+    private static final int GRID_DEPTH = 30;
     
+    private static final int CELL_SIDE_PIXEL_LENGTH = 16;
+    private static final int VERTEX_PIXEL_DIAMETER = 4;
+    
+    
+    private static final Color AREA_1_COLOR = Color.RED;
+    private static final Color AREA_2_COLOR = Color.BLUE;
+    private static final Color AREA_3_COLOR = Color.GREEN;
+    private static final Color BACKGROUND_GRID_COLOR = Color.white;
     private static final Color COLOR_GRID = Color.decode("#EEEEEE");
 
     /**
@@ -41,7 +51,8 @@ public class MapPanel extends JPanel {
      */
     public MapPanel(SwingController swingController) {
         
-        setPreferredSize(new Dimension(GRID_WIDTH*10, GRID_DEPTH*10));
+        setPreferredSize(new Dimension(GRID_WIDTH*CELL_SIDE_PIXEL_LENGTH,
+                                       GRID_DEPTH*CELL_SIDE_PIXEL_LENGTH));
         
         this.areaController = swingController.getBusinessController(AreaController.class);
         selectedArea = 1;
@@ -55,20 +66,24 @@ public class MapPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(Color.white);
-        g.fillRect(0, 0, GRID_WIDTH, GRID_DEPTH);
+        g.setColor(BACKGROUND_GRID_COLOR);
+        g.fillRect(0, 0, getWidth(), getHeight());
         
-        drawGrid((Graphics2D) g);
+        Graphics2D g2D = (Graphics2D) g;
+        drawGrid(g2D);
+        if (isArea1Displayed) displayArea(1, g2D);
+        if (isArea2Displayed) displayArea(2, g2D);
+        if (isArea3Displayed) displayArea(3, g2D);
     }
 
     private void drawGrid(Graphics2D g) {        
         g.setColor(COLOR_GRID);
         
-        for(int i = 0; i < GRID_WIDTH; i += numberOfPixelsBetweenVertexs())
-            g.drawLine(i, 0, i, GRID_DEPTH);
+        for(int i = 0; i < getWidth(); i += cellSize())
+            g.drawLine(i, 0, i, getHeight());
         
-        for(int i = 0; i < GRID_DEPTH; i += numberOfPixelsBetweenVertexs())
-            g.drawLine(0, i, GRID_WIDTH, i);
+        for(int i = 0; i < getHeight(); i += cellSize())
+            g.drawLine(0, i, getWidth(), i);
     }
         
     /**
@@ -113,9 +128,39 @@ public class MapPanel extends JPanel {
         repaint();
     }
     
-    private int numberOfPixelsBetweenVertexs() {
-        return this.getWidth() / GRID_WIDTH;
+    private int cellSize() {
+        return Math.max(this.getWidth() / GRID_WIDTH,
+                        this.getHeight() / GRID_DEPTH);
     } 
+
+    private void displayArea(int areaNumber, Graphics2D g) {
+        assert(areaNumber >= 1 && areaNumber <= 3);
+        
+        HashSet<Point> vertexs = areaController.getVertexs(areaNumber);
+        for (Point p : vertexs) {
+            displayPoint(p, getColor(areaNumber), g);
+        }
+    }
+    
+    private Color getColor(int areaNumber) {
+        assert(areaNumber >= 1 && areaNumber <= 3);
+        
+        if (areaNumber == 1) return AREA_1_COLOR;
+        if (areaNumber == 2) return AREA_2_COLOR;
+        return AREA_3_COLOR;
+    }
+
+    private void displayPoint(Point p, Color color, Graphics2D g) {
+        Point coordinates = findCoordinates(p);
+        g.setColor(color);
+        g.drawOval(coordinates.x - VERTEX_PIXEL_DIAMETER/2,
+                   coordinates.y - VERTEX_PIXEL_DIAMETER/2,
+                   VERTEX_PIXEL_DIAMETER, VERTEX_PIXEL_DIAMETER);
+    }
+
+    private Point findCoordinates(Point p) {
+        return new Point(p.x*cellSize(), p.y*cellSize());
+    }
     
     private class SelectGridPointListener extends MouseAdapter {
 
@@ -137,8 +182,8 @@ public class MapPanel extends JPanel {
         }
 
         private Point getClosestVertex(Point point) {
-            return new Point(point.x/numberOfPixelsBetweenVertexs(),
-                             point.y/numberOfPixelsBetweenVertexs());
+            return new Point((point.x+CELL_SIDE_PIXEL_LENGTH/2)/cellSize(),
+                             (point.y+CELL_SIDE_PIXEL_LENGTH/2)/cellSize());
         }
 
     }   

@@ -49,5 +49,13 @@ public class AreaController extends BusinessController {
         if (areaNumber == 2) return area2Vertexs;
         return area3Vertexs;
     }
+
+    public HashSet<java.awt.Point> getVertexs(int i) {
+        HashSet<java.awt.Point> vertexs = new HashSet<java.awt.Point>();
+        for (Point p : getAreaVertexs(i)) {
+            vertexs.add(new java.awt.Point(p.x, p.y));
+        }
+        return vertexs;
+    }
     
 }

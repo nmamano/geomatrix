@@ -261,9 +261,8 @@ public class MainFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void initMapPanel() {
-        //setLayout(new BorderLayout());
         mapPanel = swing.get(MapPanel.class);
-        add(mapPanel, BorderLayout.EAST);
+        add(mapPanel, BorderLayout.CENTER);
         mapPanel.setVisible(true);
         pack();
     }
