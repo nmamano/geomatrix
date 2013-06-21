@@ -28,6 +28,7 @@ import manticore.presentation.SwingController;
  */
 public class MapPanel extends JPanel {
     
+    private MainFrame mainFrame;
     private AreaController areaController;
     
     private int selectedAreaNumber;
@@ -76,6 +77,16 @@ public class MapPanel extends JPanel {
         
     }
 
+    /**
+     * This coupling is made so that mapPanel can tell the main frame when the
+     * areas are valid/unvalid so that it can enable/disable the menu
+     * options that require the areas to be valid.
+     * @param mainFrame 
+     */
+    void setMainFrame(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
         g.setColor(BACKGROUND_GRID_COLOR);
@@ -376,8 +387,27 @@ public class MapPanel extends JPanel {
         for (Point vertex : getArea(toBeClonedAreaNumber).vertexs) {
             getArea(destinationAreaNumber).vertexs.add(vertex);
         }
+        
+        updateSetOperationMenusActivation(destinationAreaNumber);
         repaint();
     }
+
+    void unionArea(int destinationAreaNumber, int otherAreaNumber) {
+        assert(destinationAreaNumber != otherAreaNumber);
+//        getArea(destinationAreaNumber).vertexs =
+//                areaController.union
+        
+    }
+    
+    private void updateSetOperationMenusActivation(int modifiedAreaNumber) {
+        if (areaController.isValidArea(getArea(modifiedAreaNumber).vertexs)) {
+            mainFrame.enableSetOperations(modifiedAreaNumber, true);
+        }
+        else {
+            mainFrame.enableSetOperations(modifiedAreaNumber, false);
+        }
+    }
+        
     
     private class SelectGridPointListener extends MouseAdapter {
 
@@ -396,6 +426,8 @@ public class MapPanel extends JPanel {
             else {
                 selectedArea.addVertexToArea(clickedVertex);
             }
+            
+            updateSetOperationMenusActivation(selectedAreaNumber);
             
             repaint();
         }

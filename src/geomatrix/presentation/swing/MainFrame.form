@@ -52,71 +52,71 @@
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu5">
+            <Menu class="javax.swing.JMenu" name="area1Union">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Union"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
+                <MenuItem class="javax.swing.JMenuItem" name="area1UnionArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem5ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1UnionArea2"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
+                <MenuItem class="javax.swing.JMenuItem" name="area1UnionArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu6">
+            <Menu class="javax.swing.JMenu" name="area1Intersection">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Intersection"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
+                <MenuItem class="javax.swing.JMenuItem" name="area1IntersectionArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
+                <MenuItem class="javax.swing.JMenuItem" name="area1IntersectionArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu7">
+            <Menu class="javax.swing.JMenu" name="area1Difference">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Difference"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem9">
+                <MenuItem class="javax.swing.JMenuItem" name="area1DifferenceArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem10">
+                <MenuItem class="javax.swing.JMenuItem" name="area1DifferenceArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu8">
+            <Menu class="javax.swing.JMenu" name="area1SymmetricDifference">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Symmetric difference"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem11">
+                <MenuItem class="javax.swing.JMenuItem" name="area1SymmetricDifferenceArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem12">
+                <MenuItem class="javax.swing.JMenuItem" name="area1SymmetricDifferenceArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
@@ -175,68 +175,68 @@
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator10">
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu21">
+            <Menu class="javax.swing.JMenu" name="area2Union">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Union"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem38">
+                <MenuItem class="javax.swing.JMenuItem" name="area2UnionArea1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem39">
+                <MenuItem class="javax.swing.JMenuItem" name="area2UnionArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu22">
+            <Menu class="javax.swing.JMenu" name="area2Intersection">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Intersection"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem40">
+                <MenuItem class="javax.swing.JMenuItem" name="area2IntersectionArea1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem41">
+                <MenuItem class="javax.swing.JMenuItem" name="area2IntersectionArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu23">
+            <Menu class="javax.swing.JMenu" name="area2Difference">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Difference"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem42">
+                <MenuItem class="javax.swing.JMenuItem" name="area2DifferenceArea1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem43">
+                <MenuItem class="javax.swing.JMenuItem" name="area2DifferenceArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu24">
+            <Menu class="javax.swing.JMenu" name="area2SymmetricDifference">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Symmetric difference"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem44">
+                <MenuItem class="javax.swing.JMenuItem" name="area2SymmetricDifferenceArea1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem45">
+                <MenuItem class="javax.swing.JMenuItem" name="area2SymmetricDifferenceArea3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 3"/>
                   </Properties>
@@ -295,74 +295,74 @@
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator4">
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu11">
+            <Menu class="javax.swing.JMenu" name="area3Union">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Union"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem16">
+                <MenuItem class="javax.swing.JMenuItem" name="area3UnionArea1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem16ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3UnionArea1ActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem17">
+                <MenuItem class="javax.swing.JMenuItem" name="area3UnionArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu12">
+            <Menu class="javax.swing.JMenu" name="area3Intersection">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Intersection"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem18">
+                <MenuItem class="javax.swing.JMenuItem" name="area3IntersectionArea1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem19">
+                <MenuItem class="javax.swing.JMenuItem" name="area3IntersectionArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu13">
+            <Menu class="javax.swing.JMenu" name="area3Difference">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Difference"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem20">
+                <MenuItem class="javax.swing.JMenuItem" name="area3DifferenceArea1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem21">
+                <MenuItem class="javax.swing.JMenuItem" name="area3DifferenceArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem21ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3DifferenceArea2ActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <Menu class="javax.swing.JMenu" name="jMenu14">
+            <Menu class="javax.swing.JMenu" name="area3SymmetricDifference">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Symmetric difference"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem22">
+                <MenuItem class="javax.swing.JMenuItem" name="area3SymmetricDifferenceArea1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 1"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem23">
+                <MenuItem class="javax.swing.JMenuItem" name="area3SymmetricDifferenceArea2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
