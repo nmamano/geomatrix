@@ -57,6 +57,9 @@ public class AreaController extends BusinessController {
     }
 
     public Set<Point> union(Set<Point> area1Vertexs, Set<Point> area2Vertexs) {
+        
+        assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
+        
         Geomatrix area1 = new Geomatrix(area1Vertexs);
         Geomatrix area2 = new Geomatrix(area2Vertexs);
         area1.union(area2);

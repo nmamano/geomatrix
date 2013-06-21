@@ -376,8 +376,19 @@ public class MapPanel extends JPanel {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    private void updateSetOperationMenusActivation(int modifiedAreaNumber) {
+        if (areaController.isValidArea(getArea(modifiedAreaNumber).vertexs)) {
+            mainFrame.enableSetOperations(modifiedAreaNumber, true);
+        }
+        else {
+            mainFrame.enableSetOperations(modifiedAreaNumber, false);
+        }
+    }
+        
     void resetArea(int areaNumber) {
         getArea(areaNumber).vertexs = new HashSet<Point>();
+        
+        updateSetOperationMenusActivation(areaNumber);
         repaint();
     }
 
@@ -407,13 +418,20 @@ public class MapPanel extends JPanel {
         repaint();
     }
     
-    private void updateSetOperationMenusActivation(int modifiedAreaNumber) {
-        if (areaController.isValidArea(getArea(modifiedAreaNumber).vertexs)) {
-            mainFrame.enableSetOperations(modifiedAreaNumber, true);
-        }
-        else {
-            mainFrame.enableSetOperations(modifiedAreaNumber, false);
-        }
+
+
+    void intersectionArea(int destinationAreaNumber, int otherAreaNumber) {
+        assert(destinationAreaNumber != otherAreaNumber);
+        Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
+        Set<Point> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
+        assert(areaController.isValidArea(destinationAreaVertexs) &&
+               areaController.isValidArea(otherAreaVertexs));
+        
+        getArea(destinationAreaNumber).vertexs = areaController.union(destinationAreaVertexs,
+                                                      otherAreaVertexs);
+        
+        updateSetOperationMenusActivation(destinationAreaNumber);
+        repaint();
     }
         
     

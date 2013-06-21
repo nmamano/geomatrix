@@ -84,6 +84,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Area 2"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1IntersectionArea2ActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="area1IntersectionArea3">
                   <Properties>

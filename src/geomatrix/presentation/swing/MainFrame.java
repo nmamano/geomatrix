@@ -313,6 +313,11 @@ public class MainFrame extends javax.swing.JFrame {
         area1Intersection.setText("Intersection");
 
         area1IntersectionArea2.setText("Area 2");
+        area1IntersectionArea2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1IntersectionArea2ActionPerformed(evt);
+            }
+        });
         area1Intersection.add(area1IntersectionArea2);
 
         area1IntersectionArea3.setText("Area 3");
@@ -650,6 +655,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void area3UnionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3UnionArea2ActionPerformed
         mapPanel.unionArea(3,2);
     }//GEN-LAST:event_area3UnionArea2ActionPerformed
+
+    private void area1IntersectionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1IntersectionArea2ActionPerformed
+        mapPanel.intersectionArea(1,2);
+    }//GEN-LAST:event_area1IntersectionArea2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu area1Difference;

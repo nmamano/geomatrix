@@ -22,6 +22,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
         // Create a new Application
         Application app = new Application();
         
