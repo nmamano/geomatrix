@@ -893,9 +893,13 @@ public class Geomatrix implements Area {
             }
             else {
                 for (int y = myEdge.yInterval.low+1; y < myEdge.yInterval.high; ++y) {
-                    for (HorizontalSegment otherEdge : other.horizontalEdgesStoredByY.get(y)) {
-                        if (myEdge.intersects(otherEdge)) {
-                            intersectionPoints.add(myEdge.getIntersection(otherEdge));
+                    List<HorizontalSegment> otherHorizontalEdgesAtY =
+                            other.horizontalEdgesStoredByY.get(y);
+                    if (otherHorizontalEdgesAtY != null) {
+                        for (HorizontalSegment otherEdge : otherHorizontalEdgesAtY) {
+                            if (myEdge.intersects(otherEdge)) {
+                                intersectionPoints.add(myEdge.getIntersection(otherEdge));
+                            }
                         }
                     }
                 }
@@ -913,9 +917,13 @@ public class Geomatrix implements Area {
             }
             else {
                 for (int y = otherEdge.yInterval.low+1; y < otherEdge.yInterval.high; ++y) {
-                    for (HorizontalSegment myEdge : horizontalEdgesStoredByY.get(y)) {
-                        if (otherEdge.intersects(myEdge)) {
-                            intersectionPoints.add(myEdge.getIntersection(otherEdge));
+                    List<HorizontalSegment> myHorizontalEdgesAtY =
+                            horizontalEdgesStoredByY.get(y);
+                    if (myHorizontalEdgesAtY != null) {
+                        for (HorizontalSegment myEdge : myHorizontalEdgesAtY) {
+                            if (otherEdge.intersects(myEdge)) {
+                                intersectionPoints.add(myEdge.getIntersection(otherEdge));
+                            }
                         }
                     }
                 }                
