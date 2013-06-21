@@ -13,7 +13,7 @@
     </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="area1Menu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Area 1"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -146,10 +146,13 @@
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem1">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area1ShowRectangleDecomposition">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show rectangle decomposition"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1ShowRectangleDecompositionActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem2">
               <Properties>
@@ -158,7 +161,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="area2Menu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Area 2"/>
           </Properties>
@@ -290,10 +293,13 @@
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator11">
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem8">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area2ShowRectangleDecomposition">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show rectangle decomposition"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2ShowRectangleDecompositionActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem7">
               <Properties>
@@ -302,7 +308,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu9">
+        <Menu class="javax.swing.JMenu" name="area3Menu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Area 3"/>
           </Properties>
@@ -434,10 +440,13 @@
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator5">
             </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem3">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area3ShowRectangleDecomposition">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show rectangle decomposition"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3ShowRectangleDecompositionActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem4">
               <Properties>
