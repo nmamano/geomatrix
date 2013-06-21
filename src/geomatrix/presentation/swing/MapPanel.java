@@ -72,65 +72,65 @@ public class MapPanel extends JPanel {
         
         Graphics2D g2D = (Graphics2D) g;
         drawGrid(g2D);
-//        if (area1.isDisplayed) paintArea(area1, g2D);
-//        if (area2.isDisplayed) paintArea(area2, g2D);
-//        if (area3.isDisplayed) paintArea(area3, g2D);
-        paintAreas(g2D);
+        if (area1.isDisplayed) paintArea(area1, g2D);
+        if (area2.isDisplayed) paintArea(area2, g2D);
+        if (area3.isDisplayed) paintArea(area3, g2D);
+//        paintAreas(g2D);
     }
 
-    private void paintAreas(Graphics2D g) {
-        for (int i = 0; i < GRID_DEPTH; ++i) {
-            for (int j = 0; j < GRID_WIDTH; ++j) {
-                Point point = new Point(i, j);
-                if (shouldPaint(point)) {
-                    paintPoint(point, g);
-                }
-            }
-        }
-    }
-    
-    private void paintPoint(Point point, Graphics2D g) {        
-        Point coordinates = findCoordinates(point);
-        g.setColor(getColor(point));
-        for (int i = 0; i <= VERTEX_PIXEL_DIAMETER; ++i) {
-            g.drawOval(coordinates.x - i/2, coordinates.y - i/2, i, i);
-        }
-    }
-    
-    private Color getColor(Point point) {
-        boolean isArea1Vertex = area1.containsVertex(point);
-        boolean isArea2Vertex = area2.containsVertex(point);
-        boolean isArea3Vertex = area3.containsVertex(point);       
-        assert(isArea1Vertex || isArea2Vertex || isArea3Vertex);
-        
-        int redComponent, blueComponent, greenComponent;
-        redComponent = blueComponent = greenComponent = 0;
-        
-        if (isArea1Vertex) {
-            redComponent += area1.color.getRed();
-            blueComponent += area1.color.getBlue();
-            greenComponent += area1.color.getGreen();
-        }
-        if (isArea2Vertex) {
-            redComponent += area2.color.getRed();
-            blueComponent += area2.color.getBlue();
-            greenComponent += area2.color.getGreen();
-        }
-        if (isArea3Vertex) {
-            redComponent += area3.color.getRed();
-            blueComponent += area3.color.getBlue();
-            greenComponent += area3.color.getGreen();
-        }
-        
-        return new Color(redComponent, greenComponent, blueComponent);
-    }
-    
-    private boolean shouldPaint(Point point) {
-        boolean isArea1Vertex = area1.containsVertex(point);
-        boolean isArea2Vertex = area2.containsVertex(point);
-        boolean isArea3Vertex = area3.containsVertex(point);
-        return isArea1Vertex || isArea2Vertex || isArea3Vertex;
-    }
+//    private void paintAreas(Graphics2D g) {
+//        for (int i = 0; i < GRID_DEPTH; ++i) {
+//            for (int j = 0; j < GRID_WIDTH; ++j) {
+//                Point point = new Point(i, j);
+//                if (shouldPaint(point)) {
+//                    paintPoint(point, g);
+//                }
+//            }
+//        }
+//    }
+//    
+//    private void paintPoint(Point point, Graphics2D g) {        
+//        Point coordinates = findCoordinates(point);
+//        g.setColor(getColor(point));
+//        for (int i = 0; i <= VERTEX_PIXEL_DIAMETER; ++i) {
+//            g.drawOval(coordinates.x - i/2, coordinates.y - i/2, i, i);
+//        }
+//    }
+//    
+//    private Color getColor(Point point) {
+//        boolean isArea1Vertex = area1.containsVertex(point);
+//        boolean isArea2Vertex = area2.containsVertex(point);
+//        boolean isArea3Vertex = area3.containsVertex(point);       
+//        assert(isArea1Vertex || isArea2Vertex || isArea3Vertex);
+//        
+//        int redComponent, blueComponent, greenComponent;
+//        redComponent = blueComponent = greenComponent = 0;
+//        
+//        if (isArea1Vertex) {
+//            redComponent += area1.color.getRed();
+//            blueComponent += area1.color.getBlue();
+//            greenComponent += area1.color.getGreen();
+//        }
+//        if (isArea2Vertex) {
+//            redComponent += area2.color.getRed();
+//            blueComponent += area2.color.getBlue();
+//            greenComponent += area2.color.getGreen();
+//        }
+//        if (isArea3Vertex) {
+//            redComponent += area3.color.getRed();
+//            blueComponent += area3.color.getBlue();
+//            greenComponent += area3.color.getGreen();
+//        }
+//        
+//        return new Color(redComponent, greenComponent, blueComponent);
+//    }
+//    
+//    private boolean shouldPaint(Point point) {
+//        boolean isArea1Vertex = area1.containsVertex(point);
+//        boolean isArea2Vertex = area2.containsVertex(point);
+//        boolean isArea3Vertex = area3.containsVertex(point);
+//        return isArea1Vertex || isArea2Vertex || isArea3Vertex;
+//    }
     
     
     private void drawGrid(Graphics2D g) {        
@@ -152,9 +152,9 @@ public class MapPanel extends JPanel {
     private void displayPoint(Point p, Color color, Graphics2D g) {
         Point coordinates = findCoordinates(p);
         g.setColor(color);
-        g.drawOval(coordinates.x - VERTEX_PIXEL_DIAMETER/2,
-                   coordinates.y - VERTEX_PIXEL_DIAMETER/2,
-                   VERTEX_PIXEL_DIAMETER, VERTEX_PIXEL_DIAMETER);
+        for (int i = 0; i <= VERTEX_PIXEL_DIAMETER; ++i) {
+            g.drawOval(coordinates.x - i/2, coordinates.y - i/2, i, i);
+        }
     }
     
         

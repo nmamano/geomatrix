@@ -21,7 +21,7 @@ public class PresentationArea {
 
     public PresentationArea(boolean isDisplayed, Color color) {
         this.isDisplayed = isDisplayed;
-        this.color = color;
+        this.color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 128);
         vertexs = new HashSet<Point>();
     }
 
