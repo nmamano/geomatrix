@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JPanel;
 import manticore.presentation.SwingController;
 
@@ -394,9 +395,16 @@ public class MapPanel extends JPanel {
 
     void unionArea(int destinationAreaNumber, int otherAreaNumber) {
         assert(destinationAreaNumber != otherAreaNumber);
-//        getArea(destinationAreaNumber).vertexs =
-//                areaController.union
+        Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
+        Set<Point> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
+        assert(areaController.isValidArea(destinationAreaVertexs) &&
+               areaController.isValidArea(otherAreaVertexs));
         
+        getArea(destinationAreaNumber).vertexs = areaController.union(destinationAreaVertexs,
+                                                      otherAreaVertexs);
+        
+        updateSetOperationMenusActivation(destinationAreaNumber);
+        repaint();
     }
     
     private void updateSetOperationMenusActivation(int modifiedAreaNumber) {

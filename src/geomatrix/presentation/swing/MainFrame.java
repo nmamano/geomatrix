@@ -301,6 +301,11 @@ public class MainFrame extends javax.swing.JFrame {
         area1Union.add(area1UnionArea2);
 
         area1UnionArea3.setText("Area 3");
+        area1UnionArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1UnionArea3(evt);
+            }
+        });
         area1Union.add(area1UnionArea3);
 
         jMenu1.add(area1Union);
@@ -378,9 +383,19 @@ public class MainFrame extends javax.swing.JFrame {
         area2Union.setText("Union");
 
         area2UnionArea1.setText("Area 1");
+        area2UnionArea1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2UnionArea1ActionPerformed(evt);
+            }
+        });
         area2Union.add(area2UnionArea1);
 
         area2UnionArea3.setText("Area 3");
+        area2UnionArea3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2UnionArea3ActionPerformed(evt);
+            }
+        });
         area2Union.add(area2UnionArea3);
 
         jMenu2.add(area2Union);
@@ -466,6 +481,11 @@ public class MainFrame extends javax.swing.JFrame {
         area3Union.add(area3UnionArea1);
 
         area3UnionArea2.setText("Area 2");
+        area3UnionArea2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3UnionArea2ActionPerformed(evt);
+            }
+        });
         area3Union.add(area3UnionArea2);
 
         jMenu9.add(area3Union);
@@ -580,7 +600,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_area2New
 
     private void area3UnionArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3UnionArea1ActionPerformed
-        // TODO add your handling code here:
+        mapPanel.unionArea(3,1);
     }//GEN-LAST:event_area3UnionArea1ActionPerformed
 
     private void area3DifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3DifferenceArea2ActionPerformed
@@ -614,6 +634,22 @@ public class MainFrame extends javax.swing.JFrame {
     private void area3CloneArea2(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3CloneArea2
         mapPanel.cloneArea(2,3);
     }//GEN-LAST:event_area3CloneArea2
+
+    private void area1UnionArea3(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1UnionArea3
+        mapPanel.unionArea(1,3);
+    }//GEN-LAST:event_area1UnionArea3
+
+    private void area2UnionArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2UnionArea1ActionPerformed
+        mapPanel.unionArea(2,1);
+    }//GEN-LAST:event_area2UnionArea1ActionPerformed
+
+    private void area2UnionArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2UnionArea3ActionPerformed
+        mapPanel.unionArea(2,3);
+    }//GEN-LAST:event_area2UnionArea3ActionPerformed
+
+    private void area3UnionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3UnionArea2ActionPerformed
+        mapPanel.unionArea(3,2);
+    }//GEN-LAST:event_area3UnionArea2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu area1Difference;

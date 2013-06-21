@@ -17,6 +17,7 @@ import geomatrix.utils.Line;
 import geomatrix.utils.Pair;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -81,12 +82,12 @@ public class Geomatrix implements Area {
         build(new ArrayList<GridPoint>());
     }
     
-    public Geomatrix(List<Point> points) {
-        List<GridPoint> vertexs = new ArrayList<GridPoint>();
+    public Geomatrix(Collection<Point> points) {
+        List<GridPoint> newVertexs = new ArrayList<GridPoint>();
         for (Point point : points) {
-            vertexs.add(new GridPoint(point.x, point.y));
+            newVertexs.add(new GridPoint(point.x, point.y));
         }
-        build(vertexs);
+        build(newVertexs);
     }
     
     /**
@@ -100,6 +101,10 @@ public class Geomatrix implements Area {
         return g;
     }
     
+    public List<GridPoint> getVertexs() {
+        return vertexs;
+    }
+        
     /**
      * Initializes the Geomatrix from the list of its vertexs.
      * @param vertexs the vertexs that this geomatrix has to have.
