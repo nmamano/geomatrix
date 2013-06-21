@@ -41,7 +41,7 @@ public class MapPanel extends JPanel {
      */
     public MapPanel(SwingController swingController) {
         
-        setPreferredSize(new Dimension(10*GRID_WIDTH, 10*GRID_DEPTH));
+        setPreferredSize(new Dimension(GRID_WIDTH*10, GRID_DEPTH*10));
         
         this.areaController = swingController.getBusinessController(AreaController.class);
         selectedArea = 1;
@@ -55,7 +55,9 @@ public class MapPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        g.setColor(Color.white);
+        g.fillRect(0, 0, GRID_WIDTH, GRID_DEPTH);
+        
         drawGrid((Graphics2D) g);
     }
 
@@ -112,7 +114,7 @@ public class MapPanel extends JPanel {
     }
     
     private int numberOfPixelsBetweenVertexs() {
-        return this.getWidth()/GRID_WIDTH;
+        return this.getWidth() / GRID_WIDTH;
     } 
     
     private class SelectGridPointListener extends MouseAdapter {

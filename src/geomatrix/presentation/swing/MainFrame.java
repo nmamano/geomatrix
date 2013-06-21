@@ -30,79 +30,22 @@ public class MainFrame extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
-        displayArea1 = new javax.swing.JToggleButton();
-        displayArea2 = new javax.swing.JToggleButton();
-        displayArea3 = new javax.swing.JToggleButton();
+        jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         selectArea1 = new javax.swing.JRadioButton();
         selectArea2 = new javax.swing.JRadioButton();
         selectArea3 = new javax.swing.JRadioButton();
+        jPanel1 = new javax.swing.JPanel();
+        displayArea1 = new javax.swing.JToggleButton();
+        displayArea2 = new javax.swing.JToggleButton();
+        displayArea3 = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Geomatrix");
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display"));
-
-        displayArea1.setForeground(java.awt.Color.red);
-        displayArea1.setSelected(true);
-        displayArea1.setText("Area 1");
-        displayArea1.setToolTipText("Display Area 1");
-        displayArea1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                displayArea1ActionPerformed(evt);
-            }
-        });
-
-        displayArea2.setForeground(new java.awt.Color(0, 51, 255));
-        displayArea2.setSelected(true);
-        displayArea2.setText("Area 2");
-        displayArea2.setToolTipText("Display area 2");
-        displayArea2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                displayArea2ActionPerformed(evt);
-            }
-        });
-
-        displayArea3.setForeground(new java.awt.Color(0, 153, 0));
-        displayArea3.setSelected(true);
-        displayArea3.setText("Area 3");
-        displayArea3.setToolTipText("Display area 3");
-        displayArea3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                displayArea3ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(displayArea1)
-                    .addComponent(displayArea2)
-                    .addComponent(displayArea3))
-                .addGap(0, 269, Short.MAX_VALUE))
-        );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {displayArea1, displayArea2, displayArea3});
-
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(displayArea1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(displayArea2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(displayArea3))
-        );
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Select"));
 
@@ -112,8 +55,10 @@ public class MainFrame extends javax.swing.JFrame {
         selectArea1.setSelected(true);
         selectArea1.setText("Area 1");
         selectArea1.setToolTipText("Set Area 1 as selected area");
-        selectArea1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        selectArea1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 selectArea1ActionPerformed(evt);
             }
         });
@@ -123,8 +68,10 @@ public class MainFrame extends javax.swing.JFrame {
         selectArea2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectArea2.setText("Area 2");
         selectArea2.setToolTipText("Set Area 2 as selected area");
-        selectArea2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        selectArea2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 selectArea2ActionPerformed(evt);
             }
         });
@@ -134,8 +81,10 @@ public class MainFrame extends javax.swing.JFrame {
         selectArea3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         selectArea3.setText("Area 3");
         selectArea3.setToolTipText("Set Area 3 as selected area");
-        selectArea3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        selectArea3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 selectArea3ActionPerformed(evt);
             }
         });
@@ -150,7 +99,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(selectArea1)
                     .addComponent(selectArea3)
                     .addComponent(selectArea2))
-                .addContainerGap(265, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {selectArea1, selectArea2, selectArea3});
@@ -167,7 +116,91 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_START);
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display"));
+
+        displayArea1.setForeground(java.awt.Color.red);
+        displayArea1.setSelected(true);
+        displayArea1.setText("Area 1");
+        displayArea1.setToolTipText("Display Area 1");
+        displayArea1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                displayArea1ActionPerformed(evt);
+            }
+        });
+
+        displayArea2.setForeground(new java.awt.Color(0, 51, 255));
+        displayArea2.setSelected(true);
+        displayArea2.setText("Area 2");
+        displayArea2.setToolTipText("Display area 2");
+        displayArea2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                displayArea2ActionPerformed(evt);
+            }
+        });
+
+        displayArea3.setForeground(new java.awt.Color(0, 153, 0));
+        displayArea3.setSelected(true);
+        displayArea3.setText("Area 3");
+        displayArea3.setToolTipText("Display area 3");
+        displayArea3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                displayArea3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(displayArea1)
+                    .addComponent(displayArea2)
+                    .addComponent(displayArea3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {displayArea1, displayArea2, displayArea3});
+
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(displayArea1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(displayArea2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(displayArea3))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.LINE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -220,6 +253,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton displayArea2;
     private javax.swing.JToggleButton displayArea3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton selectArea1;
     private javax.swing.JRadioButton selectArea2;
