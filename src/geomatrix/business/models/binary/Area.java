@@ -16,8 +16,8 @@ public interface Area
         extends CellSet {
     
     /**
-     * This area is slided p.x cells in the x direction and p.y cells in the
-     * y direction.
+     * This area is slided p.x cells in the x axis and p.y cells in the
+     * y axis.
      * @param p the point with the distances the area has to be translated.
      */
     void translation(GridPoint p);
