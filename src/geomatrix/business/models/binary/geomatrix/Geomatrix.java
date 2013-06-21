@@ -15,6 +15,7 @@ import geomatrix.business.models.binary.WideRay;
 import geomatrix.utils.Direction;
 import geomatrix.utils.Line;
 import geomatrix.utils.Pair;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -76,6 +77,14 @@ public class Geomatrix implements Area {
      */
     public Geomatrix() {
         build(new ArrayList<GridPoint>());
+    }
+    
+    public Geomatrix(List<Point> points) {
+        List<GridPoint> vertexs = new ArrayList<GridPoint>();
+        for (Point point : points) {
+            vertexs.add(new GridPoint(point.x, point.y));
+        }
+        build(vertexs);
     }
     
     /**

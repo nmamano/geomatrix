@@ -4,10 +4,13 @@
  */
 package geomatrix.business.controllers;
 
+import geomatrix.business.models.binary.Cell;
 import geomatrix.business.models.binary.GridPoint;
 import geomatrix.business.models.binary.geomatrix.Geomatrix;
+import geomatrix.presentation.swing.GridCell;
 import geomatrix.utils.Line;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +40,22 @@ public class AreaController extends BusinessController {
             vertexs.add(new GridPoint(p.x, p.y));
         }
         return Geomatrix.getInvalidLines(vertexs);
+    }
+
+    public boolean isValidArea(Set<Point> points) {
+        return getInvalidLines(points).isEmpty();
+    }
+
+    public List<GridCell> getContainedCells(Set<Point> points) {
+        List<GridCell> containedCells = new ArrayList<GridCell>();
+        List<Point> vertexs = new ArrayList<Point> (points);
+        if (isValidArea(points)) {
+            Geomatrix area = new Geomatrix(vertexs);
+            for (Cell cell : area) {
+                containedCells.add(new GridCell(cell.x, cell.y));
+            }
+        }
+        return containedCells;        
     }
     
 }

@@ -23,6 +23,7 @@ import java.util.Set;
 import javax.swing.JPanel;
 import manticore.presentation.SwingController;
 
+
 /**
  *
  * @author Nil
@@ -50,6 +51,8 @@ public class MapPanel extends JPanel {
     private static final Color COLOR_GRID = Color.decode("#EEEEEE");
     private static final Color OVERLAPPED_LINES_COLOR = Color.GRAY;
     private static final Color DOUBLY_OVERLAPPED_LINES_COLOR = Color.BLACK;
+    private static final Color OVERLAPPED_CELLS_COLOR = Color.GRAY;
+    private static final Color DOUBLY_OVERLAPPED_CELLS_COLOR = Color.BLACK;
     
     /**
      * Initialization.
@@ -83,7 +86,8 @@ public class MapPanel extends JPanel {
         Graphics2D g2D = (Graphics2D) g;
         drawGrid(g2D);
         paintVertexs(g2D);
-        paintArea(g2D);
+        paintInvalidLines(g2D);
+        paintAreas(g2D);
     }
 
     private void paintVertexs(Graphics2D g) {
@@ -193,7 +197,7 @@ public class MapPanel extends JPanel {
         return area3;
     }
 
-    private void paintArea(Graphics2D g) {
+    private void paintInvalidLines(Graphics2D g) {
         List<Line> area1InvalidLines, area2InvalidLines, area3InvalidLines;
         if (area1.isDisplayed) {
             area1InvalidLines = areaController.getInvalidLines(area1.vertexs);
@@ -213,49 +217,49 @@ public class MapPanel extends JPanel {
         else {
             area3InvalidLines = new ArrayList<Line>();
         }
-        paintInvalidLines(area1InvalidLines, area2InvalidLines, area3InvalidLines, g);
+        paintLines(area1InvalidLines, area2InvalidLines, area3InvalidLines, g);
     }
 
-    private void paintInvalidLines(List<Line> area1InvalidLines,
-            List<Line> area2InvalidLines, List<Line> area3InvalidLines, Graphics2D g) {
+    private void paintLines(List<Line> area1Lines, List<Line> area2Lines,
+            List<Line> area3Lines, Graphics2D g) {
         
-        Map<Line, Color> colorOfInvalidLines = findColorOfInvalidLines(
-                area1InvalidLines, area2InvalidLines, area3InvalidLines);
+        Map<Line, Color> lineColors = findLineColors(
+                area1Lines, area2Lines, area3Lines);
         
-        for (Line line : colorOfInvalidLines.keySet()) {
-            paintLine(line, colorOfInvalidLines.get(line), g);
+        for (Line line : lineColors.keySet()) {
+            paintLine(line, lineColors.get(line), g);
         }
     }
 
-    private Map<Line, Color> findColorOfInvalidLines(List<Line> area1InvalidLines,
-            List<Line> area2InvalidLines, List<Line> area3InvalidLines) {
+    private Map<Line, Color> findLineColors(List<Line> area1Lines,
+            List<Line> area2Lines, List<Line> area3Lines) {
         
-        Map<Line, Color> colorOfInvalidLines = new HashMap<Line, Color>();
-        for (Line line : area1InvalidLines) {
-            colorOfInvalidLines.put(line, area1.color);
+        Map<Line, Color> lineColors = new HashMap<Line, Color>();
+        for (Line line : area1Lines) {
+            lineColors.put(line, area1.color);
         }
-        for (Line line : area2InvalidLines) {
-            if (colorOfInvalidLines.containsKey(line)) {
-                colorOfInvalidLines.put(line, OVERLAPPED_LINES_COLOR);
+        for (Line line : area2Lines) {
+            if (lineColors.containsKey(line)) {
+                lineColors.put(line, OVERLAPPED_LINES_COLOR);
             }
             else {
-                colorOfInvalidLines.put(line, area2.color);
+                lineColors.put(line, area2.color);
             }
         }
-        for (Line line : area3InvalidLines) {
-            if (colorOfInvalidLines.containsKey(line)) {
-                if (colorOfInvalidLines.get(line) == OVERLAPPED_LINES_COLOR) {
-                    colorOfInvalidLines.put(line, DOUBLY_OVERLAPPED_LINES_COLOR);
+        for (Line line : area3Lines) {
+            if (lineColors.containsKey(line)) {
+                if (lineColors.get(line) == OVERLAPPED_LINES_COLOR) {
+                    lineColors.put(line, DOUBLY_OVERLAPPED_LINES_COLOR);
                 }
                 else {
-                    colorOfInvalidLines.put(line, OVERLAPPED_LINES_COLOR);
+                    lineColors.put(line, OVERLAPPED_LINES_COLOR);
                 }
             }
             else {
-                colorOfInvalidLines.put(line, area3.color);
+                lineColors.put(line, area3.color);
             }
         }
-        return colorOfInvalidLines;
+        return lineColors;
     }
 
     private void paintLine(Line line, Color color, Graphics2D g) {
@@ -272,6 +276,96 @@ public class MapPanel extends JPanel {
         }
     }
 
+    private void paintAreas(Graphics2D g) {
+        paintContainedCells(g);
+        paintEdges(g);
+    }
+
+    private void paintContainedCells(Graphics2D g) {
+        List<GridCell> area1ContainedCells, area2ContainedCells, area3ContainedCells;
+        if (area1.isDisplayed) {
+            area1ContainedCells = areaController.getContainedCells(area1.vertexs);
+        }
+        else {
+            area1ContainedCells = new ArrayList<GridCell>();
+        }
+        if (area2.isDisplayed) {
+            area2ContainedCells = areaController.getContainedCells(area2.vertexs);
+        }
+        else {
+            area2ContainedCells = new ArrayList<GridCell>();
+        }
+        if (area3.isDisplayed) {
+            area3ContainedCells = areaController.getContainedCells(area3.vertexs);
+        }
+        else {
+            area3ContainedCells = new ArrayList<GridCell>();
+        }
+        paintCells(area1ContainedCells, area2ContainedCells, area3ContainedCells, g);
+    }
+
+    private void paintCells(List<GridCell> area1ContainedCells,
+            List<GridCell> area2ContainedCells, List<GridCell> area3ContainedCells, Graphics2D g) {
+        
+        Map<GridCell, Color> cellColors = findCellColors(
+                area1ContainedCells, area2ContainedCells, area3ContainedCells);
+        
+        for (GridCell cell : cellColors.keySet()) {
+            paintCell(cell, cellColors.get(cell), g);
+        }
+    }
+
+    private Map<GridCell, Color> findCellColors(List<GridCell> area1cells,
+            List<GridCell> area2cells, List<GridCell> area3cells) {
+        
+        Map<GridCell, Color> cellColors = new HashMap<GridCell, Color>();
+        for (GridCell cell : area1cells) {
+            cellColors.put(cell, area1.color);
+        }
+        for (GridCell cell : area2cells) {
+            if (cellColors.containsKey(cell)) {
+                cellColors.put(cell, OVERLAPPED_CELLS_COLOR);
+            }
+            else {
+                cellColors.put(cell, area2.color);
+            }
+        }
+        for (GridCell cell : area3cells) {
+            if (cellColors.containsKey(cell)) {
+                if (cellColors.get(cell) == OVERLAPPED_CELLS_COLOR) {
+                    cellColors.put(cell, DOUBLY_OVERLAPPED_CELLS_COLOR);
+                }
+                else {
+                    cellColors.put(cell, OVERLAPPED_CELLS_COLOR);
+                }
+            }
+            else {
+                cellColors.put(cell, area3.color);
+            }
+        }
+        return cellColors;
+    }
+
+    private void paintCell(GridCell cell, Color color, Graphics2D g) {
+        g.setColor(color);
+        Point topLeft = findCoordinates(new Point(cell.x, cell.y));
+        Point center = new Point(topLeft.x + cellSize()/2, topLeft.y + cellSize()/2);
+        
+        int i = center.x;
+        int j = center.y;
+        int size = 0;
+        g.drawRect(i, j, 1, 1);
+        for (; i > topLeft.x; --i) {            
+            g.drawRect(i, j, size, size);
+            --j;
+            size += 2;
+        }
+    }
+
+    private void paintEdges(Graphics2D g) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
     private class SelectGridPointListener extends MouseAdapter {
 
         public SelectGridPointListener() {
