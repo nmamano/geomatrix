@@ -140,4 +140,13 @@ public class AreaController extends BusinessController {
         area.translation(new GridPoint(xTranslate, yTranslate));
         return gridPointsToPoints(area.getVertexs()); 
     }
+
+    public Set<Point> rotate90Degrees(Set<Point> vertexs) {
+
+        assert(isValidArea(vertexs));
+        
+        Geomatrix area = new Geomatrix(vertexs);
+        area.rotation(90);
+        return gridPointsToPoints(area.getVertexs());
+    }
 }

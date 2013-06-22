@@ -585,6 +585,32 @@ public class MapPanel extends JPanel {
         
         repaint();
     }
+
+    /**
+     * This method might give trouble if the grid is not squared.
+     * Because of the reallocation. A rotated area will not necessarily fit
+     * in the grid once rotated if its not squared.
+     * @param areaNumber
+     * @param degrees 
+     */
+    void rotateArea(int areaNumber, int degrees) {
+        assert(areaController.isValidArea(getArea(areaNumber).vertexs));
+        assert(degrees == 90 || degrees == 180 || degrees == 270);
+        
+        rotate90AndReallocate(areaNumber);
+        //rotating 180 equals rotating 90 twice
+        if (degrees > 90) rotate90AndReallocate(areaNumber);
+        //rotating 270 equals rotating 90 three times
+        if (degrees > 180) rotate90AndReallocate(areaNumber);
+
+        repaint();
+    }
+
+    private void rotate90AndReallocate(int areaNumber) {
+        getArea(areaNumber).vertexs = areaController.rotate90Degrees(
+                getArea(areaNumber).vertexs);
+        translateArea(areaNumber, GRID_WIDTH, 0);
+    }
             
     private class SelectGridPointListener extends MouseAdapter {
 

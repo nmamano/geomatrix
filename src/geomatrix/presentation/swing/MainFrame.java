@@ -83,6 +83,10 @@ public class MainFrame extends javax.swing.JFrame {
         area1SymmetricDifferenceArea3 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         area1Translate = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        area1Rotate90 = new javax.swing.JMenuItem();
+        area1Rotate180 = new javax.swing.JMenuItem();
+        area1Rotate270 = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         area1ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area1ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -106,6 +110,10 @@ public class MainFrame extends javax.swing.JFrame {
         area2SymmetricDifferenceArea3 = new javax.swing.JMenuItem();
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
         area2Translate = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        area2Rotate90 = new javax.swing.JMenuItem();
+        area2Rotate180 = new javax.swing.JMenuItem();
+        area2Rotate270 = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         area2ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area2ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -129,6 +137,10 @@ public class MainFrame extends javax.swing.JFrame {
         area3SymmetricDifferenceArea2 = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         area3Translate = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        area3Rotate90 = new javax.swing.JMenuItem();
+        area3Rotate180 = new javax.swing.JMenuItem();
+        area3Rotate270 = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         area3ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area3ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -459,6 +471,34 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         area1Menu.add(area1Translate);
+
+        jMenu1.setText("Rotate");
+
+        area1Rotate90.setText("90º");
+        area1Rotate90.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1Rotate90ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(area1Rotate90);
+
+        area1Rotate180.setText("180º");
+        area1Rotate180.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1Rotate180ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(area1Rotate180);
+
+        area1Rotate270.setText("270º");
+        area1Rotate270.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1Rotate270ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(area1Rotate270);
+
+        area1Menu.add(jMenu1);
         area1Menu.add(jSeparator3);
 
         area1ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -598,6 +638,34 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         area2Menu.add(area2Translate);
+
+        jMenu2.setText("Rotate");
+
+        area2Rotate90.setText("90º");
+        area2Rotate90.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2Rotate90ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(area2Rotate90);
+
+        area2Rotate180.setText("180º");
+        area2Rotate180.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2Rotate180ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(area2Rotate180);
+
+        area2Rotate270.setText("270º");
+        area2Rotate270.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2Rotate270ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(area2Rotate270);
+
+        area2Menu.add(jMenu2);
         area2Menu.add(jSeparator7);
 
         area2ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -737,6 +805,34 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         area3Menu.add(area3Translate);
+
+        jMenu3.setText("Rotate");
+
+        area3Rotate90.setText("90º");
+        area3Rotate90.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3Rotate90ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(area3Rotate90);
+
+        area3Rotate180.setText("180º");
+        area3Rotate180.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3Rotate180ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(area3Rotate180);
+
+        area3Rotate270.setText("270º");
+        area3Rotate270.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3Rotate270ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(area3Rotate270);
+
+        area3Menu.add(jMenu3);
         area3Menu.add(jSeparator8);
 
         area3ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -1006,6 +1102,42 @@ public class MainFrame extends javax.swing.JFrame {
         areaNumberTranslate = 3;
     }//GEN-LAST:event_area3TranslateActionPerformed
 
+    private void area1Rotate90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1Rotate90ActionPerformed
+        mapPanel.rotateArea(1, 90);
+    }//GEN-LAST:event_area1Rotate90ActionPerformed
+
+    private void area1Rotate180ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1Rotate180ActionPerformed
+        mapPanel.rotateArea(1, 180);
+    }//GEN-LAST:event_area1Rotate180ActionPerformed
+
+    private void area1Rotate270ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1Rotate270ActionPerformed
+        mapPanel.rotateArea(1, 270);
+    }//GEN-LAST:event_area1Rotate270ActionPerformed
+
+    private void area2Rotate90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2Rotate90ActionPerformed
+        mapPanel.rotateArea(2, 90);
+    }//GEN-LAST:event_area2Rotate90ActionPerformed
+
+    private void area2Rotate180ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2Rotate180ActionPerformed
+        mapPanel.rotateArea(2, 180);
+    }//GEN-LAST:event_area2Rotate180ActionPerformed
+
+    private void area2Rotate270ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2Rotate270ActionPerformed
+        mapPanel.rotateArea(2, 270);
+    }//GEN-LAST:event_area2Rotate270ActionPerformed
+
+    private void area3Rotate90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3Rotate90ActionPerformed
+        mapPanel.rotateArea(3, 90);
+    }//GEN-LAST:event_area3Rotate90ActionPerformed
+
+    private void area3Rotate180ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3Rotate180ActionPerformed
+        mapPanel.rotateArea(3, 180);
+    }//GEN-LAST:event_area3Rotate180ActionPerformed
+
+    private void area3Rotate270ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3Rotate270ActionPerformed
+        mapPanel.rotateArea(3, 270);
+    }//GEN-LAST:event_area3Rotate270ActionPerformed
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1018,6 +1150,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area1IntersectionArea3;
     private javax.swing.JMenu area1Menu;
     private javax.swing.JMenuItem area1New;
+    private javax.swing.JMenuItem area1Rotate180;
+    private javax.swing.JMenuItem area1Rotate270;
+    private javax.swing.JMenuItem area1Rotate90;
     private javax.swing.JCheckBoxMenuItem area1ShowBoundingRectangle;
     private javax.swing.JCheckBoxMenuItem area1ShowRectangleDecomposition;
     private javax.swing.JMenu area1SymmetricDifference;
@@ -1036,6 +1171,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area2IntersectionArea3;
     private javax.swing.JMenu area2Menu;
     private javax.swing.JMenuItem area2New;
+    private javax.swing.JMenuItem area2Rotate180;
+    private javax.swing.JMenuItem area2Rotate270;
+    private javax.swing.JMenuItem area2Rotate90;
     private javax.swing.JCheckBoxMenuItem area2ShowBoundingRectangle;
     private javax.swing.JCheckBoxMenuItem area2ShowRectangleDecomposition;
     private javax.swing.JMenu area2SymmetricDifference;
@@ -1052,6 +1190,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area3IntersectionArea1;
     private javax.swing.JMenuItem area3IntersectionArea2;
     private javax.swing.JMenu area3Menu;
+    private javax.swing.JMenuItem area3Rotate180;
+    private javax.swing.JMenuItem area3Rotate270;
+    private javax.swing.JMenuItem area3Rotate90;
     private javax.swing.JCheckBoxMenuItem area3ShowBoundingRectangle;
     private javax.swing.JCheckBoxMenuItem area3ShowRectangleDecomposition;
     private javax.swing.JMenu area3SymmetricDifference;
@@ -1067,7 +1208,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton displayArea3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
