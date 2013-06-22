@@ -40,8 +40,8 @@ public class MapPanel extends JPanel {
     private PresentationArea area2;
     private PresentationArea area3;
 
-    private static final int GRID_WIDTH = 20;
-    private static final int GRID_DEPTH = 20;
+    private int gridWidth = 20;
+    private int gridHeight = 20;
     
     private static final int PREFERRED_CELL_PIXEL_LENGTH = 20;
     private static final int VERTEX_PIXEL_RADIUS = 9;
@@ -65,8 +65,8 @@ public class MapPanel extends JPanel {
      */
     public MapPanel(SwingController swingController) {
         
-        setPreferredSize(new Dimension(GRID_WIDTH*PREFERRED_CELL_PIXEL_LENGTH,
-                                       GRID_DEPTH*PREFERRED_CELL_PIXEL_LENGTH));
+        setPreferredSize(new Dimension(gridWidth*PREFERRED_CELL_PIXEL_LENGTH,
+                                       gridHeight*PREFERRED_CELL_PIXEL_LENGTH));
         
         this.areaController = swingController.getBusinessController(AreaController.class);
         selectedAreaNumber = 1;
@@ -104,8 +104,8 @@ public class MapPanel extends JPanel {
     }
 
     private void paintVertexs(Graphics2D g) {
-        for (int i = 0; i < GRID_DEPTH; ++i) {
-            for (int j = 0; j < GRID_WIDTH; ++j) {
+        for (int i = 0; i < gridWidth; ++i) {
+            for (int j = 0; j < gridHeight; ++j) {
                 paintPoint(new Point(i, j), g);
             }
         }
@@ -194,8 +194,8 @@ public class MapPanel extends JPanel {
     }
     
     private int cellSize() {
-        return Math.max(this.getWidth() / GRID_WIDTH,
-                        this.getHeight() / GRID_DEPTH);
+        return Math.max(this.getWidth() / gridWidth,
+                        this.getHeight() / gridHeight);
     }
 
     private Point findCoordinates(Point p) {
@@ -609,7 +609,7 @@ public class MapPanel extends JPanel {
     private void rotate90AndReallocate(int areaNumber) {
         getArea(areaNumber).vertexs = areaController.rotate90Degrees(
                 getArea(areaNumber).vertexs);
-        translateArea(areaNumber, GRID_WIDTH, 0);
+        translateArea(areaNumber, gridWidth, 0);
     }
 
     void reflectVertical(int areaNumber) {
@@ -617,7 +617,7 @@ public class MapPanel extends JPanel {
         getArea(areaNumber).vertexs = areaController.reflectVertical(
                 getArea(areaNumber).vertexs);
         
-        translateArea(areaNumber, GRID_WIDTH, 0); //reallocate in visible area
+        translateArea(areaNumber, gridWidth, 0); //reallocate in visible area
         
         repaint();
     }
@@ -627,8 +627,19 @@ public class MapPanel extends JPanel {
         getArea(areaNumber).vertexs = areaController.reflectHorizontal(
                 getArea(areaNumber).vertexs);
         
-        translateArea(areaNumber, 0, GRID_DEPTH); //reallocate in visible area
+        translateArea(areaNumber, 0, gridHeight); //reallocate in visible area
         
+        repaint();
+    }
+
+    void setGridSize(int xSize, int ySize) {
+        int gridWidthOffset = xSize - gridWidth;
+        int gridHeightOffset = ySize - gridHeight;
+        gridWidth = xSize;
+        gridHeight = ySize;
+        mainFrame.setSize(mainFrame.getWidth()+gridWidthOffset*PREFERRED_CELL_PIXEL_LENGTH,
+                          mainFrame.getHeight()+gridHeightOffset*PREFERRED_CELL_PIXEL_LENGTH);
+        mainFrame.repaint();
         repaint();
     }
             

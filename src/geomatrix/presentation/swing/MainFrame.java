@@ -17,17 +17,16 @@ public class MainFrame extends javax.swing.JFrame {
     private MapPanel mapPanel;
     private SwingController swing;
     
-    //here will be stored the input of the translate dialog.
-    //I don't know how to pass these values more properly when
+    //here will be stored from which area the translate dialog is opened.
+    //I don't know how to pass this value more properly when
     //the dialog menu is the same for all areas.
-    private int xTranslate;
-    private int yTranslate;
-    private int areaNumberTranslate;
+    private int areaNumberTranslate;   
     
     /**
      * Creates new form MainFrame
      */
-    public MainFrame(SwingController swing) { 
+    public MainFrame(SwingController swing) {
+        setResizable(false);
         initComponents();
         this.swing = swing;
         initMapPanel();
@@ -53,6 +52,12 @@ public class MainFrame extends javax.swing.JFrame {
         xFieldTranslateDialog = new javax.swing.JTextField();
         yFieldTranslateDialog = new javax.swing.JTextField();
         okButtonTranslateDialog = new javax.swing.JToggleButton();
+        resizeGridDialog = new javax.swing.JDialog();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        xFieldResizeGridDialog = new javax.swing.JTextField();
+        yFieldResizeGridDialog = new javax.swing.JTextField();
+        okButtonResizeGridDialog = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         selectArea1 = new javax.swing.JRadioButton();
@@ -63,6 +68,8 @@ public class MainFrame extends javax.swing.JFrame {
         displayArea2 = new javax.swing.JToggleButton();
         displayArea3 = new javax.swing.JToggleButton();
         jMenuBar1 = new javax.swing.JMenuBar();
+        gridMenu = new javax.swing.JMenu();
+        setGridSize = new javax.swing.JMenuItem();
         area1Menu = new javax.swing.JMenu();
         area1New = new javax.swing.JMenuItem();
         area1Clone = new javax.swing.JMenu();
@@ -209,8 +216,61 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(translateDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(yFieldTranslateDialog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(okButtonTranslateDialog)
+                .addContainerGap())
+        );
+
+        resizeGridDialog.setTitle("Resize grid");
+        resizeGridDialog.setMinimumSize(new java.awt.Dimension(184, 135));
+
+        jLabel3.setText("Width (x-axis):");
+
+        jLabel4.setText("Height (y-axis):");
+
+        xFieldResizeGridDialog.setText("20");
+
+        yFieldResizeGridDialog.setText("20");
+
+        okButtonResizeGridDialog.setText("OK");
+        okButtonResizeGridDialog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonResizeGridDialogActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout resizeGridDialogLayout = new javax.swing.GroupLayout(resizeGridDialog.getContentPane());
+        resizeGridDialog.getContentPane().setLayout(resizeGridDialogLayout);
+        resizeGridDialogLayout.setHorizontalGroup(
+            resizeGridDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(resizeGridDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(resizeGridDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(resizeGridDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(xFieldResizeGridDialog, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                    .addComponent(yFieldResizeGridDialog))
+                .addContainerGap(37, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, resizeGridDialogLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(okButtonResizeGridDialog)
+                .addContainerGap())
+        );
+        resizeGridDialogLayout.setVerticalGroup(
+            resizeGridDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(resizeGridDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(resizeGridDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(xFieldResizeGridDialog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(resizeGridDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(yFieldResizeGridDialog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(okButtonResizeGridDialog)
                 .addContainerGap())
         );
 
@@ -359,6 +419,18 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.LINE_START);
+
+        gridMenu.setText("Grid");
+
+        setGridSize.setText("Set grid size");
+        setGridSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setGridSizeActionPerformed(evt);
+            }
+        });
+        gridMenu.add(setGridSize);
+
+        jMenuBar1.add(gridMenu);
 
         area1Menu.setText("Area 1");
         area1Menu.setToolTipText("");
@@ -1152,13 +1224,17 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_area1TranslateActionPerformed
 
     private void okButtonTranslateDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonTranslateDialogActionPerformed
+        //this is so it looks unselected the next time the dialog is open.
+        //the correct thing would be not to use a toggle button, but that's all I found.
         okButtonTranslateDialog.setSelected(false);
-        xTranslate = Integer.parseInt(xFieldTranslateDialog.getText());
-        yTranslate = Integer.parseInt(yFieldTranslateDialog.getText());
+        
+        int xTranslate = Integer.parseInt(xFieldTranslateDialog.getText());
+        int yTranslate = Integer.parseInt(yFieldTranslateDialog.getText());
+        mapPanel.translateArea(areaNumberTranslate, xTranslate, yTranslate);
         xFieldTranslateDialog.setText("0");
         yFieldTranslateDialog.setText("0");
         translateDialog.setVisible(false);
-        mapPanel.translateArea(areaNumberTranslate, xTranslate, yTranslate);
+        
     }//GEN-LAST:event_okButtonTranslateDialogActionPerformed
 
     private void area2TranslateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2TranslateActionPerformed
@@ -1230,6 +1306,21 @@ public class MainFrame extends javax.swing.JFrame {
     private void area3ReflectHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3ReflectHorizontalActionPerformed
         mapPanel.reflectHorizontal(3);
     }//GEN-LAST:event_area3ReflectHorizontalActionPerformed
+
+    private void okButtonResizeGridDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonResizeGridDialogActionPerformed
+        //this is so it looks unselected the next time the dialog is open.
+        //the correct thing would be not to use a toggle button, but that's all I found.
+        okButtonResizeGridDialog.setSelected(false);
+        
+        int xSize = Integer.parseInt(xFieldResizeGridDialog.getText());
+        int ySize = Integer.parseInt(yFieldResizeGridDialog.getText());
+        resizeGridDialog.setVisible(false);
+        mapPanel.setGridSize(xSize, ySize);
+    }//GEN-LAST:event_okButtonResizeGridDialogActionPerformed
+
+    private void setGridSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setGridSizeActionPerformed
+        resizeGridDialog.setVisible(true);
+    }//GEN-LAST:event_setGridSizeActionPerformed
 
     
     
@@ -1311,8 +1402,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton displayArea1;
     private javax.swing.JToggleButton displayArea2;
     private javax.swing.JToggleButton displayArea3;
+    private javax.swing.JMenu gridMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem13;
@@ -1336,12 +1430,17 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JToggleButton okButtonResizeGridDialog;
     private javax.swing.JToggleButton okButtonTranslateDialog;
+    private javax.swing.JDialog resizeGridDialog;
     private javax.swing.JRadioButton selectArea1;
     private javax.swing.JRadioButton selectArea2;
     private javax.swing.JRadioButton selectArea3;
+    private javax.swing.JMenuItem setGridSize;
     private javax.swing.JDialog translateDialog;
+    private javax.swing.JTextField xFieldResizeGridDialog;
     private javax.swing.JTextField xFieldTranslateDialog;
+    private javax.swing.JTextField yFieldResizeGridDialog;
     private javax.swing.JTextField yFieldTranslateDialog;
     // End of variables declaration//GEN-END:variables
 
