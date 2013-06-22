@@ -13,12 +13,12 @@ import java.util.Set;
  *
  * @author Nil
  */
-public class CellIterationPanel extends javax.swing.JFrame {
+public class CellIterationPanel extends javax.swing.JDialog {
 
     private CellIteratorController iteratorController;
     private MapPanel mapPanel;
     private Set<Point> iteredCells;
-    private static final int AUTOMATIC_ITERATION_MS_LAPSUS = 40;
+    private static final int AUTOMATIC_ITERATION_MS_LAPSUS = 36;
     
     /**
      * Creates new form CellIterationPanel
