@@ -17,9 +17,6 @@
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[185, 133]"/>
         </Property>
-        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[185, 125]"/>
-        </Property>
       </Properties>
 
       <Layout>
@@ -399,6 +396,16 @@
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="area1CellIteration">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cell iteration"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1CellIterationActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator9">
+            </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area1ShowRectangleDecomposition">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show rectangle decomposition"/>
@@ -613,6 +620,16 @@
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="area2CellIteration">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cell iteration"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2CellIterationActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator12">
+            </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area2ShowRectangleDecomposition">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Show rectangle decomposition"/>
@@ -826,6 +843,16 @@
               </SubComponents>
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator8">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="area3CellIteration">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cell iteration"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3CellIterationActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator13">
             </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area3ShowRectangleDecomposition">
               <Properties>

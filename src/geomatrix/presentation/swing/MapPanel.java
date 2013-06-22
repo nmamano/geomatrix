@@ -6,6 +6,7 @@ package geomatrix.presentation.swing;
 
 import geomatrix.utils.Line;
 import geomatrix.business.controllers.AreaController;
+import geomatrix.business.controllers.CellIteratorController;
 import geomatrix.utils.Direction;
 import geomatrix.utils.Segment;
 import java.awt.Color;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import manticore.presentation.SwingController;
 
@@ -43,8 +45,10 @@ public class MapPanel extends JPanel {
     private int gridWidth = 20;
     private int gridHeight = 20;
     
-    private static final int PREFERRED_CELL_PIXEL_LENGTH = 20;
+    private static final int CELL_PIXEL_LENGTH = 20;
     private static final int VERTEX_PIXEL_RADIUS = 9;
+    private static final int ITERATION_MARK_PIXEL_RADIUS = 8;
+    public static final Color ITERATION_MARK_COLOR = Color.ORANGE;
     
     private static final Color AREA_1_COLOR = Color.RED;
     private static final Color AREA_2_COLOR = Color.BLUE;
@@ -56,6 +60,9 @@ public class MapPanel extends JPanel {
     private static final Color OVERLAPPED_CELLS_COLOR = Color.GRAY;
     private static final Color DOUBLY_OVERLAPPED_CELLS_COLOR = Color.BLACK;
     
+    private Set<Point> iteredCells;
+    private boolean ignoreInput;
+    
     /**
      * Initialization.
      * All areas have no vertexs.
@@ -65,8 +72,10 @@ public class MapPanel extends JPanel {
      */
     public MapPanel(SwingController swingController) {
         
-        setPreferredSize(new Dimension(gridWidth*PREFERRED_CELL_PIXEL_LENGTH,
-                                       gridHeight*PREFERRED_CELL_PIXEL_LENGTH));
+        setIgnoreInput(false);
+        
+        setPreferredSize(new Dimension(gridWidth*CELL_PIXEL_LENGTH,
+                                       gridHeight*CELL_PIXEL_LENGTH));
         
         this.areaController = swingController.getBusinessController(AreaController.class);
         selectedAreaNumber = 1;
@@ -101,17 +110,25 @@ public class MapPanel extends JPanel {
         paintInvalidLines(g2D);
         paintAreas(g2D);
         paintBoundingRectangles(g2D);
+        try {
+            paintIteredCells(g2D);
+        }
+        catch (java.util.ConcurrentModificationException e) {
+            //ignore
+            //this causes the automatic iteration display to disappear
+            //at times while iterating, but it's better than a exception pop up
+        }
     }
 
     private void paintVertexs(Graphics2D g) {
         for (int i = 0; i < gridWidth; ++i) {
             for (int j = 0; j < gridHeight; ++j) {
-                paintPoint(new Point(i, j), g);
+                paintVertex(new Point(i, j), g);
             }
         }
     }
     
-    private void paintPoint(Point point, Graphics2D g) {
+    private void paintVertex(Point point, Graphics2D g) {
         Point coordinates = findCoordinates(point);
         List<Color> colors = getColors(point);
         if (colors.size() == 1) {
@@ -637,12 +654,40 @@ public class MapPanel extends JPanel {
         int gridHeightOffset = ySize - gridHeight;
         gridWidth = xSize;
         gridHeight = ySize;
-        mainFrame.setSize(mainFrame.getWidth()+gridWidthOffset*PREFERRED_CELL_PIXEL_LENGTH,
-                          mainFrame.getHeight()+gridHeightOffset*PREFERRED_CELL_PIXEL_LENGTH);
+        mainFrame.setSize(mainFrame.getWidth()+gridWidthOffset*CELL_PIXEL_LENGTH,
+                          mainFrame.getHeight()+gridHeightOffset*CELL_PIXEL_LENGTH);
         mainFrame.repaint();
         repaint();
     }
-            
+
+    void cellIteration(int areaNumber) {
+        CellIteratorController cellController = new CellIteratorController(getArea(areaNumber).vertexs);
+        CellIterationPanel cellIterationPanel = new CellIterationPanel(cellController, this);
+        cellIterationPanel.setLocation(mainFrame.getWidth(), 0);
+        
+        setIgnoreInput(true);
+        cellIterationPanel.setVisible(true);
+    }
+
+    void paintIteredCells(Graphics2D g) {
+        if (iteredCells == null) return;
+        for (Point point : iteredCells) {
+            Point inGridCenter = findCoordinates(point);
+            inGridCenter.x += CELL_PIXEL_LENGTH/2;
+            inGridCenter.y += CELL_PIXEL_LENGTH/2;
+            paintSphere(inGridCenter, ITERATION_MARK_COLOR, ITERATION_MARK_PIXEL_RADIUS, g);
+        }
+    }
+
+    void setIterationPoints(Set<Point> iteredCells) {
+        this.iteredCells = iteredCells;
+    }
+
+    public void setIgnoreInput(boolean shouldIgnore) {
+        ignoreInput = shouldIgnore;
+    }
+
+        
     private class SelectGridPointListener extends MouseAdapter {
 
         public SelectGridPointListener() {
@@ -650,6 +695,7 @@ public class MapPanel extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            if (ignoreInput) return;
             
             Point clickedVertex = getClosestVertex(e.getPoint());
             
@@ -667,8 +713,8 @@ public class MapPanel extends JPanel {
         }
 
         private Point getClosestVertex(Point point) {
-            return new Point((point.x+PREFERRED_CELL_PIXEL_LENGTH/2)/cellSize(),
-                             (point.y+PREFERRED_CELL_PIXEL_LENGTH/2)/cellSize());
+            return new Point((point.x+CELL_PIXEL_LENGTH/2)/cellSize(),
+                             (point.y+CELL_PIXEL_LENGTH/2)/cellSize());
         }
 
     }   
