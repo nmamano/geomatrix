@@ -98,6 +98,8 @@ public class MainFrame extends javax.swing.JFrame {
         area1ReflectVertical = new javax.swing.JMenuItem();
         area1ReflectHorizontal = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        area1CellIteration = new javax.swing.JMenuItem();
+        jSeparator9 = new javax.swing.JPopupMenu.Separator();
         area1ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area1ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
         area2Menu = new javax.swing.JMenu();
@@ -165,7 +167,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         translateDialog.setTitle("Translate");
         translateDialog.setMinimumSize(new java.awt.Dimension(185, 133));
-        translateDialog.setPreferredSize(new java.awt.Dimension(185, 125));
 
         jLabel1.setText("x:");
 
@@ -601,6 +602,15 @@ public class MainFrame extends javax.swing.JFrame {
 
         area1Menu.add(area1Reflection);
         area1Menu.add(jSeparator3);
+
+        area1CellIteration.setText("Cell iteration");
+        area1CellIteration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1CellIterationActionPerformed(evt);
+            }
+        });
+        area1Menu.add(area1CellIteration);
+        area1Menu.add(jSeparator9);
 
         area1ShowRectangleDecomposition.setText("Show rectangle decomposition");
         area1ShowRectangleDecomposition.addActionListener(new java.awt.event.ActionListener() {
@@ -1314,6 +1324,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         int xSize = Integer.parseInt(xFieldResizeGridDialog.getText());
         int ySize = Integer.parseInt(yFieldResizeGridDialog.getText());
+        
         resizeGridDialog.setVisible(false);
         mapPanel.setGridSize(xSize, ySize);
     }//GEN-LAST:event_okButtonResizeGridDialogActionPerformed
@@ -1322,9 +1333,14 @@ public class MainFrame extends javax.swing.JFrame {
         resizeGridDialog.setVisible(true);
     }//GEN-LAST:event_setGridSizeActionPerformed
 
+    private void area1CellIterationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1CellIterationActionPerformed
+        mapPanel.cellIteration(1);
+    }//GEN-LAST:event_area1CellIterationActionPerformed
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem area1CellIteration;
     private javax.swing.JMenu area1Clone;
     private javax.swing.JMenu area1Difference;
     private javax.swing.JMenuItem area1DifferenceArea2;
@@ -1430,6 +1446,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JToggleButton okButtonResizeGridDialog;
     private javax.swing.JToggleButton okButtonTranslateDialog;
     private javax.swing.JDialog resizeGridDialog;
