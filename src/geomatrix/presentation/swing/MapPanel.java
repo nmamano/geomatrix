@@ -379,19 +379,19 @@ public class MapPanel extends JPanel {
         //edges are not painted for now. It is not necessary.
     }
 
-    private void updateSetOperationMenusActivation(int modifiedAreaNumber) {
+    private void updateMenusThatRequireValidAreaActivation(int modifiedAreaNumber) {
         if (areaController.isValidArea(getArea(modifiedAreaNumber).vertexs)) {
-            mainFrame.enableSetOperations(modifiedAreaNumber, true);
+            mainFrame.enableOperationsThatRequireValidArea(modifiedAreaNumber, true);
         }
         else {
-            mainFrame.enableSetOperations(modifiedAreaNumber, false);
+            mainFrame.enableOperationsThatRequireValidArea(modifiedAreaNumber, false);
         }
     }
         
     void resetArea(int areaNumber) {
         getArea(areaNumber).vertexs = new HashSet<Point>();
         
-        updateSetOperationMenusActivation(areaNumber);
+        updateMenusThatRequireValidAreaActivation(areaNumber);
         repaint();
     }
 
@@ -403,7 +403,7 @@ public class MapPanel extends JPanel {
             getArea(destinationAreaNumber).vertexs.add(vertex);
         }
         
-        updateSetOperationMenusActivation(destinationAreaNumber);
+        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
         repaint();
     }
 
@@ -417,7 +417,7 @@ public class MapPanel extends JPanel {
         getArea(destinationAreaNumber).vertexs = areaController.union(destinationAreaVertexs,
                                                       otherAreaVertexs);
         
-        updateSetOperationMenusActivation(destinationAreaNumber);
+        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
         repaint();
     }
     
@@ -431,7 +431,7 @@ public class MapPanel extends JPanel {
         getArea(destinationAreaNumber).vertexs = areaController.intersection(
                 destinationAreaVertexs, otherAreaVertexs);
         
-        updateSetOperationMenusActivation(destinationAreaNumber);
+        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
         repaint();
     }
 
@@ -445,7 +445,7 @@ public class MapPanel extends JPanel {
         getArea(destinationAreaNumber).vertexs = areaController.difference(
                 destinationAreaVertexs, otherAreaVertexs);
         
-        updateSetOperationMenusActivation(destinationAreaNumber);
+        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
         repaint();
     }
 
@@ -459,7 +459,7 @@ public class MapPanel extends JPanel {
         getArea(destinationAreaNumber).vertexs = areaController.symmetricDifference(
                 destinationAreaVertexs, otherAreaVertexs);
         
-        updateSetOperationMenusActivation(destinationAreaNumber);
+        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
         repaint();
     }
 
@@ -630,7 +630,7 @@ public class MapPanel extends JPanel {
                 selectedArea.addVertexToArea(clickedVertex);
             }
             
-            updateSetOperationMenusActivation(selectedAreaNumber);
+            updateMenusThatRequireValidAreaActivation(selectedAreaNumber);
             
             repaint();
         }

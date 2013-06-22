@@ -246,7 +246,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1TranslateActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu1">
+            <Menu class="javax.swing.JMenu" name="area1Rotate">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Rotate"/>
               </Properties>
@@ -437,7 +437,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2TranslateActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu2">
+            <Menu class="javax.swing.JMenu" name="area2Rotate">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Rotate"/>
               </Properties>
@@ -628,7 +628,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3TranslateActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu3">
+            <Menu class="javax.swing.JMenu" name="area3Rotate">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Rotate"/>
               </Properties>
