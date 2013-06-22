@@ -60,6 +60,7 @@ public class MapPanel extends JPanel {
     private static final Color DOUBLY_OVERLAPPED_CELLS_COLOR = Color.BLACK;
     
     private Set<Point> iteredCells;
+    private boolean ignoreInput;
     
     /**
      * Initialization.
@@ -69,6 +70,8 @@ public class MapPanel extends JPanel {
      * @param swingController 
      */
     public MapPanel(SwingController swingController) {
+        
+        setIgnoreInput(false);
         
         setPreferredSize(new Dimension(gridWidth*CELL_PIXEL_LENGTH,
                                        gridHeight*CELL_PIXEL_LENGTH));
@@ -660,6 +663,8 @@ public class MapPanel extends JPanel {
         CellIteratorController cellController = new CellIteratorController(getArea(areaNumber).vertexs);
         CellIterationPanel cellIterationPanel = new CellIterationPanel(cellController, this);
         cellIterationPanel.setLocation(mainFrame.getWidth(), 0);
+        
+        setIgnoreInput(true);
         cellIterationPanel.setVisible(true);
     }
 
@@ -677,6 +682,10 @@ public class MapPanel extends JPanel {
         this.iteredCells = iteredCells;
     }
 
+    public void setIgnoreInput(boolean shouldIgnore) {
+        ignoreInput = shouldIgnore;
+    }
+
         
     private class SelectGridPointListener extends MouseAdapter {
 
@@ -685,6 +694,7 @@ public class MapPanel extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            if (ignoreInput) return;
             
             Point clickedVertex = getClosestVertex(e.getPoint());
             
