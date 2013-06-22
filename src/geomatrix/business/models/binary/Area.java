@@ -54,7 +54,7 @@ public interface Area
      * in this area is not.
      * @return a list of disjoint rectangles that wrap all cells of this area.
      */
-    List<Rectangle> descomposition();
+    List<Rectangle> decomposition();
     
     /**
      * Returns an iterator through the points p such that all cells within a

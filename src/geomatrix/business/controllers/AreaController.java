@@ -149,4 +149,22 @@ public class AreaController extends BusinessController {
         area.rotation(90);
         return gridPointsToPoints(area.getVertexs());
     }
+
+    public Set<Point> reflectVertical(Set<Point> vertexs) {
+
+        assert(isValidArea(vertexs));
+        
+        Geomatrix area = new Geomatrix(vertexs);
+        area.verticalReflection();
+        return gridPointsToPoints(area.getVertexs());
+    }
+
+    public Set<Point> reflectHorizontal(Set<Point> vertexs) {
+
+        assert(isValidArea(vertexs));
+        
+        Geomatrix area = new Geomatrix(vertexs);
+        area.horizontalReflection();
+        return gridPointsToPoints(area.getVertexs());
+    }
 }

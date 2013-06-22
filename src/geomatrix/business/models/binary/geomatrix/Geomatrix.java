@@ -310,7 +310,7 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public List<Rectangle> descomposition() {
+    public List<Rectangle> decomposition() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -408,9 +408,9 @@ public class Geomatrix implements Area {
          * 
          * 
          * Algorithm 2:
-         * return descomposition().totalSize()
+         * return decomposition().totalSize()
          * 
-         * Sadly, descomposition has not been implemented yet :(
+         * Sadly, decomposition has not been implemented yet :(
          */
         throw new UnsupportedOperationException("Not supported yet.");
     }

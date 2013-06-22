@@ -208,14 +208,14 @@ public class GeomatrixTest {
     }
 
     /**
-     * Test of descomposition method, of class Geomatrix.
+     * Test of decomposition method, of class Geomatrix.
      */
     @Test
     public void testDescomposition() {
         System.out.println("descomposition");
         Geomatrix instance = new Geomatrix();
         List expResult = null;
-        List result = instance.descomposition();
+        List result = instance.decomposition();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

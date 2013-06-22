@@ -611,6 +611,26 @@ public class MapPanel extends JPanel {
                 getArea(areaNumber).vertexs);
         translateArea(areaNumber, GRID_WIDTH, 0);
     }
+
+    void reflectVertical(int areaNumber) {
+        assert(areaController.isValidArea(getArea(areaNumber).vertexs));
+        getArea(areaNumber).vertexs = areaController.reflectVertical(
+                getArea(areaNumber).vertexs);
+        
+        translateArea(areaNumber, GRID_WIDTH, 0); //reallocate in visible area
+        
+        repaint();
+    }
+
+    void reflectHorizontal(int areaNumber) {
+        assert(areaController.isValidArea(getArea(areaNumber).vertexs));
+        getArea(areaNumber).vertexs = areaController.reflectHorizontal(
+                getArea(areaNumber).vertexs);
+        
+        translateArea(areaNumber, 0, GRID_DEPTH); //reallocate in visible area
+        
+        repaint();
+    }
             
     private class SelectGridPointListener extends MouseAdapter {
 

@@ -87,6 +87,9 @@ public class MainFrame extends javax.swing.JFrame {
         area1Rotate90 = new javax.swing.JMenuItem();
         area1Rotate180 = new javax.swing.JMenuItem();
         area1Rotate270 = new javax.swing.JMenuItem();
+        area1Reflection = new javax.swing.JMenu();
+        area1ReflectVertical = new javax.swing.JMenuItem();
+        area1ReflectHorizontal = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         area1ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area1ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -114,6 +117,9 @@ public class MainFrame extends javax.swing.JFrame {
         area2Rotate90 = new javax.swing.JMenuItem();
         area2Rotate180 = new javax.swing.JMenuItem();
         area2Rotate270 = new javax.swing.JMenuItem();
+        area2Reflection = new javax.swing.JMenu();
+        area2ReflectVertical = new javax.swing.JMenuItem();
+        area2ReflectHorizontal = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         area2ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area2ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -141,6 +147,9 @@ public class MainFrame extends javax.swing.JFrame {
         area3Rotate90 = new javax.swing.JMenuItem();
         area3Rotate180 = new javax.swing.JMenuItem();
         area3Rotate270 = new javax.swing.JMenuItem();
+        area3Reflection = new javax.swing.JMenu();
+        area3ReflectVertical = new javax.swing.JMenuItem();
+        area3ReflectHorizontal = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         area3ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area3ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -499,6 +508,26 @@ public class MainFrame extends javax.swing.JFrame {
         area1Rotate.add(area1Rotate270);
 
         area1Menu.add(area1Rotate);
+
+        area1Reflection.setText("Reflection");
+
+        area1ReflectVertical.setText("Vertical");
+        area1ReflectVertical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1ReflectVerticalActionPerformed(evt);
+            }
+        });
+        area1Reflection.add(area1ReflectVertical);
+
+        area1ReflectHorizontal.setText("Horizontal");
+        area1ReflectHorizontal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1ReflectHorizontalActionPerformed(evt);
+            }
+        });
+        area1Reflection.add(area1ReflectHorizontal);
+
+        area1Menu.add(area1Reflection);
         area1Menu.add(jSeparator3);
 
         area1ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -666,6 +695,26 @@ public class MainFrame extends javax.swing.JFrame {
         area2Rotate.add(area2Rotate270);
 
         area2Menu.add(area2Rotate);
+
+        area2Reflection.setText("Reflection");
+
+        area2ReflectVertical.setText("Vertical");
+        area2ReflectVertical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2ReflectVerticalActionPerformed(evt);
+            }
+        });
+        area2Reflection.add(area2ReflectVertical);
+
+        area2ReflectHorizontal.setText("Horizontal");
+        area2ReflectHorizontal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2ReflectHorizontalActionPerformed(evt);
+            }
+        });
+        area2Reflection.add(area2ReflectHorizontal);
+
+        area2Menu.add(area2Reflection);
         area2Menu.add(jSeparator7);
 
         area2ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -833,6 +882,26 @@ public class MainFrame extends javax.swing.JFrame {
         area3Rotate.add(area3Rotate270);
 
         area3Menu.add(area3Rotate);
+
+        area3Reflection.setText("Reflection");
+
+        area3ReflectVertical.setText("Vertical");
+        area3ReflectVertical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3ReflectVerticalActionPerformed(evt);
+            }
+        });
+        area3Reflection.add(area3ReflectVertical);
+
+        area3ReflectHorizontal.setText("Horizontal");
+        area3ReflectHorizontal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3ReflectHorizontalActionPerformed(evt);
+            }
+        });
+        area3Reflection.add(area3ReflectHorizontal);
+
+        area3Menu.add(area3Reflection);
         area3Menu.add(jSeparator8);
 
         area3ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -1138,6 +1207,30 @@ public class MainFrame extends javax.swing.JFrame {
         mapPanel.rotateArea(3, 270);
     }//GEN-LAST:event_area3Rotate270ActionPerformed
 
+    private void area1ReflectVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1ReflectVerticalActionPerformed
+        mapPanel.reflectVertical(1);
+    }//GEN-LAST:event_area1ReflectVerticalActionPerformed
+
+    private void area1ReflectHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1ReflectHorizontalActionPerformed
+        mapPanel.reflectHorizontal(1);
+    }//GEN-LAST:event_area1ReflectHorizontalActionPerformed
+
+    private void area2ReflectVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2ReflectVerticalActionPerformed
+        mapPanel.reflectVertical(2);
+    }//GEN-LAST:event_area2ReflectVerticalActionPerformed
+
+    private void area2ReflectHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2ReflectHorizontalActionPerformed
+        mapPanel.reflectHorizontal(2);
+    }//GEN-LAST:event_area2ReflectHorizontalActionPerformed
+
+    private void area3ReflectVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3ReflectVerticalActionPerformed
+        mapPanel.reflectVertical(3);
+    }//GEN-LAST:event_area3ReflectVerticalActionPerformed
+
+    private void area3ReflectHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3ReflectHorizontalActionPerformed
+        mapPanel.reflectHorizontal(3);
+    }//GEN-LAST:event_area3ReflectHorizontalActionPerformed
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1150,6 +1243,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area1IntersectionArea3;
     private javax.swing.JMenu area1Menu;
     private javax.swing.JMenuItem area1New;
+    private javax.swing.JMenuItem area1ReflectHorizontal;
+    private javax.swing.JMenuItem area1ReflectVertical;
+    private javax.swing.JMenu area1Reflection;
     private javax.swing.JMenu area1Rotate;
     private javax.swing.JMenuItem area1Rotate180;
     private javax.swing.JMenuItem area1Rotate270;
@@ -1172,6 +1268,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area2IntersectionArea3;
     private javax.swing.JMenu area2Menu;
     private javax.swing.JMenuItem area2New;
+    private javax.swing.JMenuItem area2ReflectHorizontal;
+    private javax.swing.JMenuItem area2ReflectVertical;
+    private javax.swing.JMenu area2Reflection;
     private javax.swing.JMenu area2Rotate;
     private javax.swing.JMenuItem area2Rotate180;
     private javax.swing.JMenuItem area2Rotate270;
@@ -1192,6 +1291,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area3IntersectionArea1;
     private javax.swing.JMenuItem area3IntersectionArea2;
     private javax.swing.JMenu area3Menu;
+    private javax.swing.JMenuItem area3ReflectHorizontal;
+    private javax.swing.JMenuItem area3ReflectVertical;
+    private javax.swing.JMenu area3Reflection;
     private javax.swing.JMenu area3Rotate;
     private javax.swing.JMenuItem area3Rotate180;
     private javax.swing.JMenuItem area3Rotate270;
@@ -1272,6 +1374,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             area1Translate.setEnabled(isValid);
             area1Rotate.setEnabled(isValid);
+            area1Reflection.setEnabled(isValid);
         }
         else if (areaNumber == 2) {
             area2Union.setEnabled(isValid);
@@ -1291,6 +1394,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             area2Translate.setEnabled(isValid);
             area2Rotate.setEnabled(isValid);
+            area2Reflection.setEnabled(isValid);
         }
         else if (areaNumber == 3) {
             area3Union.setEnabled(isValid);
@@ -1310,6 +1414,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             area3Translate.setEnabled(isValid);
             area3Rotate.setEnabled(isValid);
+            area3Reflection.setEnabled(isValid);
         }
     }
 }

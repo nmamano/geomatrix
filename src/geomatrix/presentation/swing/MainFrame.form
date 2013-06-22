@@ -277,6 +277,29 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <Menu class="javax.swing.JMenu" name="area1Reflection">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Reflection"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="area1ReflectVertical">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Vertical"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1ReflectVerticalActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="area1ReflectHorizontal">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Horizontal"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area1ReflectHorizontalActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
             </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area1ShowRectangleDecomposition">
@@ -468,6 +491,29 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <Menu class="javax.swing.JMenu" name="area2Reflection">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Reflection"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="area2ReflectVertical">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Vertical"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2ReflectVerticalActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="area2ReflectHorizontal">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Horizontal"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area2ReflectHorizontalActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
             </MenuItem>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="area2ShowRectangleDecomposition">
@@ -655,6 +701,29 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3Rotate270ActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="area3Reflection">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Reflection"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="area3ReflectVertical">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Vertical"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3ReflectVerticalActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="area3ReflectHorizontal">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Horizontal"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="area3ReflectHorizontalActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
