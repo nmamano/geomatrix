@@ -2,6 +2,10 @@
 package geomatrix.presentation.swing;
 
 import java.awt.BorderLayout;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import manticore.presentation.SwingController;
 
 /**
@@ -12,6 +16,13 @@ public class MainFrame extends javax.swing.JFrame {
 
     private MapPanel mapPanel;
     private SwingController swing;
+    
+    //here will be stored the input of the translate dialog.
+    //I don't know how to pass these values more properly when
+    //the dialog menu is the same for all areas.
+    private int xTranslate;
+    private int yTranslate;
+    private int areaNumberTranslate;
     
     /**
      * Creates new form MainFrame
@@ -36,6 +47,12 @@ public class MainFrame extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jMenuItem4 = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JSeparator();
+        translateDialog = new javax.swing.JDialog();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        xFieldTranslateDialog = new javax.swing.JTextField();
+        yFieldTranslateDialog = new javax.swing.JTextField();
+        okButtonTranslateDialog = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         selectArea1 = new javax.swing.JRadioButton();
@@ -65,6 +82,8 @@ public class MainFrame extends javax.swing.JFrame {
         area1SymmetricDifferenceArea2 = new javax.swing.JMenuItem();
         area1SymmetricDifferenceArea3 = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        area1Translate = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         area1ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area1ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
         area2Menu = new javax.swing.JMenu();
@@ -86,6 +105,8 @@ public class MainFrame extends javax.swing.JFrame {
         area2SymmetricDifferenceArea1 = new javax.swing.JMenuItem();
         area2SymmetricDifferenceArea3 = new javax.swing.JMenuItem();
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
+        area2Translate = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
         area2ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area2ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
         area3Menu = new javax.swing.JMenu();
@@ -107,10 +128,70 @@ public class MainFrame extends javax.swing.JFrame {
         area3SymmetricDifferenceArea1 = new javax.swing.JMenuItem();
         area3SymmetricDifferenceArea2 = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        area3Translate = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
         area3ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area3ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
 
         jMenuItem4.setText("jMenuItem4");
+
+        translateDialog.setTitle("Translate");
+        translateDialog.setMinimumSize(new java.awt.Dimension(185, 133));
+        translateDialog.setPreferredSize(new java.awt.Dimension(185, 125));
+
+        jLabel1.setText("x:");
+
+        jLabel2.setText("y:");
+
+        xFieldTranslateDialog.setText("0");
+
+        yFieldTranslateDialog.setText("0");
+
+        okButtonTranslateDialog.setText("OK");
+        okButtonTranslateDialog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonTranslateDialogActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout translateDialogLayout = new javax.swing.GroupLayout(translateDialog.getContentPane());
+        translateDialog.getContentPane().setLayout(translateDialogLayout);
+        translateDialogLayout.setHorizontalGroup(
+            translateDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(translateDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(translateDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, translateDialogLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(okButtonTranslateDialog))
+                    .addGroup(translateDialogLayout.createSequentialGroup()
+                        .addGroup(translateDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(translateDialogLayout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(xFieldTranslateDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(translateDialogLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(yFieldTranslateDialog)))
+                        .addGap(0, 58, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        translateDialogLayout.setVerticalGroup(
+            translateDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(translateDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(translateDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(xFieldTranslateDialog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(translateDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(yFieldTranslateDialog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addComponent(okButtonTranslateDialog)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Geomatrix");
@@ -253,7 +334,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.LINE_START);
@@ -370,6 +451,15 @@ public class MainFrame extends javax.swing.JFrame {
 
         area1Menu.add(area1SymmetricDifference);
         area1Menu.add(jSeparator2);
+
+        area1Translate.setText("Translate");
+        area1Translate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1TranslateActionPerformed(evt);
+            }
+        });
+        area1Menu.add(area1Translate);
+        area1Menu.add(jSeparator3);
 
         area1ShowRectangleDecomposition.setText("Show rectangle decomposition");
         area1ShowRectangleDecomposition.addActionListener(new java.awt.event.ActionListener() {
@@ -501,6 +591,15 @@ public class MainFrame extends javax.swing.JFrame {
         area2Menu.add(area2SymmetricDifference);
         area2Menu.add(jSeparator11);
 
+        area2Translate.setText("Translate");
+        area2Translate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2TranslateActionPerformed(evt);
+            }
+        });
+        area2Menu.add(area2Translate);
+        area2Menu.add(jSeparator7);
+
         area2ShowRectangleDecomposition.setText("Show rectangle decomposition");
         area2ShowRectangleDecomposition.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -630,6 +729,15 @@ public class MainFrame extends javax.swing.JFrame {
 
         area3Menu.add(area3SymmetricDifference);
         area3Menu.add(jSeparator5);
+
+        area3Translate.setText("Translate");
+        area3Translate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3TranslateActionPerformed(evt);
+            }
+        });
+        area3Menu.add(area3Translate);
+        area3Menu.add(jSeparator8);
 
         area3ShowRectangleDecomposition.setText("Show rectangle decomposition");
         area3ShowRectangleDecomposition.addActionListener(new java.awt.event.ActionListener() {
@@ -873,6 +981,33 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_area3ShowBoundingRectangleActionPerformed
 
+    private void area1TranslateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1TranslateActionPerformed
+        translateDialog.setVisible(true);
+        areaNumberTranslate = 1;
+    }//GEN-LAST:event_area1TranslateActionPerformed
+
+    private void okButtonTranslateDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonTranslateDialogActionPerformed
+        okButtonTranslateDialog.setSelected(false);
+        xTranslate = Integer.parseInt(xFieldTranslateDialog.getText());
+        yTranslate = Integer.parseInt(yFieldTranslateDialog.getText());
+        xFieldTranslateDialog.setText("0");
+        yFieldTranslateDialog.setText("0");
+        translateDialog.setVisible(false);
+        mapPanel.translateArea(areaNumberTranslate, xTranslate, yTranslate);
+    }//GEN-LAST:event_okButtonTranslateDialogActionPerformed
+
+    private void area2TranslateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2TranslateActionPerformed
+        translateDialog.setVisible(true);
+        areaNumberTranslate = 2;
+    }//GEN-LAST:event_area2TranslateActionPerformed
+
+    private void area3TranslateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3TranslateActionPerformed
+        translateDialog.setVisible(true);
+        areaNumberTranslate = 3;
+    }//GEN-LAST:event_area3TranslateActionPerformed
+
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu area1Clone;
     private javax.swing.JMenu area1Difference;
@@ -888,6 +1023,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu area1SymmetricDifference;
     private javax.swing.JMenuItem area1SymmetricDifferenceArea2;
     private javax.swing.JMenuItem area1SymmetricDifferenceArea3;
+    private javax.swing.JMenuItem area1Translate;
     private javax.swing.JMenu area1Union;
     private javax.swing.JMenuItem area1UnionArea2;
     private javax.swing.JMenuItem area1UnionArea3;
@@ -905,6 +1041,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu area2SymmetricDifference;
     private javax.swing.JMenuItem area2SymmetricDifferenceArea1;
     private javax.swing.JMenuItem area2SymmetricDifferenceArea3;
+    private javax.swing.JMenuItem area2Translate;
     private javax.swing.JMenu area2Union;
     private javax.swing.JMenuItem area2UnionArea1;
     private javax.swing.JMenuItem area2UnionArea3;
@@ -920,6 +1057,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu area3SymmetricDifference;
     private javax.swing.JMenuItem area3SymmetricDifferenceArea1;
     private javax.swing.JMenuItem area3SymmetricDifferenceArea2;
+    private javax.swing.JMenuItem area3Translate;
     private javax.swing.JMenu area3Union;
     private javax.swing.JMenuItem area3UnionArea1;
     private javax.swing.JMenuItem area3UnionArea2;
@@ -927,6 +1065,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton displayArea1;
     private javax.swing.JToggleButton displayArea2;
     private javax.swing.JToggleButton displayArea3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem13;
@@ -944,12 +1084,19 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JToggleButton okButtonTranslateDialog;
     private javax.swing.JRadioButton selectArea1;
     private javax.swing.JRadioButton selectArea2;
     private javax.swing.JRadioButton selectArea3;
+    private javax.swing.JDialog translateDialog;
+    private javax.swing.JTextField xFieldTranslateDialog;
+    private javax.swing.JTextField yFieldTranslateDialog;
     // End of variables declaration//GEN-END:variables
 
     private void initMapPanel() {

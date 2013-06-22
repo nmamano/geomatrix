@@ -576,6 +576,15 @@ public class MapPanel extends JPanel {
         else if (direction == Direction.W) --point.x;
         else ++point.x;
     }
+
+    void translateArea(int areaNumber, int xTranslate, int yTranslate) {
+        assert(areaController.isValidArea(getArea(areaNumber).vertexs));
+        
+        getArea(areaNumber).vertexs = areaController.translate(
+                getArea(areaNumber).vertexs, xTranslate, yTranslate);
+        
+        repaint();
+    }
             
     private class SelectGridPointListener extends MouseAdapter {
 

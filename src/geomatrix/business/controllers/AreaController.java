@@ -131,4 +131,13 @@ public class AreaController extends BusinessController {
         edges.add(new Segment(new Point(r.bottomRight.x, r.topLeft.y), new Point(r.bottomRight.x, r.bottomRight.y)));
         return edges;
     }
+
+    public Set<Point> translate(Set<Point> vertexs, int xTranslate, int yTranslate) {
+
+        assert(isValidArea(vertexs));
+        
+        Geomatrix area = new Geomatrix(vertexs);
+        area.translation(new GridPoint(xTranslate, yTranslate));
+        return gridPointsToPoints(area.getVertexs()); 
+    }
 }
