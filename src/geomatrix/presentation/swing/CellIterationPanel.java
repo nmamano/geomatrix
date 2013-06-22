@@ -25,8 +25,8 @@ public class CellIterationPanel extends javax.swing.JFrame {
      */
     public CellIterationPanel(CellIteratorController iteratorController, MapPanel mapPanel) {
 
-        setCloseBehaviour();
         initComponents();
+        setCloseBehaviour();
         this.iteratorController = iteratorController;
         this.mapPanel = mapPanel;
         reset();
@@ -46,8 +46,10 @@ public class CellIterationPanel extends javax.swing.JFrame {
         automaticButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Cell Iteration");
+        setMinimumSize(new java.awt.Dimension(170, 155));
+        setResizable(false);
 
         IterateCellsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Cell Iteration"));
 
@@ -80,9 +82,9 @@ public class CellIterationPanel extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(IterateCellsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(advanceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(automaticButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(resetButton))
-                .addContainerGap(39, Short.MAX_VALUE))
+                    .addComponent(resetButton)
+                    .addComponent(automaticButton, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         IterateCellsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {advanceButton, automaticButton, resetButton});

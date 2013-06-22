@@ -659,6 +659,7 @@ public class MapPanel extends JPanel {
     void cellIteration(int areaNumber) {
         CellIteratorController cellController = new CellIteratorController(getArea(areaNumber).vertexs);
         CellIterationPanel cellIterationPanel = new CellIterationPanel(cellController, this);
+        cellIterationPanel.setLocation(mainFrame.getWidth(), 0);
         cellIterationPanel.setVisible(true);
     }
 
