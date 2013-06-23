@@ -81,8 +81,8 @@ public class MapPanel extends JPanel {
         selectedAreaNumber = 1;
         
         area1 = new PresentationArea(true, AREA_1_COLOR);
-        area2 = new PresentationArea(true, AREA_2_COLOR);
-        area3 = new PresentationArea(true, AREA_3_COLOR);
+        area2 = new PresentationArea(false, AREA_2_COLOR);
+        area3 = new PresentationArea(false, AREA_3_COLOR);
         
         this.addMouseListener(new SelectGridPointListener());
         repaint();
@@ -694,7 +694,7 @@ public class MapPanel extends JPanel {
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             if (ignoreInput) return;
             
             Point clickedVertex = getClosestVertex(e.getPoint());
