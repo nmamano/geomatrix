@@ -1604,6 +1604,8 @@ public class MainFrame extends javax.swing.JFrame {
             area1Translate.setEnabled(isValid);
             area1Rotate.setEnabled(isValid);
             area1Reflection.setEnabled(isValid);
+            
+            area1CellIteration.setEnabled(isValid);
         }
         else if (areaNumber == 2) {
             area2Union.setEnabled(isValid);
@@ -1624,6 +1626,8 @@ public class MainFrame extends javax.swing.JFrame {
             area2Translate.setEnabled(isValid);
             area2Rotate.setEnabled(isValid);
             area2Reflection.setEnabled(isValid);
+            
+            area2CellIteration.setEnabled(isValid);
         }
         else if (areaNumber == 3) {
             area3Union.setEnabled(isValid);
@@ -1644,6 +1648,8 @@ public class MainFrame extends javax.swing.JFrame {
             area3Translate.setEnabled(isValid);
             area3Rotate.setEnabled(isValid);
             area3Reflection.setEnabled(isValid);
+            
+            area3CellIteration.setEnabled(isValid);
         }
     }
 }
