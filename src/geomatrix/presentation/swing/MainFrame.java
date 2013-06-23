@@ -58,6 +58,11 @@ public class MainFrame extends javax.swing.JFrame {
         xFieldResizeGridDialog = new javax.swing.JTextField();
         yFieldResizeGridDialog = new javax.swing.JTextField();
         okButtonResizeGridDialog = new javax.swing.JToggleButton();
+        helpDialog = new javax.swing.JDialog();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        helpDialogOk = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         selectArea1 = new javax.swing.JRadioButton();
@@ -166,6 +171,8 @@ public class MainFrame extends javax.swing.JFrame {
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
         area3ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area3ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        HelpItem = new javax.swing.JMenuItem();
 
         jMenuItem4.setText("jMenuItem4");
 
@@ -276,6 +283,52 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(yFieldResizeGridDialog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(okButtonResizeGridDialog)
+                .addContainerGap())
+        );
+
+        helpDialog.setTitle("Help");
+        helpDialog.setMinimumSize(new java.awt.Dimension(457, 160));
+        helpDialog.setPreferredSize(new java.awt.Dimension(457, 160));
+        helpDialog.setResizable(false);
+
+        jLabel5.setText("Click on a grid intersection to add a vertex of the selected area.");
+
+        jLabel6.setText("If the vertexs of an area form a valid area, it is drawn.");
+
+        jLabel7.setText("Otherwise, the lines with an incorrect number of vertexs are marked.");
+
+        helpDialogOk.setText("OK");
+        helpDialogOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                helpDialogOkActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout helpDialogLayout = new javax.swing.GroupLayout(helpDialog.getContentPane());
+        helpDialog.getContentPane().setLayout(helpDialogLayout);
+        helpDialogLayout.setHorizontalGroup(
+            helpDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(helpDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(helpDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(helpDialogOk)
+                    .addGroup(helpDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel7)))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        helpDialogLayout.setVerticalGroup(
+            helpDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(helpDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addComponent(helpDialogOk)
                 .addContainerGap())
         );
 
@@ -1024,6 +1077,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(area3Menu);
 
+        jMenu1.setText("Help");
+
+        HelpItem.setText("Help");
+        HelpItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HelpItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(HelpItem);
+
+        jMenuBar1.add(jMenu1);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -1365,9 +1430,19 @@ public class MainFrame extends javax.swing.JFrame {
         mapPanel.cellIteration(3);
     }//GEN-LAST:event_area3CellIterationActionPerformed
 
+    private void HelpItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HelpItemActionPerformed
+        helpDialog.setLocation(this.getWidth(), 0);
+        helpDialog.setVisible(true);
+    }//GEN-LAST:event_HelpItemActionPerformed
+
+    private void helpDialogOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpDialogOkActionPerformed
+        helpDialog.setVisible(false);
+    }//GEN-LAST:event_helpDialogOkActionPerformed
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem HelpItem;
     private javax.swing.JMenuItem area1CellIteration;
     private javax.swing.JMenu area1Clone;
     private javax.swing.JMenu area1Difference;
@@ -1449,10 +1524,16 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton displayArea2;
     private javax.swing.JToggleButton displayArea3;
     private javax.swing.JMenu gridMenu;
+    private javax.swing.JDialog helpDialog;
+    private javax.swing.JButton helpDialogOk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem13;
