@@ -1081,7 +1081,6 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="33" red="0" type="rgb"/>
                 </Property>
-                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Area 2"/>
                 <Property name="toolTipText" type="java.lang.String" value="Display area 2"/>
               </Properties>
@@ -1094,7 +1093,6 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="99" red="0" type="rgb"/>
                 </Property>
-                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Area 3"/>
                 <Property name="toolTipText" type="java.lang.String" value="Display area 3"/>
               </Properties>

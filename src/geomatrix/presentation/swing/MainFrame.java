@@ -358,7 +358,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         displayArea2.setForeground(new java.awt.Color(0, 51, 255));
-        displayArea2.setSelected(true);
         displayArea2.setText("Area 2");
         displayArea2.setToolTipText("Display area 2");
         displayArea2.addActionListener(new java.awt.event.ActionListener() {
@@ -368,7 +367,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         displayArea3.setForeground(new java.awt.Color(0, 153, 0));
-        displayArea3.setSelected(true);
         displayArea3.setText("Area 3");
         displayArea3.setToolTipText("Display area 3");
         displayArea3.addActionListener(new java.awt.event.ActionListener() {
