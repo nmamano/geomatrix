@@ -2,6 +2,9 @@
 package geomatrix.business.models.binary;
 
 import geomatrix.utils.Interval;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Represents a rectangle of the grid.
@@ -102,6 +105,15 @@ public class Rectangle {
     @Override
     public String toString() {
         return "[" + topLeft.toString() + ", " + bottomRight.toString() + ']';
+    }
+
+    public Collection<Point> getVertexes() {
+        Collection<Point> vertexes = new ArrayList();
+        vertexes.add(new Point(topLeft.x, topLeft.y));
+        vertexes.add(new Point(bottomRight.y, bottomRight.x));
+        vertexes.add(new Point(topLeft.x, bottomRight.y));
+        vertexes.add(new Point(topLeft.y, bottomRight.x));
+        return vertexes;
     }
     
     
