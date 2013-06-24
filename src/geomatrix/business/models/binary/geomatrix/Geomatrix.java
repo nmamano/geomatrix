@@ -973,41 +973,16 @@ public class Geomatrix implements Area {
     }
 
     private Geomatrix trimForRectangleIteration(Rectangle rectangle) {
-        /*
-         * Let A be the return value.
-         * 
-         * the area A is computed as follows:
-         * A is this area minus each area of a collection of areas CA.
-         * 
-         * The collection of areas CA is computed as follows: 
-         * There is an area in CA for each S
-         * 
-         * Where S is one of the following four possibilities:
-         * a vertical edge not intersected by any other edge with the contained
-         * adjacent cells to its left.
-         * a portiion of vertical edge intersected by another edge, between two
-         * intersections or endpoints such that the contained adjacent cells are
-         * found to its left.
-         * the equivalent but for horizontal edges with the contained adjacent
-         * cells above it.
-         * 
-         * From each S, the associated area in CA is calculated as follows:
-         * if S is a vertical segment:
-         * S is enlarged upwards the height of rectangle -1.
-         * The area is a rectangle that has S as right edge, and width the width
-         * of rectangle -1 (all the edges of the rectangle can be deduced by this)
-         */
+
         Geomatrix result = copy(this);
 
-        List<PseudoEdge> pseudoEdges = getPseudoEdges();
-        for (PseudoEdge edge : pseudoEdges) {
-            if (edge.isRightEdge()) {
+        for (PseudoEdge edge : getPseudoEdges()) {
+            if (isRightOrBottomEdge(edge)) {
                 Rectangle conflictingRectangle = edge.getConflictingArea(rectangle);
                 Geomatrix conflictingArea = buildGeomatrixFromPoints(conflictingRectangle.getVertexes());
                 result.difference(conflictingArea);
             }
-        }
-        
+        }        
         return result;
     }
 
@@ -1045,30 +1020,28 @@ public class Geomatrix implements Area {
     }
 
     private List<PseudoEdge> getPseudoEdges() {
-        if(alreadyGeneratedPseudoEdges) {
-            return pseudoEdges;
-        }
-        else {
-            pseudoEdges = generatePseudoEdges();
+        if(! alreadyGeneratedPseudoEdges) {
+            generatePseudoEdges();
             alreadyGeneratedPseudoEdges = true;
-            return pseudoEdges;
         }
+        return pseudoEdges;
     }
     
-    private List<PseudoEdge> generatePseudoEdges() {
-        List<PseudoEdge> result = new ArrayList<PseudoEdge>();
+    private void generatePseudoEdges() {
+        pseudoEdges = new ArrayList<PseudoEdge>();
         
         for (GridPoint point : getCriticalPoints()) {
-            Pair<GridPoint, GridPoint> closestPointsBelowAndRight =
-                    getClosestPointsBelowAndRight(point);
-            PseudoEdge segmentBelow = new PseudoEdge(point, closestPointsBelowAndRight.first);
-            PseudoEdge segmentRight = new PseudoEdge(point, closestPointsBelowAndRight.second);
-            
-            if (isPartOfEdge(segmentBelow)) result.add(segmentBelow);
-            if (isPartOfEdge(segmentRight)) result.add(segmentRight);
+            GridPoint closestBelow = getClosestCriticalPointBelow(point);
+            if (closestBelow != null) {
+                PseudoEdge segmentBelow = new PseudoEdge(point, closestBelow);
+                if (isPartOfEdge(segmentBelow)) pseudoEdges.add(segmentBelow);
+            }
+            GridPoint closestRight = getClosestCriticalPointRight(point);
+            if (closestRight != null) {
+                PseudoEdge segmentRight = new PseudoEdge(point, closestRight);
+                if (isPartOfEdge(segmentRight)) pseudoEdges.add(segmentRight);
+            }
         }
-        
-        return result;
     }
     
     private void generateMapsOfCriticalPoints() {
@@ -1084,12 +1057,73 @@ public class Geomatrix implements Area {
         }
     }
 
-    private Pair<GridPoint, GridPoint> getClosestPointsBelowAndRight(GridPoint point) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    /**
+     * Returns the closest critical point below 'point' in the same vertical line
+     * as point, or null if there is none.
+     * @param point
+     * @return 
+     */
+    private GridPoint getClosestCriticalPointBelow(GridPoint point) {
+        GridPoint closestSouth = null;
+        for(GridPoint p : criticalPointsStoredByX.get(point.x)) {
+            if (p.y > point.y) {
+                if (closestSouth == null || closestSouth.y > p.y) {
+                    closestSouth = p;
+                }
+            }
+        }
+        return closestSouth;
+    }
+    
+    /**
+     * Returns the closest critical point to the right of 'point' in the same
+     * horizontal line as point, or null if there is none.
+     * @param point
+     * @return 
+     */
+    private GridPoint getClosestCriticalPointRight(GridPoint point) {
+        GridPoint closestRight = null;
+        for(GridPoint p : criticalPointsStoredByY.get(point.y)) {
+            if (p.x > point.x) {
+                if (closestRight == null || closestRight.x > p.x) {
+                    closestRight = p;
+                }
+            }
+        }
+        return closestRight;
     }
 
     private boolean isPartOfEdge(PseudoEdge edge) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (edge.isVerticalSegment()) {
+            for (VerticalSegment myEdge : verticalEdgesStoredByX.get(edge.getX())) {
+                if (myEdge.yInterval.contains(edge.getInterval())) {
+                    return true;
+                }
+            }
+        }
+        else {
+            for (HorizontalSegment myEdge : horizontalEdgesStoredByY.get(edge.getY())) {
+                if (myEdge.yInterval.contains(edge.getInterval())) {
+                    return true;
+                }
+            }            
+        }
+        return false;
+    }
+    
+    private boolean isRightOrBottomEdge(PseudoEdge edge) {
+        if (edge.isVerticalSegment()) {
+            int x = edge.getX()-1;
+            int y = edge.getInterval().low;
+            Cell adjRightCell = new Cell(x, y);
+            return contains(adjRightCell);
+        }
+        else {
+            int y = edge.getY()-1;
+            int x = edge.getInterval().low;
+            Cell adjAboveCell = new Cell(x, y);
+            return contains(adjAboveCell);
+        }
     }
 
     private class CellIterator implements Iterator<Cell> {

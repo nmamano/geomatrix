@@ -115,6 +115,14 @@ public class Rectangle {
         vertexes.add(new Point(topLeft.y, bottomRight.x));
         return vertexes;
     }
+
+    public int getWidth() {
+        return bottomRight.y - topLeft.y;
+    }
+
+    public int getHeight() {
+        return bottomRight.x - topLeft.x;
+    }
     
     
     
