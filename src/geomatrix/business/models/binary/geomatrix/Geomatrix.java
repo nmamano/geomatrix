@@ -245,7 +245,7 @@ public class Geomatrix implements Area {
     @Override
     public Iterator<Cell> iterator() {
         //return new GeomatrixIterator();
-        return new AreaIterator();
+        return new GeomatrixIterator();
     }
     
     @Override
@@ -1059,81 +1059,4 @@ public class Geomatrix implements Area {
         
     }
 
-
-
-    /**
-     * Unefficient preliminar version.
-     */
-    private class AreaIterator
-        implements Iterator<Cell> {
-
-        private Cell currentCell;
-        
-        private int xMin, xMax;
-        private int yMin, yMax;
-        
-        public AreaIterator() {
-            
-            xMin = boundingRectangle.topLeft.x-1;
-            xMax = boundingRectangle.bottomRight.x+2;
-            yMin = boundingRectangle.topLeft.y-1;
-            yMax = boundingRectangle.bottomRight.y+2;
-            
-            currentCell = new Cell(xMin, yMin);
-            advanceToNext();
-        }
-        
-        @Override
-        public boolean hasNext() {
-            return currentCell != null;
-//            //current row
-//            for (int j = currentCell.y+1; j < yMax; ++j) {
-//                if (contains(new Cell(currentCell.x, j))) {
-//                    return true;
-//                }                
-//            }
-//            //following rows
-//            for (int i = currentCell.x+1; i < xMax; ++i) {
-//                for (int j = yMin; j < yMax; ++j) {
-//                    if (contains(new Cell(i, j))) {
-//                        return true;
-//                    }
-//                }
-//            }
-//            return false;
-        }
-
-        @Override
-        public Cell next() {
-            Cell beforeAdvancingCell = currentCell;
-            advanceToNext();
-            return beforeAdvancingCell;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        private void advanceToNext() {
-            //current row
-            for (int i = currentCell.x+1; i < xMax; ++i) {
-                if (contains(new Cell(i, currentCell.y))) {
-                    currentCell = new Cell(i, currentCell.y);
-                    return;
-                }                
-            }
-            //following rows
-            for (int j = currentCell.y+1; j < yMax; ++j) {
-                for (int i = xMin; i < xMax; ++i) {
-                    if (contains(new Cell(i, j))) {
-                        currentCell = new Cell(i, j);
-                        return;
-                    }
-                }
-            }
-            currentCell = null;
-        }
-  
-    }
 }
