@@ -19,7 +19,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import manticore.Debug;
 
 /**
  * Area implementation of the master interface.
@@ -54,12 +52,14 @@ public class Geomatrix implements Area {
     /**
      * Given first x' value, permits fast access to all vertexs of the area
      * of the form (x',y).
+     * It is only used during initialization phase. After it, it is set to null.
      */
     private HashMap<Integer,List<GridPoint>> vertexsStoredByX;
     
     /**
      * Given first y' value, permits fast access to all vertexs of the area
      * of the form (x,y').
+     * It is only used during initialization phase. After it, it is set to null.
      */
     private HashMap<Integer,List<GridPoint>> vertexsStoredByY;
     
@@ -88,6 +88,13 @@ public class Geomatrix implements Area {
             newVertexs.add(new GridPoint(point.x, point.y));
         }
         build(newVertexs);
+    }
+    
+    public static Geomatrix buildGeomatrixFromPoints(Collection<Point> points) {
+        List<GridPoint> newVertexs = pointsToGridPointList(points);        
+        Geomatrix geomatrix = new Geomatrix();
+        geomatrix.build(newVertexs);
+        return geomatrix;
     }
     
     /**
@@ -481,12 +488,14 @@ public class Geomatrix implements Area {
         initializeEdgesAndPathRepresentatives();
         sortVerticalEdges();
         initializeMapsOfEdges();
+        clearMapsOfVertexs();
     }
 
     /**
      * Initializes vertexsStoredByX and vertexsStoredByY and the bounding
      * rectangle in the same loop.
      */
+    @SuppressWarnings({"null", "ConstantConditions"})
     private void initializeMapsOfVertexsAndBoundingRectangle() {
         vertexsStoredByX = new HashMap<Integer,List<GridPoint>>();
         vertexsStoredByY = new HashMap<Integer,List<GridPoint>>();
@@ -855,7 +864,7 @@ public class Geomatrix implements Area {
      * In the context of finding the edge intersections of an edge e in respect
      * to the set of edges S of the opposed kind, returns whether it is more
      * efficient to check only the edges of S such that their fixed coordinate
-     * falls within the yInterval of coordinates of e (with the
+     * falls within the interval of coordinates of e (with the
      * edgesSortedByCoordinate HashMaps) or to check all edges in S.
      * This second case is preferable when e is very large in comparison
      * to the size of S.
@@ -945,6 +954,22 @@ public class Geomatrix implements Area {
     private boolean allTrue(List<Boolean> booleans) {
         for (Boolean b : booleans) if (! b) return false;
         return true;
+    }
+    
+    private static List<GridPoint> pointsToGridPointList(Collection<Point> points) {
+        List<GridPoint> gridPoints = new ArrayList<GridPoint>();
+        for (Point point : points) {
+            gridPoints.add(new GridPoint(point.x, point.y));
+        }
+        return gridPoints;
+    }
+
+    /**
+     * Clears the HashMaps of vertexs because they are no longer needed.
+     */
+    private void clearMapsOfVertexs() {
+        vertexsStoredByX = null;
+        vertexsStoredByY = null;
     }
 
     private class GeomatrixIterator implements Iterator<Cell> {
