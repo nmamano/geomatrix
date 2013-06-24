@@ -50,7 +50,7 @@ public class AreaController extends BusinessController {
         List<GridCell> containedCells = new ArrayList<GridCell>();
         List<Point> vertexs = new ArrayList<Point> (points);
         if (isValidArea(points)) {
-            Geomatrix area = new Geomatrix(vertexs);
+            Geomatrix area = Geomatrix.buildGeomatrixFromPoints(points);
             for (Cell cell : area) {
                 containedCells.add(new GridCell(cell.x, cell.y));
             }
@@ -78,8 +78,8 @@ public class AreaController extends BusinessController {
         
         assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
         
-        Geomatrix area1 = new Geomatrix(area1Vertexs);
-        Geomatrix area2 = new Geomatrix(area2Vertexs);
+        Geomatrix area1 = Geomatrix.buildGeomatrixFromPoints(area1Vertexs);
+        Geomatrix area2 = Geomatrix.buildGeomatrixFromPoints(area2Vertexs);
         area1.union(area2);
         return gridPointsToPoints(area1.getVertexs());    
     }
@@ -88,8 +88,8 @@ public class AreaController extends BusinessController {
 
         assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
         
-        Geomatrix area1 = new Geomatrix(area1Vertexs);
-        Geomatrix area2 = new Geomatrix(area2Vertexs);
+        Geomatrix area1 = Geomatrix.buildGeomatrixFromPoints(area1Vertexs);
+        Geomatrix area2 = Geomatrix.buildGeomatrixFromPoints(area2Vertexs);
         area1.intersection(area2);
         return gridPointsToPoints(area1.getVertexs()); 
     }
@@ -98,8 +98,8 @@ public class AreaController extends BusinessController {
 
         assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
         
-        Geomatrix area1 = new Geomatrix(area1Vertexs);
-        Geomatrix area2 = new Geomatrix(area2Vertexs);
+        Geomatrix area1 = Geomatrix.buildGeomatrixFromPoints(area1Vertexs);
+        Geomatrix area2 = Geomatrix.buildGeomatrixFromPoints(area2Vertexs);
         area1.difference(area2);
         return gridPointsToPoints(area1.getVertexs()); 
     }
@@ -108,8 +108,8 @@ public class AreaController extends BusinessController {
 
         assert(isValidArea(area1Vertexs) && isValidArea(area2Vertexs));
         
-        Geomatrix area1 = new Geomatrix(area1Vertexs);
-        Geomatrix area2 = new Geomatrix(area2Vertexs);
+        Geomatrix area1 = Geomatrix.buildGeomatrixFromPoints(area1Vertexs);
+        Geomatrix area2 = Geomatrix.buildGeomatrixFromPoints(area2Vertexs);
         area1.symmetricDifference(area2);
         return gridPointsToPoints(area1.getVertexs()); 
     }
@@ -117,7 +117,7 @@ public class AreaController extends BusinessController {
     public List<Segment> getBoundingRectangleEdges(Set<Point> vertexs) {
         assert(isValidArea(vertexs));
         
-        Geomatrix area = new Geomatrix(vertexs);
+        Geomatrix area = Geomatrix.buildGeomatrixFromPoints(vertexs);
         Rectangle r = area.getBoundingRectangle();
         return getEdges(r);
         
@@ -136,7 +136,7 @@ public class AreaController extends BusinessController {
 
         assert(isValidArea(vertexs));
         
-        Geomatrix area = new Geomatrix(vertexs);
+        Geomatrix area = Geomatrix.buildGeomatrixFromPoints(vertexs);
         area.translation(new GridPoint(xTranslate, yTranslate));
         return gridPointsToPoints(area.getVertexs()); 
     }
@@ -145,7 +145,7 @@ public class AreaController extends BusinessController {
 
         assert(isValidArea(vertexs));
         
-        Geomatrix area = new Geomatrix(vertexs);
+        Geomatrix area = Geomatrix.buildGeomatrixFromPoints(vertexs);
         area.rotation(90);
         return gridPointsToPoints(area.getVertexs());
     }
@@ -154,7 +154,7 @@ public class AreaController extends BusinessController {
 
         assert(isValidArea(vertexs));
         
-        Geomatrix area = new Geomatrix(vertexs);
+        Geomatrix area = Geomatrix.buildGeomatrixFromPoints(vertexs);
         area.verticalReflection();
         return gridPointsToPoints(area.getVertexs());
     }
@@ -163,7 +163,7 @@ public class AreaController extends BusinessController {
 
         assert(isValidArea(vertexs));
         
-        Geomatrix area = new Geomatrix(vertexs);
+        Geomatrix area = Geomatrix.buildGeomatrixFromPoints(vertexs);
         area.horizontalReflection();
         return gridPointsToPoints(area.getVertexs());
     }

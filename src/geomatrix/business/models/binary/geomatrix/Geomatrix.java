@@ -82,14 +82,6 @@ public class Geomatrix implements Area {
         build(new ArrayList<GridPoint>());
     }
     
-    public Geomatrix(Collection<Point> points) {
-        List<GridPoint> newVertexs = new ArrayList<GridPoint>();
-        for (Point point : points) {
-            newVertexs.add(new GridPoint(point.x, point.y));
-        }
-        build(newVertexs);
-    }
-    
     public static Geomatrix buildGeomatrixFromPoints(Collection<Point> points) {
         List<GridPoint> newVertexs = pointsToGridPointList(points);        
         Geomatrix geomatrix = new Geomatrix();

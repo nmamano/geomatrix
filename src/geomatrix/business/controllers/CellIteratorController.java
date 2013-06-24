@@ -19,7 +19,7 @@ public class CellIteratorController {
     Iterator<Cell> iterator;
 
     public CellIteratorController(Set<Point> vertexs) {
-        geomatrix = new Geomatrix(vertexs);
+        geomatrix = Geomatrix.buildGeomatrixFromPoints(vertexs);
         iterator = geomatrix.iterator();
     }
 
