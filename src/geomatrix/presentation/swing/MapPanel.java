@@ -4,6 +4,7 @@
  */
 package geomatrix.presentation.swing;
 
+import geomatrix.business.controllers.RectangleIteratorController;
 import geomatrix.utils.Line;
 import geomatrix.business.controllers.AreaController;
 import geomatrix.business.controllers.CellIteratorController;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import manticore.Debug;
 import manticore.presentation.SwingController;
 
 
@@ -48,7 +50,8 @@ public class MapPanel extends JPanel {
     private static final int CELL_PIXEL_LENGTH = 20;
     private static final int VERTEX_PIXEL_RADIUS = 9;
     private static final int ITERATION_MARK_PIXEL_RADIUS = 8;
-    public static final Color ITERATION_MARK_COLOR = Color.ORANGE;
+    private static final Color ITERATION_MARK_COLOR = Color.ORANGE;
+    private static final Color ITERATION_RECTANGLE_COLOR = Color.BLACK;
     
     private static final Color AREA_1_COLOR = Color.RED;
     private static final Color AREA_2_COLOR = Color.BLUE;
@@ -62,6 +65,8 @@ public class MapPanel extends JPanel {
     
     private Set<Point> iteredCells;
     private boolean ignoreInput;
+    
+    private RectangleIterationPanel rectangleIterationPanel;
     
     /**
      * Initialization.
@@ -118,6 +123,7 @@ public class MapPanel extends JPanel {
             //this causes the automatic iteration display to disappear
             //at times while iterating, but it's better than a exception pop up
         }
+        paintIteratingRectangle(g2D);
     }
 
     private void paintVertexs(Graphics2D g) {
@@ -536,6 +542,7 @@ public class MapPanel extends JPanel {
         Point gridEndPoint1 = findCoordinates(segment.endPoint1);
         Point gridEndPoint2 = findCoordinates(segment.endPoint2);
         g.drawLine(gridEndPoint1.x, gridEndPoint1.y, gridEndPoint2.x, gridEndPoint2.y);
+        Debug.println("paintedLine:" + gridEndPoint1.toString() + " : " + gridEndPoint2.toString());
     }
 
     private List<Segment> breakDownToUnitarySegments(List<Segment> segments) {
@@ -663,7 +670,7 @@ public class MapPanel extends JPanel {
     void cellIteration(int areaNumber) {
         CellIteratorController cellController = new CellIteratorController(getArea(areaNumber).vertexs);
         CellIterationPanel cellIterationPanel = new CellIterationPanel(cellController, this);
-        cellIterationPanel.setLocation(mainFrame.getWidth(), 0);
+        cellIterationPanel.setLocation(mainFrame.getLocation().x + mainFrame.getWidth(), mainFrame.getLocation().y);
         
         setIgnoreInput(true);
         cellIterationPanel.setVisible(true);
@@ -683,8 +690,35 @@ public class MapPanel extends JPanel {
         this.iteredCells = iteredCells;
     }
 
-    public void setIgnoreInput(boolean shouldIgnore) {
+    public final void setIgnoreInput(boolean shouldIgnore) {
         ignoreInput = shouldIgnore;
+    }
+
+    void rectangleIteration(int areaNumber) {
+        RectangleIteratorController rectangleController = new RectangleIteratorController(getArea(areaNumber).vertexs);
+        rectangleIterationPanel = new RectangleIterationPanel(rectangleController, this);
+        rectangleIterationPanel.setLocation(mainFrame.getLocation().x + mainFrame.getWidth(), mainFrame.getLocation().y);
+        
+        setIgnoreInput(true);
+        rectangleIterationPanel.setVisible(true);
+    }
+
+    private void paintIteratingRectangle(Graphics2D g) {
+        if (rectangleIterationPanel != null && rectangleIterationPanel.isVisible()
+                && ! iteredCells.isEmpty()) {
+            Point topLeft = rectangleIterationPanel.lastIteratedPoint;
+            Point topRight = (Point) topLeft.clone();
+            topRight.x += rectangleIterationPanel.rectangleWidth;
+            Point bottomLeft = (Point) topLeft.clone();
+            bottomLeft.y += rectangleIterationPanel.rectangleHeight;
+            Point bottomRight = (Point) bottomLeft.clone();
+            bottomRight.x += rectangleIterationPanel.rectangleWidth;
+            Debug.println(topLeft.toString() + topRight.toString() + bottomLeft.toString() + bottomRight.toString());
+            paintSegment(new Segment(topLeft, topRight), ITERATION_RECTANGLE_COLOR, g);
+            paintSegment(new Segment(topLeft, bottomLeft), ITERATION_RECTANGLE_COLOR, g);
+            paintSegment(new Segment(topRight, bottomRight), ITERATION_RECTANGLE_COLOR, g);
+            paintSegment(new Segment(bottomLeft, bottomRight), ITERATION_RECTANGLE_COLOR, g);
+        }
     }
 
         

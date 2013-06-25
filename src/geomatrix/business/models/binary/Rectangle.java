@@ -5,6 +5,7 @@ import geomatrix.utils.Interval;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
+import manticore.Debug;
 
 /**
  * Represents a rectangle of the grid.
@@ -108,20 +109,21 @@ public class Rectangle {
     }
 
     public Collection<Point> getVertexes() {
+        Debug.println(this.toString());
         Collection<Point> vertexes = new ArrayList();
         vertexes.add(new Point(topLeft.x, topLeft.y));
-        vertexes.add(new Point(bottomRight.y, bottomRight.x));
+        vertexes.add(new Point(bottomRight.x, bottomRight.y));
         vertexes.add(new Point(topLeft.x, bottomRight.y));
-        vertexes.add(new Point(topLeft.y, bottomRight.x));
+        vertexes.add(new Point(bottomRight.x, topLeft.y));
         return vertexes;
     }
 
     public int getWidth() {
-        return bottomRight.y - topLeft.y;
+        return bottomRight.x - topLeft.x;
     }
 
     public int getHeight() {
-        return bottomRight.x - topLeft.x;
+        return bottomRight.y - topLeft.y;
     }
     
     

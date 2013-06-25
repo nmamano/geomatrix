@@ -104,6 +104,7 @@ public class MainFrame extends javax.swing.JFrame {
         area1ReflectHorizontal = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         area1CellIteration = new javax.swing.JMenuItem();
+        area1RectangleIteration = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
         area1ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area1ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -136,6 +137,7 @@ public class MainFrame extends javax.swing.JFrame {
         area2ReflectHorizontal = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         area2CellIteration = new javax.swing.JMenuItem();
+        area2RectangleIteration = new javax.swing.JMenuItem();
         jSeparator12 = new javax.swing.JPopupMenu.Separator();
         area2ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area2ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -168,6 +170,7 @@ public class MainFrame extends javax.swing.JFrame {
         area3ReflectHorizontal = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         area3CellIteration = new javax.swing.JMenuItem();
+        area3RectangleIteration = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
         area3ShowRectangleDecomposition = new javax.swing.JCheckBoxMenuItem();
         area3ShowBoundingRectangle = new javax.swing.JCheckBoxMenuItem();
@@ -288,7 +291,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         helpDialog.setTitle("Help");
         helpDialog.setMinimumSize(new java.awt.Dimension(457, 160));
-        helpDialog.setPreferredSize(new java.awt.Dimension(457, 160));
         helpDialog.setResizable(false);
 
         jLabel5.setText("Click on a grid intersection to add a vertex of the selected area.");
@@ -665,6 +667,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         area1Menu.add(area1CellIteration);
+
+        area1RectangleIteration.setText("Rectangle iteration");
+        area1RectangleIteration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area1RectangleIterationActionPerformed(evt);
+            }
+        });
+        area1Menu.add(area1RectangleIteration);
         area1Menu.add(jSeparator9);
 
         area1ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -861,6 +871,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         area2Menu.add(area2CellIteration);
+
+        area2RectangleIteration.setText("Rectangle iteration");
+        area2RectangleIteration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area2RectangleIterationActionPerformed(evt);
+            }
+        });
+        area2Menu.add(area2RectangleIteration);
         area2Menu.add(jSeparator12);
 
         area2ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -1057,6 +1075,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         area3Menu.add(area3CellIteration);
+
+        area3RectangleIteration.setText("Rectangle iteration");
+        area3RectangleIteration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                area3RectangleIterationActionPerformed(evt);
+            }
+        });
+        area3Menu.add(area3RectangleIteration);
         area3Menu.add(jSeparator13);
 
         area3ShowRectangleDecomposition.setText("Show rectangle decomposition");
@@ -1439,6 +1465,18 @@ public class MainFrame extends javax.swing.JFrame {
         helpDialog.setVisible(false);
     }//GEN-LAST:event_helpDialogOkActionPerformed
 
+    private void area1RectangleIterationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1RectangleIterationActionPerformed
+        mapPanel.rectangleIteration(1);
+    }//GEN-LAST:event_area1RectangleIterationActionPerformed
+
+    private void area2RectangleIterationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2RectangleIterationActionPerformed
+        mapPanel.rectangleIteration(2);
+    }//GEN-LAST:event_area2RectangleIterationActionPerformed
+
+    private void area3RectangleIterationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3RectangleIterationActionPerformed
+        mapPanel.rectangleIteration(3);
+    }//GEN-LAST:event_area3RectangleIterationActionPerformed
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1453,6 +1491,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area1IntersectionArea3;
     private javax.swing.JMenu area1Menu;
     private javax.swing.JMenuItem area1New;
+    private javax.swing.JMenuItem area1RectangleIteration;
     private javax.swing.JMenuItem area1ReflectHorizontal;
     private javax.swing.JMenuItem area1ReflectVertical;
     private javax.swing.JMenu area1Reflection;
@@ -1479,6 +1518,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area2IntersectionArea3;
     private javax.swing.JMenu area2Menu;
     private javax.swing.JMenuItem area2New;
+    private javax.swing.JMenuItem area2RectangleIteration;
     private javax.swing.JMenuItem area2ReflectHorizontal;
     private javax.swing.JMenuItem area2ReflectVertical;
     private javax.swing.JMenu area2Reflection;
@@ -1503,6 +1543,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem area3IntersectionArea1;
     private javax.swing.JMenuItem area3IntersectionArea2;
     private javax.swing.JMenu area3Menu;
+    private javax.swing.JMenuItem area3RectangleIteration;
     private javax.swing.JMenuItem area3ReflectHorizontal;
     private javax.swing.JMenuItem area3ReflectVertical;
     private javax.swing.JMenu area3Reflection;
@@ -1606,6 +1647,7 @@ public class MainFrame extends javax.swing.JFrame {
             area1Reflection.setEnabled(isValid);
             
             area1CellIteration.setEnabled(isValid);
+            area1RectangleIteration.setEnabled(isValid);
         }
         else if (areaNumber == 2) {
             area2Union.setEnabled(isValid);
@@ -1628,6 +1670,7 @@ public class MainFrame extends javax.swing.JFrame {
             area2Reflection.setEnabled(isValid);
             
             area2CellIteration.setEnabled(isValid);
+            area2RectangleIteration.setEnabled(isValid);
         }
         else if (areaNumber == 3) {
             area3Union.setEnabled(isValid);
@@ -1650,6 +1693,7 @@ public class MainFrame extends javax.swing.JFrame {
             area3Reflection.setEnabled(isValid);
             
             area3CellIteration.setEnabled(isValid);
+            area3RectangleIteration.setEnabled(isValid);
         }
     }
 }

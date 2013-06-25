@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class CellIterationPanel extends javax.swing.JDialog {
 
-    private CellIteratorController iteratorController;
+    private CellIteratorController cellIteratorController;
     private MapPanel mapPanel;
     private Set<Point> iteredCells;
     private static final int AUTOMATIC_ITERATION_MS_LAPSUS = 36;
@@ -27,7 +27,7 @@ public class CellIterationPanel extends javax.swing.JDialog {
 
         initComponents();
         setCloseBehaviour();
-        this.iteratorController = iteratorController;
+        this.cellIteratorController = iteratorController;
         this.mapPanel = mapPanel;
         reset();
     }
@@ -122,17 +122,14 @@ public class CellIterationPanel extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void advanceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_advanceButtonActionPerformed
-        if (! finished()) {
-            advance();
-        }
-        else {
-            showFinishedMessage();
-        }
+        advance();
+        enableIteration(! finished());
     }//GEN-LAST:event_advanceButtonActionPerformed
 
     private void automaticButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticButtonActionPerformed
         Thread thread = new Thread(new automaticIterator());
         thread.start();
+        enableIteration(false);
     }//GEN-LAST:event_automaticButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
@@ -147,24 +144,19 @@ public class CellIterationPanel extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void reset() {
-        iteratorController.reset();
+        cellIteratorController.reset();
         iteredCells = new HashSet<Point>();
         repaintIteredCells();
+        enableIteration(! finished());
     }
 
     private boolean finished() {
-        return ! iteratorController.hasMore();
+        return ! cellIteratorController.hasMore();
     }
 
     private void advance() {
-        iteredCells.add(iteratorController.getNext());
+        iteredCells.add(cellIteratorController.getNext());
         repaintIteredCells();
-    }
-
-    private void showFinishedMessage() {
-        //We want the user to see this exception. It is a lazy shortcut to
-        //creating a popup message myself
-        throw new UnsupportedOperationException("There are no more cells in this area");
     }
 
     private void repaintIteredCells() {
@@ -187,13 +179,9 @@ public class CellIterationPanel extends javax.swing.JDialog {
         });
     }
 
-    private void waitSomeTime() {
-        try {
-            Thread.sleep(AUTOMATIC_ITERATION_MS_LAPSUS);
-        }
-        catch (InterruptedException e) {
-            
-        }
+    private void enableIteration(boolean enable) {
+        advanceButton.setEnabled(enable);
+        automaticButton.setEnabled(enable);
     }
     
     private class automaticIterator implements Runnable {
@@ -205,6 +193,15 @@ public class CellIterationPanel extends javax.swing.JDialog {
                 //all at the same time at the end of the whole waiting time
                 advance();
                 waitSomeTime();
+            }
+        }
+        
+        private void waitSomeTime() {
+            try {
+                Thread.sleep(AUTOMATIC_ITERATION_MS_LAPSUS);
+            }
+            catch (InterruptedException e) {
+
             }
         }
         

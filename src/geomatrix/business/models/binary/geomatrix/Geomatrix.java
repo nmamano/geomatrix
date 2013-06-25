@@ -76,40 +76,23 @@ public class Geomatrix implements Area {
     private HashMap<Integer,List<HorizontalSegment>> horizontalEdgesStoredByY;
     
     /**
-     * List of grid points where 2 edges of this area intersect eachother.
-     * It should only be accessed through the getter and not directly.
+     * Data structs for rectangle iteration include self edge intersections,
+     * critical points, hash maps of critical points and bottom and
+     * right pseudo edges.
      */
+    private boolean alreadyInitializeDataStructsForRectangleIteration;
+    
     private List<GridPoint> selfEdgeIntersections;
-    private boolean alreadyGeneratedSelfEdgeIntersections;
 
-    /**
-     * List of critical points.
-     * It should only be accessed through the getter and not directly.
-     */
     private List<GridPoint> criticalPoints;
-    private boolean alreadyGeneratedCriticalPoints;
-    
-    /**
-     * List of pseudo edges.
-     * It should only be accessed through the getter and not directly.
-     */
-    private List<PseudoEdge> pseudoEdges;
-    private boolean alreadyGeneratedPseudoEdges;
 
-    /**
-     * Given a x' value, permits fast access to all critical points
-     * of the form (x',y).
-     */
     private HashMap<Integer,List<GridPoint>> criticalPointsStoredByX;
-    
-    /**
-     * Given a y' value, permits fast access to all critical points
-     * of the form (x,y').
-     */
+
     private HashMap<Integer,List<GridPoint>> criticalPointsStoredByY;
     
+    private List<VerticalPseudoEdge> rightPseudoEdges;
     
-    
+    private List<HorizontalPseudoEdge> bottomPseudoEdges;
     
     
     /**
@@ -352,6 +335,7 @@ public class Geomatrix implements Area {
 
     @Override
     public Iterator<GridPoint> iterator(Rectangle rectangle) {
+        assertDataStructsForRectangleIterationInitialized();
         Geomatrix trimmedGeomatrix = trimForRectangleIteration(rectangle);
         return trimmedGeomatrix.cellToGridPointIterator();
     }
@@ -487,9 +471,7 @@ public class Geomatrix implements Area {
         
     private void initializeDataStructsFromVertexs() {
         assert(valid());
-        alreadyGeneratedSelfEdgeIntersections = false;
-        alreadyGeneratedCriticalPoints = false;
-        alreadyGeneratedPseudoEdges = false;
+        alreadyInitializeDataStructsForRectangleIteration = false;
         
         initializeMapsOfVertexsAndBoundingRectangle();
         initializeEdgesAndPathRepresentatives();
@@ -976,85 +958,126 @@ public class Geomatrix implements Area {
 
         Geomatrix result = copy(this);
 
-        for (PseudoEdge edge : getPseudoEdges()) {
-            if (isRightOrBottomEdge(edge)) {
+        if (rectangle.getWidth() > 1) {
+            for (VerticalPseudoEdge edge : rightPseudoEdges) {
                 Rectangle conflictingRectangle = edge.getConflictingArea(rectangle);
                 Geomatrix conflictingArea = buildGeomatrixFromPoints(conflictingRectangle.getVertexes());
                 result.difference(conflictingArea);
-            }
-        }        
+            }     
+        }
+        if (rectangle.getHeight() > 1) {       
+            for (HorizontalPseudoEdge edge : bottomPseudoEdges) {
+                Rectangle conflictingRectangle = edge.getConflictingArea(rectangle);
+                Geomatrix conflictingArea = buildGeomatrixFromPoints(conflictingRectangle.getVertexes());
+                result.difference(conflictingArea);
+            }  
+        }
+        
         return result;
     }
 
     private Iterator<GridPoint> cellToGridPointIterator() {
         return new GridPointIterator();
     }
-
-    private List<GridPoint> getSelfEdgeIntersections() {
-        if (alreadyGeneratedSelfEdgeIntersections) {
-            return selfEdgeIntersections;
-        }
-        else {
-            selfEdgeIntersections = getEdgesIntersect(this);
-            alreadyGeneratedSelfEdgeIntersections = true;
-            return selfEdgeIntersections;
-        }
-    }
-
-    private List<GridPoint> getCriticalPoints() {
-        if (alreadyGeneratedCriticalPoints) {
-            return criticalPoints;
-        }
-        else {
-            criticalPoints = generateCriticalPoints();
-            alreadyGeneratedCriticalPoints = true;
-            return criticalPoints;
-        }
-    }
-
-    private List<GridPoint> generateCriticalPoints() {
-        List<GridPoint> result = new ArrayList<GridPoint>();
-        result.addAll(vertexes);
-        result.addAll(getSelfEdgeIntersections());
-        return result;
-    }
-
-    private List<PseudoEdge> getPseudoEdges() {
-        if(! alreadyGeneratedPseudoEdges) {
-            generatePseudoEdges();
-            alreadyGeneratedPseudoEdges = true;
-        }
-        return pseudoEdges;
-    }
     
-    private void generatePseudoEdges() {
-        pseudoEdges = new ArrayList<PseudoEdge>();
+    private void assertDataStructsForRectangleIterationInitialized() {
+        if (! alreadyInitializeDataStructsForRectangleIteration) {
+            initializeSelfEdgeIntersections();
+            initializeCriticalPoints();
+            initializeMapsOfCriticalPoints();
+            initializePseudoEdges();
+            alreadyInitializeDataStructsForRectangleIteration = true;
+        }
         
-        for (GridPoint point : getCriticalPoints()) {
-            GridPoint closestBelow = getClosestCriticalPointBelow(point);
-            if (closestBelow != null) {
-                PseudoEdge segmentBelow = new PseudoEdge(point, closestBelow);
-                if (isPartOfEdge(segmentBelow)) pseudoEdges.add(segmentBelow);
-            }
-            GridPoint closestRight = getClosestCriticalPointRight(point);
-            if (closestRight != null) {
-                PseudoEdge segmentRight = new PseudoEdge(point, closestRight);
-                if (isPartOfEdge(segmentRight)) pseudoEdges.add(segmentRight);
-            }
-        }
     }
-    
-    private void generateMapsOfCriticalPoints() {
+
+    private void initializeSelfEdgeIntersections() {
+        selfEdgeIntersections = getEdgesIntersect(this);
+    }
+        
+    private void initializeCriticalPoints() {
+        criticalPoints = new ArrayList<GridPoint>();
+        criticalPoints.addAll(vertexes);
+        criticalPoints.addAll(selfEdgeIntersections);
+    }
+
+    private void initializeMapsOfCriticalPoints() {
         criticalPointsStoredByX = new HashMap<Integer,List<GridPoint>>();
         criticalPointsStoredByY = new HashMap<Integer,List<GridPoint>>();
         
         criticalPointsStoredByX.putAll(vertexesStoredByX);
         criticalPointsStoredByY.putAll(vertexesStoredByY);
         
-        for (GridPoint p : getSelfEdgeIntersections()) {
+        for (GridPoint p : selfEdgeIntersections) {
             criticalPointsStoredByX.get(p.x).add(p);
             criticalPointsStoredByY.get(p.y).add(p);
         }
+    }
+
+    private void initializePseudoEdges() {
+        rightPseudoEdges = new ArrayList<VerticalPseudoEdge>();
+        bottomPseudoEdges = new ArrayList<HorizontalPseudoEdge>();
+        
+        for (GridPoint point : criticalPoints) {
+            VerticalPseudoEdge pseudoEdgeBelow = getPseudoEdgeBelow(point);
+            if (pseudoEdgeBelow != null) {
+                if (isRightPseudoEdge(pseudoEdgeBelow)) {
+                    rightPseudoEdges.add(pseudoEdgeBelow);
+                }
+            }
+            HorizontalPseudoEdge pseudoEdgeRightward = getPseudoEdgeRightward(point);
+            if (pseudoEdgeRightward != null) {
+                if (isBottomPseudoEdge(pseudoEdgeRightward)) {
+                    bottomPseudoEdges.add(pseudoEdgeRightward);
+                }
+            }
+        }
+    }
+    
+    private VerticalPseudoEdge getPseudoEdgeBelow(GridPoint point) {
+        GridPoint closestBelow = getClosestCriticalPointBelow(point);
+        if (closestBelow == null) return null;
+        else {
+            VerticalPseudoEdge potentialPseudoEdgeBelow =
+                    new VerticalPseudoEdge(point, closestBelow);
+            if (isPartOfEdge(potentialPseudoEdgeBelow)) {
+                return potentialPseudoEdgeBelow;
+            }
+            else return null;
+        }
+    }
+
+    private HorizontalPseudoEdge getPseudoEdgeRightward(GridPoint point) {
+        GridPoint closestRight = getClosestCriticalPointRightward(point);
+        if (closestRight == null) return null;
+        else {
+            HorizontalPseudoEdge potentialPseudoEdgeRight =
+                    new HorizontalPseudoEdge(point, closestRight);
+            if (isPartOfEdge(potentialPseudoEdgeRight)) {
+                return potentialPseudoEdgeRight;
+            }
+            else return null;
+        }
+    }
+    
+    private boolean isPartOfEdge(VerticalPseudoEdge pseudoEdge) {
+        int x = pseudoEdge.getX();
+        for (VerticalSegment myEdge : verticalEdgesStoredByX.get(x)) {
+            if (myEdge.yInterval.contains(pseudoEdge.getInterval())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean isPartOfEdge(HorizontalPseudoEdge pseudoEdge) {
+        int y = pseudoEdge.getY();
+        for (HorizontalSegment myEdge : horizontalEdgesStoredByY.get(y)) {
+            if (myEdge.yInterval.contains(pseudoEdge.getInterval())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1065,10 +1088,12 @@ public class Geomatrix implements Area {
      */
     private GridPoint getClosestCriticalPointBelow(GridPoint point) {
         GridPoint closestSouth = null;
-        for(GridPoint p : criticalPointsStoredByX.get(point.x)) {
-            if (p.y > point.y) {
-                if (closestSouth == null || closestSouth.y > p.y) {
-                    closestSouth = p;
+        if (criticalPointsStoredByX.get(point.x) != null) {
+            for(GridPoint p : criticalPointsStoredByX.get(point.x)) {
+                if (p.y > point.y) {
+                    if (closestSouth == null || closestSouth.y > p.y) {
+                        closestSouth = p;
+                    }
                 }
             }
         }
@@ -1081,50 +1106,34 @@ public class Geomatrix implements Area {
      * @param point
      * @return 
      */
-    private GridPoint getClosestCriticalPointRight(GridPoint point) {
+    private GridPoint getClosestCriticalPointRightward(GridPoint point) {
         GridPoint closestRight = null;
-        for(GridPoint p : criticalPointsStoredByY.get(point.y)) {
-            if (p.x > point.x) {
-                if (closestRight == null || closestRight.x > p.x) {
-                    closestRight = p;
+        if (criticalPointsStoredByY.get(point.y) != null) {
+            for(GridPoint p : criticalPointsStoredByY.get(point.y)) {
+                if (p.x > point.x) {
+                    if (closestRight == null || closestRight.x > p.x) {
+                        closestRight = p;
+                    }
                 }
             }
         }
         return closestRight;
     }
 
-    private boolean isPartOfEdge(PseudoEdge edge) {
-        if (edge.isVerticalSegment()) {
-            for (VerticalSegment myEdge : verticalEdgesStoredByX.get(edge.getX())) {
-                if (myEdge.yInterval.contains(edge.getInterval())) {
-                    return true;
-                }
-            }
-        }
-        else {
-            for (HorizontalSegment myEdge : horizontalEdgesStoredByY.get(edge.getY())) {
-                if (myEdge.yInterval.contains(edge.getInterval())) {
-                    return true;
-                }
-            }            
-        }
-        return false;
+    private boolean isBottomPseudoEdge(HorizontalPseudoEdge pseudoEdge) {
+        int y = pseudoEdge.getY()-1;
+        int x = pseudoEdge.getInterval().low;
+        Cell adjAboveCell = new Cell(x, y);
+        return contains(adjAboveCell);
     }
-    
-    private boolean isRightOrBottomEdge(PseudoEdge edge) {
-        if (edge.isVerticalSegment()) {
-            int x = edge.getX()-1;
-            int y = edge.getInterval().low;
-            Cell adjRightCell = new Cell(x, y);
-            return contains(adjRightCell);
-        }
-        else {
-            int y = edge.getY()-1;
-            int x = edge.getInterval().low;
-            Cell adjAboveCell = new Cell(x, y);
-            return contains(adjAboveCell);
-        }
+
+    private boolean isRightPseudoEdge(VerticalPseudoEdge edge) {
+        int x = edge.getX()-1;
+        int y = edge.getInterval().low;
+        Cell adjRightCell = new Cell(x, y);
+        return contains(adjRightCell);
     }
+
 
     private class CellIterator implements Iterator<Cell> {
       
