@@ -363,9 +363,8 @@ public class Geomatrix implements Area {
          * DOES NOT WORK DUE TO HOLES
          * 
          * Idea for algorithm:
-         * put all edges in a collection CS of segments; in case of intersecting
-         * edges, put the part of the segment to each side of the intersection
-         * in CS separately.
+         * Let CS be the collection of pseudo edges.
+         * 
          * Now, for each concave vertex v (those with 3 adjacent contained cells)
          * propagate a ray in the opposed directions of the direction where its
          * associated edges are; add to CS the segments between v and the first

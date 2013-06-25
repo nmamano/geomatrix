@@ -542,7 +542,6 @@ public class MapPanel extends JPanel {
         Point gridEndPoint1 = findCoordinates(segment.endPoint1);
         Point gridEndPoint2 = findCoordinates(segment.endPoint2);
         g.drawLine(gridEndPoint1.x, gridEndPoint1.y, gridEndPoint2.x, gridEndPoint2.y);
-        Debug.println("paintedLine:" + gridEndPoint1.toString() + " : " + gridEndPoint2.toString());
     }
 
     private List<Segment> breakDownToUnitarySegments(List<Segment> segments) {
