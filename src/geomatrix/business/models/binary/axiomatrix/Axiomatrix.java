@@ -84,24 +84,58 @@ public class Axiomatrix implements MasterAPI {
         return new CellIterator();
     }
 
-    private static class CellIterator implements Iterator<Cell> {
+    private class CellIterator implements Iterator<Cell> {
+        
+        private Cell iteratingCell;
+        private boolean finished;
 
         public CellIterator() {
+            iteratingCell = new Cell(0, 0);
+            finished = false;
+            if (! contains(iteratingCell)) {
+                advanceToNext();
+            }
         }
 
         @Override
         public boolean hasNext() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return ! finished;
         }
 
         @Override
         public Cell next() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            Cell currentCell = iteratingCell;
+            advanceToNext();
+            return currentCell;
         }
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new UnsupportedOperationException("Remove is not supported.");
+        }
+
+        private void advanceToNext() {
+            //current row
+            for (int j = iteratingCell.y + 1; j < maxY; ++j) {
+                Cell cell = new Cell(iteratingCell.x, j);
+                if (contains(cell)) {
+                    iteratingCell = cell;
+                    return;
+                }
+                
+                
+            }
+            //next rows    
+            for (int i = iteratingCell.x + 1; i < maxX; ++i) {
+                for (int j = 0; j < maxY; ++j) {
+                    Cell cell = new Cell(i, j);
+                    if (contains(cell)) {
+                        iteratingCell = cell;
+                        return;
+                    }
+                }
+            }
+            finished = true;
         }
     }
     
