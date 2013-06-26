@@ -14,10 +14,10 @@ import geomatrix.gridplane.VerticalSegment;
 import geomatrix.gridplane.WideRay;
 import geomatrix.utils.Direction;
 import geomatrix.utils.Interval;
-import geomatrix.utils.Line;
+import geomatrix.gridplane.Line;
 import geomatrix.utils.Pair;
-import geomatrix.utils.Segment;
-import java.awt.Point;
+import geomatrix.gridplane.Vector;
+import geomatrix.utils.Axis;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -102,8 +102,8 @@ public class Geomatrix implements ExtendedAPI {
         build(new ArrayList<GridPoint>());
     }
     
-    public static Geomatrix buildGeomatrixFromPoints(Collection<Point> points) {
-        List<GridPoint> newVertexs = pointsToGridPointList(points);        
+    public static Geomatrix buildGeomatrixFromPoints(Collection<GridPoint> points) {
+        List<GridPoint> newVertexs = new ArrayList(points);        
         Geomatrix geomatrix = new Geomatrix();
         geomatrix.build(newVertexs);
         return geomatrix;
@@ -141,7 +141,7 @@ public class Geomatrix implements ExtendedAPI {
         int intersectionCount = 0;
         for (VerticalSegment edge : verticalEdges) {
             if (edge.intersects(ray)) ++intersectionCount;
-            if (edge.x > cell.x) break;
+            if (edge.getX() > cell.x) break;
         }
         
         //return result according to the odd-even rule
@@ -437,12 +437,12 @@ public class Geomatrix implements ExtendedAPI {
         HashSet<Line> lines = new HashSet<Line>();
         
         for (GridPoint vertex : vertexs) {
-            Line verticalLine = new Line(true, vertex.x);
+            Line verticalLine = new Line(vertex.x, Axis.Vertical);
             if (lines.contains(verticalLine))
                 lines.remove(verticalLine);
             else lines.add(verticalLine);
             
-            Line horizontalLine = new Line(false, vertex.y);
+            Line horizontalLine = new Line(vertex.y, Axis.Horizontal);
             if (lines.contains(horizontalLine))
                 lines.remove(horizontalLine);
             else lines.add(horizontalLine);
@@ -456,16 +456,9 @@ public class Geomatrix implements ExtendedAPI {
     public String toString() {
         StringBuilder result = new StringBuilder();
         String nl = System.getProperty("line.separator");
-
-        result.append("Area:" + nl);
         result.append("List of vertexs:" + nl);
         for (GridPoint vertex : vertexes) {
             result.append(vertex.toString() + "\t");
-        }
-
-        result.append(nl + "List of vertical segments:" + nl);
-        for (VerticalSegment edge : verticalEdges) {
-            result.append(edge.toString() + "\t");
         }
         result.append(nl);
         return result.toString();
@@ -702,9 +695,9 @@ public class Geomatrix implements ExtendedAPI {
         horizontalEdgesStoredByY = new HashMap<Integer,List<HorizontalSegment>>();
         
         for (VerticalSegment e : verticalEdges) {
-            if (!verticalEdgesStoredByX.containsKey(e.x))
-                verticalEdgesStoredByX.put(e.x, new ArrayList<VerticalSegment>());
-            verticalEdgesStoredByX.get(e.x).add(e);
+            if (!verticalEdgesStoredByX.containsKey(e.getX()))
+                verticalEdgesStoredByX.put(e.getX(), new ArrayList<VerticalSegment>());
+            verticalEdgesStoredByX.get(e.getX()).add(e);
         }
         for (HorizontalSegment e : horizontalEdges) {
             if (!horizontalEdgesStoredByY.containsKey(e.getY()))
@@ -816,14 +809,14 @@ public class Geomatrix implements ExtendedAPI {
      */
     private boolean doEdgesIntersect(Geomatrix other) {
         for (VerticalSegment myEdge : verticalEdges) {
-            boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.yInterval.size(), other.horizontalEdges.size());
+            boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.getYInterval().size(), other.horizontalEdges.size());
             if (! betterByCoords) {
                 for (HorizontalSegment otherEdge : other.horizontalEdges) {
                     if (myEdge.intersects(otherEdge)) return true;
                 }
             }
             else {
-                for (int y = myEdge.yInterval.low+1; y < myEdge.yInterval.high; ++y) {
+                for (int y = myEdge.getYInterval().low+1; y < myEdge.getYInterval().high; ++y) {
                     for (HorizontalSegment otherEdge : other.horizontalEdgesStoredByY.get(y)) {
                         if (myEdge.intersects(otherEdge)) return true;
                     }
@@ -832,14 +825,14 @@ public class Geomatrix implements ExtendedAPI {
         }
         
         for (VerticalSegment otherEdge : other.verticalEdges) {
-            boolean betterByCoords = shouldIterateEdgesByCoords(otherEdge.yInterval.size(), horizontalEdges.size());
+            boolean betterByCoords = shouldIterateEdgesByCoords(otherEdge.getYInterval().size(), horizontalEdges.size());
             if (! betterByCoords) {
                 for (HorizontalSegment myEdge : horizontalEdges) {
                     if (otherEdge.intersects(myEdge)) return true;
                 }
             }
             else {
-                for (int y = otherEdge.yInterval.low+1; y < otherEdge.yInterval.high; ++y) {
+                for (int y = otherEdge.getYInterval().low+1; y < otherEdge.getYInterval().high; ++y) {
                     for (HorizontalSegment myEdge : horizontalEdgesStoredByY.get(y)) {
                         if (otherEdge.intersects(myEdge)) return true;
                     }
@@ -883,7 +876,7 @@ public class Geomatrix implements ExtendedAPI {
         List<GridPoint> intersectionPoints = new ArrayList<GridPoint>();
         
         for (VerticalSegment myEdge : verticalEdges) {
-            boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.yInterval.size(), other.horizontalEdges.size());
+            boolean betterByCoords = shouldIterateEdgesByCoords(myEdge.getYInterval().size(), other.horizontalEdges.size());
             if (! betterByCoords) {
                 for (HorizontalSegment otherEdge : other.horizontalEdges) {
                     if (myEdge.intersects(otherEdge)) {
@@ -892,7 +885,7 @@ public class Geomatrix implements ExtendedAPI {
                 }
             }
             else {
-                for (int y = myEdge.yInterval.low+1; y < myEdge.yInterval.high; ++y) {
+                for (int y = myEdge.getYInterval().low+1; y < myEdge.getYInterval().high; ++y) {
                     List<HorizontalSegment> otherHorizontalEdgesAtY =
                             other.horizontalEdgesStoredByY.get(y);
                     if (otherHorizontalEdgesAtY != null) {
@@ -907,7 +900,7 @@ public class Geomatrix implements ExtendedAPI {
         }
         if (other != this /*this really is a same-reference check*/) {
             for (VerticalSegment otherEdge : other.verticalEdges) {
-                boolean betterByCoords = shouldIterateEdgesByCoords(otherEdge.yInterval.size(), horizontalEdges.size());
+                boolean betterByCoords = shouldIterateEdgesByCoords(otherEdge.getYInterval().size(), horizontalEdges.size());
                 if (! betterByCoords) {
                     for (HorizontalSegment myEdge : horizontalEdges) {
                         if (otherEdge.intersects(myEdge)) {
@@ -916,7 +909,7 @@ public class Geomatrix implements ExtendedAPI {
                     }
                 }
                 else {
-                    for (int y = otherEdge.yInterval.low+1; y < otherEdge.yInterval.high; ++y) {
+                    for (int y = otherEdge.getYInterval().low+1; y < otherEdge.getYInterval().high; ++y) {
                         List<HorizontalSegment> myHorizontalEdgesAtY =
                                 horizontalEdgesStoredByY.get(y);
                         if (myHorizontalEdgesAtY != null) {
@@ -946,14 +939,6 @@ public class Geomatrix implements ExtendedAPI {
     private boolean allTrue(List<Boolean> booleans) {
         for (Boolean b : booleans) if (! b) return false;
         return true;
-    }
-    
-    private static List<GridPoint> pointsToGridPointList(Collection<Point> points) {
-        List<GridPoint> gridPoints = new ArrayList<GridPoint>();
-        for (Point point : points) {
-            gridPoints.add(new GridPoint(point.x, point.y));
-        }
-        return gridPoints;
     }
 
     private Geomatrix trimForRectangleIteration(Rectangle rectangle) {
@@ -1041,7 +1026,7 @@ public class Geomatrix implements ExtendedAPI {
         if (closestBelow == null) return null;
         else {
             VerticalPseudoEdge potentialPseudoEdgeBelow =
-                    new VerticalPseudoEdge(point, closestBelow);
+                    new VerticalPseudoEdge(point.x, new Interval(point.y, closestBelow.y));
             if (isPartOfEdge(potentialPseudoEdgeBelow)) {
                 return potentialPseudoEdgeBelow;
             }
@@ -1054,7 +1039,7 @@ public class Geomatrix implements ExtendedAPI {
         if (closestRight == null) return null;
         else {
             HorizontalPseudoEdge potentialPseudoEdgeRight =
-                    new HorizontalPseudoEdge(point, closestRight);
+                    new HorizontalPseudoEdge(point.y, new Interval(point.x, closestRight.x));
             if (isPartOfEdge(potentialPseudoEdgeRight)) {
                 return potentialPseudoEdgeRight;
             }
@@ -1065,7 +1050,7 @@ public class Geomatrix implements ExtendedAPI {
     private boolean isPartOfEdge(VerticalPseudoEdge pseudoEdge) {
         int x = pseudoEdge.getX();
         for (VerticalSegment myEdge : verticalEdgesStoredByX.get(x)) {
-            if (myEdge.yInterval.contains(pseudoEdge.getInterval())) {
+            if (myEdge.getYInterval().contains(pseudoEdge.getYInterval())) {
                 return true;
             }
         }
@@ -1075,7 +1060,7 @@ public class Geomatrix implements ExtendedAPI {
     private boolean isPartOfEdge(HorizontalPseudoEdge pseudoEdge) {
         int y = pseudoEdge.getY();
         for (HorizontalSegment myEdge : horizontalEdgesStoredByY.get(y)) {
-            if (myEdge.yInterval.contains(pseudoEdge.getInterval())) {
+            if (myEdge.getXInterval().contains(pseudoEdge.getXInterval())) {
                 return true;
             }
         }
@@ -1124,22 +1109,17 @@ public class Geomatrix implements ExtendedAPI {
 
     private boolean isBottomPseudoEdge(HorizontalPseudoEdge pseudoEdge) {
         int y = pseudoEdge.getY()-1;
-        int x = pseudoEdge.getInterval().low;
+        int x = pseudoEdge.getXInterval().low;
         Cell adjAboveCell = new Cell(x, y);
         return contains(adjAboveCell);
     }
 
     private boolean isRightPseudoEdge(VerticalPseudoEdge edge) {
         int x = edge.getX()-1;
-        int y = edge.getInterval().low;
+        int y = edge.getYInterval().low;
         Cell adjRightCell = new Cell(x, y);
         return contains(adjRightCell);
     }
-
-    private void addVertexesAdjacentCellsContainmentToHashMap(GridPoint myVertex, List<Boolean> myAdjCells) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 
     private class CellIterator implements Iterator<Cell> {
       
@@ -1225,7 +1205,7 @@ public class Geomatrix implements ExtendedAPI {
             WideRay ray = new WideRay(wideRayOrigin, Direction.E);
             for (VerticalSegment edge : verticalEdges)
                 if (edge.intersects(ray))
-                    segments.add(edge.x);
+                    segments.add(edge.getX());
         }
 
         private void advanceToNext() {

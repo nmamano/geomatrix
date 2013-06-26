@@ -4,14 +4,11 @@
  */
 package geomatrix.business.controllers;
 
-import geomatrix.gridplane.Cell;
 import geomatrix.gridplane.GridPoint;
 import geomatrix.gridplane.Rectangle;
 import geomatrix.business.models.binary.geomatrix.Geomatrix;
-import java.awt.Point;
 import java.util.Iterator;
 import java.util.Set;
-import manticore.Debug;
 
 /**
  *
@@ -24,7 +21,7 @@ public class RectangleIteratorController {
     private static final int STARTING_WIDTH = 4;
     private static final int STARTING_HEIGHT = 4;
     
-    public RectangleIteratorController(Set<Point> vertexs) {
+    public RectangleIteratorController(Set<GridPoint> vertexs) {
         geomatrix = Geomatrix.buildGeomatrixFromPoints(vertexs);
         setRectangle(STARTING_WIDTH, STARTING_HEIGHT);
         iterator = geomatrix.iterator(rectangle);
@@ -38,9 +35,8 @@ public class RectangleIteratorController {
         return iterator.hasNext();
     }
 
-    public Point getNext() {
-        GridPoint next = iterator.next();
-        return new Point(next.x, next.y);
+    public GridPoint getNext() {
+        return iterator.next();
     }
 
     public final void setRectangle(int width, int height) {

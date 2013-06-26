@@ -2,26 +2,28 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geomatrix.utils;
+package geomatrix.gridplane;
+
+import geomatrix.utils.Axis;
 
 /**
  *
  * @author Nil
  */
 public class Line {
-    public boolean vertical; //if false, the line is horizontal
     public int fixedCoordinate;
+    public Axis axis;
 
-    public Line(boolean vertical, int fixedCoordinate) {
-        this.vertical = vertical;
+    public Line(int fixedCoordinate, Axis axis) {
         this.fixedCoordinate = fixedCoordinate;
+        this.axis = axis;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + (this.vertical ? 1 : 0);
-        hash = 97 * hash + this.fixedCoordinate;
+        hash = 29 * hash + this.fixedCoordinate;
+        hash = 29 * hash + (this.axis != null ? this.axis.hashCode() : 0);
         return hash;
     }
 
@@ -34,13 +36,13 @@ public class Line {
             return false;
         }
         final Line other = (Line) obj;
-        if (this.vertical != other.vertical) {
+        if (this.fixedCoordinate != other.fixedCoordinate) {
             return false;
         }
-        if (this.fixedCoordinate != other.fixedCoordinate) {
+        if (this.axis != other.axis) {
             return false;
         }
         return true;
     }
-    
+
 }

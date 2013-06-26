@@ -6,7 +6,7 @@ package geomatrix.business.controllers;
 
 import geomatrix.gridplane.Cell;
 import geomatrix.business.models.binary.geomatrix.Geomatrix;
-import java.awt.Point;
+import geomatrix.gridplane.GridPoint;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -18,7 +18,7 @@ public class CellIteratorController {
     Geomatrix geomatrix;
     Iterator<Cell> iterator;
 
-    public CellIteratorController(Set<Point> vertexs) {
+    public CellIteratorController(Set<GridPoint> vertexs) {
         geomatrix = Geomatrix.buildGeomatrixFromPoints(vertexs);
         iterator = geomatrix.iterator();
     }
@@ -31,9 +31,8 @@ public class CellIteratorController {
         return iterator.hasNext();
     }
 
-    public Point getNext() {
-        Cell next = iterator.next();
-        return new Point(next.x, next.y);
+    public Cell getNext() {
+        return iterator.next();
     }
 
     

@@ -5,19 +5,25 @@
 package geomatrix.presentation.swing;
 
 import geomatrix.business.controllers.RectangleIteratorController;
-import geomatrix.utils.Line;
-import geomatrix.business.controllers.AreaController;
+import geomatrix.gridplane.Line;
+import geomatrix.business.controllers.GeomatrixController;
 import geomatrix.business.controllers.CellIteratorController;
+import geomatrix.gridplane.Cell;
+import geomatrix.gridplane.GridPoint;
+import geomatrix.gridplane.Rectangle;
+import geomatrix.gridplane.Segment;
 import geomatrix.utils.Direction;
-import geomatrix.utils.Segment;
+import geomatrix.gridplane.Vector;
+import geomatrix.utils.Axis;
+import geomatrix.utils.Pair;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,7 +42,7 @@ import manticore.presentation.SwingController;
 public class MapPanel extends JPanel {
     
     private MainFrame mainFrame;
-    private AreaController areaController;
+    private GeomatrixController areaController;
     
     private int selectedAreaNumber;
   
@@ -63,7 +69,7 @@ public class MapPanel extends JPanel {
     private static final Color OVERLAPPED_CELLS_COLOR = Color.GRAY;
     private static final Color DOUBLY_OVERLAPPED_CELLS_COLOR = Color.BLACK;
     
-    private Set<Point> iteredCells;
+    private Set<Cell> iteredCells;
     private boolean ignoreInput;
     
     private RectangleIterationPanel rectangleIterationPanel;
@@ -82,7 +88,7 @@ public class MapPanel extends JPanel {
         setPreferredSize(new Dimension(gridWidth*CELL_PIXEL_LENGTH,
                                        gridHeight*CELL_PIXEL_LENGTH));
         
-        this.areaController = swingController.getBusinessController(AreaController.class);
+        this.areaController = swingController.getBusinessController(GeomatrixController.class);
         selectedAreaNumber = 1;
         
         area1 = new PresentationArea(true, AREA_1_COLOR);
@@ -129,13 +135,13 @@ public class MapPanel extends JPanel {
     private void paintVertexs(Graphics2D g) {
         for (int i = 0; i < gridWidth; ++i) {
             for (int j = 0; j < gridHeight; ++j) {
-                paintVertex(new Point(i, j), g);
+                paintVertex(new GridPoint(i, j), g);
             }
         }
     }
     
-    private void paintVertex(Point point, Graphics2D g) {
-        Point coordinates = findCoordinates(point);
+    private void paintVertex(GridPoint point, Graphics2D g) {
+        Pixel coordinates = findCoordinates(point);
         List<Color> colors = getColors(point);
         if (colors.size() == 1) {
             paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS, g);
@@ -151,14 +157,14 @@ public class MapPanel extends JPanel {
         }
     }
     
-    private void paintSphere(Point center, Color color, int radius, Graphics2D g) {
+    private void paintSphere(Pixel center, Color color, int radius, Graphics2D g) {
         g.setColor(color);
         for (int i = 0; i <= radius; ++i) {
             g.drawOval(center.x - i/2, center.y - i/2, i, i);
         }
     }
     
-    private List<Color> getColors(Point point) {
+    private List<Color> getColors(GridPoint point) {
         List<Color> colors = new ArrayList<Color>();
         if (area1.containsVertex(point) && area1.isDisplayed) colors.add(area1.color);
         if (area2.containsVertex(point) && area2.isDisplayed) colors.add(area2.color);
@@ -221,8 +227,15 @@ public class MapPanel extends JPanel {
                         this.getHeight() / gridHeight);
     }
 
-    private Point findCoordinates(Point p) {
-        return new Point(p.x*cellSize(), p.y*cellSize());
+    private Pixel findCoordinates(GridPoint p) {
+        return new Pixel(p.x*cellSize(), p.y*cellSize());
+    }
+    
+    private Pixel findCoordinates(Cell cell) {
+        Pixel center = new Pixel(cell.x*cellSize(), cell.y*cellSize());
+        center.x += CELL_PIXEL_LENGTH/2;
+        center.y += CELL_PIXEL_LENGTH/2;
+        return center;
     }
 
     private PresentationArea getArea(int areaNumber) {
@@ -300,13 +313,13 @@ public class MapPanel extends JPanel {
 
     private void paintLine(Line line, Color color, Graphics2D g) {
         g.setColor(color);
-        if (line.vertical) {
-            Point lineOrigin = new Point(line.fixedCoordinate, 0);
+        if (line.axis == Axis.Vertical) {
+            GridPoint lineOrigin = new GridPoint(line.fixedCoordinate, 0);
             int xValue = findCoordinates(lineOrigin).x;
             g.drawLine(xValue, 0, xValue, getHeight());
         }
         else {
-            Point lineOrigin = new Point(0, line.fixedCoordinate);
+            GridPoint lineOrigin = new GridPoint(0, line.fixedCoordinate);
             int yValue = findCoordinates(lineOrigin).y;
             g.drawLine(0, yValue, getWidth(), yValue);
         }
@@ -318,47 +331,47 @@ public class MapPanel extends JPanel {
     }
 
     private void paintContainedCells(Graphics2D g) {
-        List<GridCell> area1ContainedCells, area2ContainedCells, area3ContainedCells;
+        List<Cell> area1ContainedCells, area2ContainedCells, area3ContainedCells;
         if (area1.isDisplayed) {
             area1ContainedCells = areaController.getContainedCells(area1.vertexs);
         }
         else {
-            area1ContainedCells = new ArrayList<GridCell>();
+            area1ContainedCells = new ArrayList<Cell>();
         }
         if (area2.isDisplayed) {
             area2ContainedCells = areaController.getContainedCells(area2.vertexs);
         }
         else {
-            area2ContainedCells = new ArrayList<GridCell>();
+            area2ContainedCells = new ArrayList<Cell>();
         }
         if (area3.isDisplayed) {
             area3ContainedCells = areaController.getContainedCells(area3.vertexs);
         }
         else {
-            area3ContainedCells = new ArrayList<GridCell>();
+            area3ContainedCells = new ArrayList<Cell>();
         }
         paintCells(area1ContainedCells, area2ContainedCells, area3ContainedCells, g);
     }
 
-    private void paintCells(List<GridCell> area1ContainedCells,
-            List<GridCell> area2ContainedCells, List<GridCell> area3ContainedCells, Graphics2D g) {
+    private void paintCells(List<Cell> area1ContainedCells,
+            List<Cell> area2ContainedCells, List<Cell> area3ContainedCells, Graphics2D g) {
         
-        Map<GridCell, Color> cellColors = findCellColors(
+        Map<Cell, Color> cellColors = findCellColors(
                 area1ContainedCells, area2ContainedCells, area3ContainedCells);
         
-        for (GridCell cell : cellColors.keySet()) {
+        for (Cell cell : cellColors.keySet()) {
             paintCell(cell, cellColors.get(cell), g);
         }
     }
 
-    private Map<GridCell, Color> findCellColors(List<GridCell> area1cells,
-            List<GridCell> area2cells, List<GridCell> area3cells) {
+    private Map<Cell, Color> findCellColors(List<Cell> area1cells,
+            List<Cell> area2cells, List<Cell> area3cells) {
         
-        Map<GridCell, Color> cellColors = new HashMap<GridCell, Color>();
-        for (GridCell cell : area1cells) {
+        Map<Cell, Color> cellColors = new HashMap<Cell, Color>();
+        for (Cell cell : area1cells) {
             cellColors.put(cell, area1.color);
         }
-        for (GridCell cell : area2cells) {
+        for (Cell cell : area2cells) {
             if (cellColors.containsKey(cell)) {
                 cellColors.put(cell, OVERLAPPED_CELLS_COLOR);
             }
@@ -366,7 +379,7 @@ public class MapPanel extends JPanel {
                 cellColors.put(cell, area2.color);
             }
         }
-        for (GridCell cell : area3cells) {
+        for (Cell cell : area3cells) {
             if (cellColors.containsKey(cell)) {
                 if (cellColors.get(cell) == OVERLAPPED_CELLS_COLOR) {
                     cellColors.put(cell, DOUBLY_OVERLAPPED_CELLS_COLOR);
@@ -382,10 +395,10 @@ public class MapPanel extends JPanel {
         return cellColors;
     }
 
-    private void paintCell(GridCell cell, Color color, Graphics2D g) {
+    private void paintCell(Cell cell, Color color, Graphics2D g) {
         g.setColor(color);
-        Point topLeft = findCoordinates(new Point(cell.x, cell.y));
-        Point center = new Point(topLeft.x + cellSize()/2, topLeft.y + cellSize()/2);
+        Pixel topLeft = findCoordinates(new GridPoint(cell.x, cell.y));
+        Pixel center = new Pixel(topLeft.x + cellSize()/2, topLeft.y + cellSize()/2);
         
         int i = center.x;
         int j = center.y;
@@ -412,7 +425,7 @@ public class MapPanel extends JPanel {
     }
         
     void resetArea(int areaNumber) {
-        getArea(areaNumber).vertexs = new HashSet<Point>();
+        getArea(areaNumber).vertexs = new HashSet<GridPoint>();
         
         updateMenusThatRequireValidAreaActivation(areaNumber);
         repaint();
@@ -421,8 +434,8 @@ public class MapPanel extends JPanel {
     void cloneArea(int destinationAreaNumber, int toBeClonedAreaNumber) {
         assert(destinationAreaNumber != toBeClonedAreaNumber);
         
-        getArea(destinationAreaNumber).vertexs = new HashSet<Point>();
-        for (Point vertex : getArea(toBeClonedAreaNumber).vertexs) {
+        getArea(destinationAreaNumber).vertexs = new HashSet<GridPoint>();
+        for (GridPoint vertex : getArea(toBeClonedAreaNumber).vertexs) {
             getArea(destinationAreaNumber).vertexs.add(vertex);
         }
         
@@ -432,8 +445,8 @@ public class MapPanel extends JPanel {
 
     void unionArea(int destinationAreaNumber, int otherAreaNumber) {
         assert(destinationAreaNumber != otherAreaNumber);
-        Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
-        Set<Point> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
+        Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
+        Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
         assert(areaController.isValidArea(destinationAreaVertexs) &&
                areaController.isValidArea(otherAreaVertexs));
         
@@ -446,8 +459,8 @@ public class MapPanel extends JPanel {
     
     void intersectionArea(int destinationAreaNumber, int otherAreaNumber) {
         assert(destinationAreaNumber != otherAreaNumber);
-        Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
-        Set<Point> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
+        Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
+        Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
         assert(areaController.isValidArea(destinationAreaVertexs) &&
                areaController.isValidArea(otherAreaVertexs));
         
@@ -460,8 +473,8 @@ public class MapPanel extends JPanel {
 
     void differenceArea(int destinationAreaNumber, int otherAreaNumber) {
         assert(destinationAreaNumber != otherAreaNumber);
-        Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
-        Set<Point> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
+        Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
+        Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
         assert(areaController.isValidArea(destinationAreaVertexs) &&
                areaController.isValidArea(otherAreaVertexs));
         
@@ -474,8 +487,8 @@ public class MapPanel extends JPanel {
 
     void symmetricDifferenceArea(int destinationAreaNumber, int otherAreaNumber) {
         assert(destinationAreaNumber != otherAreaNumber);
-        Set<Point> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
-        Set<Point> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
+        Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
+        Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
         assert(areaController.isValidArea(destinationAreaVertexs) &&
                areaController.isValidArea(otherAreaVertexs));
         
@@ -493,7 +506,7 @@ public class MapPanel extends JPanel {
     }
 
     private void paintBoundingRectangles(Graphics2D g) {
-        List<Segment> area1BoundingRectangleEdges, area2BoundingRectangleEdges,
+        Collection<Segment> area1BoundingRectangleEdges, area2BoundingRectangleEdges,
                 area3BoundingRectangleEdges;
         
         if (shouldPaintBoundingRectangle(1)) {
@@ -523,53 +536,33 @@ public class MapPanel extends JPanel {
                areaController.isValidArea(getArea(areaNumber).vertexs);
     }
 
-    private void paintSegments(List<Segment> area1Segments,
-            List<Segment> area2Segments, List<Segment> area3Segments, Graphics2D g) {
-        
-        List<Segment> area1UnitarySegments = breakDownToUnitarySegments(area1Segments);
-        List<Segment> area2UnitarySegments = breakDownToUnitarySegments(area2Segments);
-        List<Segment> area3UnitarySegments = breakDownToUnitarySegments(area3Segments);
-        Map<Segment, Color> lineColors = findUnitarySegmentColors(
-                area1Segments, area2Segments, area3Segments);
-        
-        for (Segment segment : lineColors.keySet()) {
-            paintSegment(segment, lineColors.get(segment), g);
-        }
+    private void paintSegments(Collection<Segment> area1Segments,
+            Collection<Segment> area2Segments, Collection<Segment> area3Segments,
+            Graphics2D g) {
+
+        //TO REFACTOR
+//        for (Vector segment : lineColors.keySet()) {
+//            paintSegment(segment, lineColors.get(segment), g);
+//        }
     }
 
     private void paintSegment(Segment segment, Color color, Graphics2D g) {
         g.setColor(color);
-        Point gridEndPoint1 = findCoordinates(segment.endPoint1);
-        Point gridEndPoint2 = findCoordinates(segment.endPoint2);
-        g.drawLine(gridEndPoint1.x, gridEndPoint1.y, gridEndPoint2.x, gridEndPoint2.y);
+        Pair<GridPoint, GridPoint> endPoints = segment.getEndpoints();
+        Pixel pixelEndPoint1 = findCoordinates(endPoints.first);
+        Pixel pixelEndPoint2 = findCoordinates(endPoints.second);
+        g.drawLine(pixelEndPoint1.x, pixelEndPoint1.y, pixelEndPoint2.x, pixelEndPoint2.y);
     }
 
-    private List<Segment> breakDownToUnitarySegments(List<Segment> segments) {
-        List<Segment> unitarySegments = new ArrayList<Segment>();
+    private Map<Vector, Color> findUnitarySegmentColors(
+            List<Vector> area1Segments, List<Vector> area2Segments,
+            List<Vector> area3Segments) {
         
-        for (Segment segment : segments) {
-            Direction direction = segment.getDirection();
-            Point point = segment.endPoint1;
-            while (! point.equals(segment.endPoint2)) {
-                Point next = (Point) point.clone();
-                advance(next, direction);
-                unitarySegments.add(new Segment(point, next));
-                point = (Point) next.clone();
-            }
-        }
-        
-        return unitarySegments;
-    }
-
-    private Map<Segment, Color> findUnitarySegmentColors(
-            List<Segment> area1Segments, List<Segment> area2Segments,
-            List<Segment> area3Segments) {
-        
-        Map<Segment, Color> segmentColors = new HashMap<Segment, Color>();
-        for (Segment segment : area1Segments) {
+        Map<Vector, Color> segmentColors = new HashMap<Vector, Color>();
+        for (Vector segment : area1Segments) {
             segmentColors.put(segment, area1.color);
         }
-        for (Segment segment : area2Segments) {
+        for (Vector segment : area2Segments) {
             if (segmentColors.containsKey(segment)) {
                 segmentColors.put(segment, OVERLAPPED_LINES_COLOR);
             }
@@ -577,7 +570,7 @@ public class MapPanel extends JPanel {
                 segmentColors.put(segment, area2.color);
             }
         }
-        for (Segment segment : area3Segments) {
+        for (Vector segment : area3Segments) {
             if (segmentColors.containsKey(segment)) {
                 if (segmentColors.get(segment) == OVERLAPPED_LINES_COLOR) {
                     segmentColors.put(segment, DOUBLY_OVERLAPPED_LINES_COLOR);
@@ -593,7 +586,7 @@ public class MapPanel extends JPanel {
         return segmentColors;
     }
 
-    private void advance(Point point, Direction direction) {
+    private void advance(GridPoint point, Direction direction) {
         if (direction == Direction.N) --point.y;
         else if (direction == Direction.S) ++point.y;
         else if (direction == Direction.W) --point.x;
@@ -677,15 +670,13 @@ public class MapPanel extends JPanel {
 
     void paintIteredCells(Graphics2D g) {
         if (iteredCells == null) return;
-        for (Point point : iteredCells) {
-            Point inGridCenter = findCoordinates(point);
-            inGridCenter.x += CELL_PIXEL_LENGTH/2;
-            inGridCenter.y += CELL_PIXEL_LENGTH/2;
+        for (Cell point : iteredCells) {
+            Pixel inGridCenter = findCoordinates(point);
             paintSphere(inGridCenter, ITERATION_MARK_COLOR, ITERATION_MARK_PIXEL_RADIUS, g);
         }
     }
 
-    void setIterationPoints(Set<Point> iteredCells) {
+    void setIterationPoints(Set<Cell> iteredCells) {
         this.iteredCells = iteredCells;
     }
 
@@ -705,18 +696,15 @@ public class MapPanel extends JPanel {
     private void paintIteratingRectangle(Graphics2D g) {
         if (rectangleIterationPanel != null && rectangleIterationPanel.isVisible()
                 && ! iteredCells.isEmpty()) {
-            Point topLeft = rectangleIterationPanel.lastIteratedPoint;
-            Point topRight = (Point) topLeft.clone();
-            topRight.x += rectangleIterationPanel.rectangleWidth;
-            Point bottomLeft = (Point) topLeft.clone();
-            bottomLeft.y += rectangleIterationPanel.rectangleHeight;
-            Point bottomRight = (Point) bottomLeft.clone();
+            GridPoint topLeft = rectangleIterationPanel.lastIteratedPoint;
+            GridPoint bottomRight = rectangleIterationPanel.lastIteratedPoint;
             bottomRight.x += rectangleIterationPanel.rectangleWidth;
-            Debug.println(topLeft.toString() + topRight.toString() + bottomLeft.toString() + bottomRight.toString());
-            paintSegment(new Segment(topLeft, topRight), ITERATION_RECTANGLE_COLOR, g);
-            paintSegment(new Segment(topLeft, bottomLeft), ITERATION_RECTANGLE_COLOR, g);
-            paintSegment(new Segment(topRight, bottomRight), ITERATION_RECTANGLE_COLOR, g);
-            paintSegment(new Segment(bottomLeft, bottomRight), ITERATION_RECTANGLE_COLOR, g);
+            bottomRight.y += rectangleIterationPanel.rectangleHeight;
+
+            Rectangle rectangle = new Rectangle(topLeft, bottomRight);
+            for (Segment segment : rectangle.getEdges()) {
+                paintSegment(segment, ITERATION_RECTANGLE_COLOR, g);
+            }
         }
     }
 
@@ -730,7 +718,8 @@ public class MapPanel extends JPanel {
         public void mousePressed(MouseEvent e) {
             if (ignoreInput) return;
             
-            Point clickedVertex = getClosestVertex(e.getPoint());
+            Pixel clickedPixel = new Pixel(e.getX(), e.getY());
+            GridPoint clickedVertex = getClosestVertex(clickedPixel);
             
             PresentationArea selectedArea = getArea(selectedAreaNumber);
             if (selectedArea.containsVertex(clickedVertex)) {
@@ -745,9 +734,9 @@ public class MapPanel extends JPanel {
             repaint();
         }
 
-        private Point getClosestVertex(Point point) {
-            return new Point((point.x+CELL_PIXEL_LENGTH/2)/cellSize(),
-                             (point.y+CELL_PIXEL_LENGTH/2)/cellSize());
+        private GridPoint getClosestVertex(Pixel pixel) {
+            return new GridPoint((pixel.x+CELL_PIXEL_LENGTH/2)/cellSize(),
+                                 (pixel.y+CELL_PIXEL_LENGTH/2)/cellSize());
         }
 
     }   

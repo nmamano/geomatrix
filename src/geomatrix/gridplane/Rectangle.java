@@ -2,8 +2,8 @@
 package geomatrix.gridplane;
 
 import geomatrix.gridplane.GridPoint;
+import geomatrix.utils.Axis;
 import geomatrix.utils.Interval;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import manticore.Debug;
@@ -30,13 +30,14 @@ public class Rectangle {
     /**
      * Returns the distance between 2 Rectangles.
      * @param r1
-     * @param r2
+     * @param other
      * @return 
      */
-    public static float distance(Rectangle r1, Rectangle r2) {
-        int xOffset = r1.getXinterval().distance(r2.getXinterval());
-        int yOffset = r1.getYinterval().distance(r2.getYinterval());
-        return GridPoint.distance(new GridPoint(0,0), new GridPoint(xOffset, yOffset));
+    public float distance(Rectangle other) {
+        int xOffset = getXInterval().distance(other.getXInterval());
+        int yOffset = getYInterval().distance(other.getYInterval());
+        GridPoint origin = new GridPoint(0, 0);
+        return origin.distance(new GridPoint(xOffset, yOffset));
     }
     
     /**
@@ -45,7 +46,7 @@ public class Rectangle {
      * @return an interval containing the x values between the vertical
      * segments.
      */
-    public Interval getXinterval() {
+    public Interval getXInterval() {
         return new Interval(topLeft.x, bottomRight.x);
     }
     
@@ -55,7 +56,7 @@ public class Rectangle {
      * @return an interval containing the y values between the horizontal
      * segments.
      */
-    public Interval getYinterval() {
+    public Interval getYInterval() {
         return new Interval(topLeft.y, bottomRight.y);
     }
     
@@ -67,6 +68,48 @@ public class Rectangle {
      */
     boolean valid() {
         return topLeft.x < bottomRight.x && topLeft.y < bottomRight.y;
+    }
+
+    public Collection<GridPoint> getVertexes() {
+        Collection<GridPoint> vertexes = new ArrayList();
+        vertexes.add(new GridPoint(topLeft.x, topLeft.y));
+        vertexes.add(new GridPoint(bottomRight.x, bottomRight.y));
+        vertexes.add(new GridPoint(topLeft.x, bottomRight.y));
+        vertexes.add(new GridPoint(bottomRight.x, topLeft.y));
+        return vertexes;
+    }
+    
+    public Collection<Segment> getEdges() {
+        Collection<Segment> edges = new ArrayList();
+        edges.add(getLeftEdge());
+        edges.add(getRightEdge());
+        edges.add(getTopEdge());
+        edges.add(getBottomEdge());
+        return edges;    
+    }
+    
+    public Segment getLeftEdge() {
+        return new Segment(topLeft.x, getYInterval(), Axis.Vertical);
+    }   
+    
+    public Segment getRightEdge() {
+        return new Segment(bottomRight.x, getYInterval(), Axis.Vertical);
+    }  
+    
+    public Segment getTopEdge() {
+        return new Segment(topLeft.y, getXInterval(), Axis.Horizontal);
+    }  
+    
+    public Segment getBottomEdge() {
+        return new Segment(bottomRight.y, getXInterval(), Axis.Horizontal);
+    }
+    
+    public int getWidth() {
+        return bottomRight.x - topLeft.x;
+    }
+
+    public int getHeight() {
+        return bottomRight.y - topLeft.y;
     }
     
     /**
@@ -108,25 +151,5 @@ public class Rectangle {
     public String toString() {
         return "[" + topLeft.toString() + ", " + bottomRight.toString() + ']';
     }
-
-    public Collection<Point> getVertexes() {
-        Debug.println(this.toString());
-        Collection<Point> vertexes = new ArrayList();
-        vertexes.add(new Point(topLeft.x, topLeft.y));
-        vertexes.add(new Point(bottomRight.x, bottomRight.y));
-        vertexes.add(new Point(topLeft.x, bottomRight.y));
-        vertexes.add(new Point(bottomRight.x, topLeft.y));
-        return vertexes;
-    }
-
-    public int getWidth() {
-        return bottomRight.x - topLeft.x;
-    }
-
-    public int getHeight() {
-        return bottomRight.y - topLeft.y;
-    }
-    
-    
     
 }

@@ -4,9 +4,9 @@
  */
 package geomatrix.presentation.swing;
 
+import geomatrix.gridplane.GridPoint;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,25 +17,25 @@ import java.util.Set;
 public class PresentationArea {
     protected boolean isDisplayed;
     protected Color color;
-    protected Set<Point> vertexs;
+    protected Set<GridPoint> vertexs;
     protected boolean isBoundingRectangleDisplayed;
 
     public PresentationArea(boolean isDisplayed, Color color) {
         this.isDisplayed = isDisplayed;
         this.color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 128);
-        vertexs = new HashSet<Point>();
+        vertexs = new HashSet<GridPoint>();
         isBoundingRectangleDisplayed = false;
     }
 
-    boolean containsVertex(Point vertex) {
+    boolean containsVertex(GridPoint vertex) {
         return vertexs.contains(vertex);
     }
 
-    void removeVertexFromArea(Point vertex) {
+    void removeVertexFromArea(GridPoint vertex) {
         vertexs.remove(vertex);
     }
 
-    void addVertexToArea(Point vertex) {
+    void addVertexToArea(GridPoint vertex) {
         vertexs.add(vertex);
     }
 

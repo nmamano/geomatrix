@@ -43,6 +43,11 @@ public enum Direction {
         return Direction.values()[(this.direction + 2) % 4];
     }
     
+    public Axis getAxis() {
+        if (this == N || this == S) return Axis.Vertical;
+        else return Axis.Horizontal;
+    }
+    
     @Override
     public String toString() {
         if (this == N) return "N";

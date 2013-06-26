@@ -5,36 +5,30 @@
 package geomatrix.business.models.binary.geomatrix;
 
 import geomatrix.gridplane.GridPoint;
+import geomatrix.gridplane.HorizontalSegment;
 import geomatrix.gridplane.Rectangle;
 import geomatrix.utils.Interval;
-import geomatrix.utils.Segment;
+import geomatrix.gridplane.Vector;
 import java.awt.Point;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Nil
  */
-class HorizontalPseudoEdge extends Segment {
+class HorizontalPseudoEdge extends HorizontalSegment {
 
-    public HorizontalPseudoEdge(GridPoint endPoint1, GridPoint endPoint2) {
-        super(new Point(endPoint1.x, endPoint1.y), new Point(endPoint2.x, endPoint2.y));
+    public HorizontalPseudoEdge(int y, Interval xInterval) {
+        super(y, xInterval);
     }
 
     Rectangle getConflictingArea(Rectangle rectangle) {
         GridPoint bottomRight, topLeft;
-        bottomRight = new GridPoint(getInterval().high, getY());
+        bottomRight = new GridPoint(getXInterval().high, getY());
         topLeft = new GridPoint(
-                getInterval().low - rectangle.getWidth() + 1,
+                getXInterval().low - rectangle.getWidth() + 1,
                 getY() - rectangle.getHeight() + 1);
         return new Rectangle(topLeft, bottomRight);
-    }
-
-    int getY() {
-        return endPoint1.y;
-    }
-
-    Interval getInterval() {
-        return new Interval(endPoint1.x, endPoint2.x);
     }
     
 }

@@ -5,7 +5,8 @@
 package geomatrix.presentation.swing;
 
 import geomatrix.business.controllers.RectangleIteratorController;
-import java.awt.Point;
+import geomatrix.gridplane.Cell;
+import geomatrix.gridplane.GridPoint;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,13 +18,13 @@ public class RectangleIterationPanel extends javax.swing.JDialog {
 
     private RectangleIteratorController rectangleIteratorController;
     private MapPanel mapPanel;
-    private Set<Point> iteredCells;
+    private Set<Cell> iteredCells;
     private static final int AUTOMATIC_ITERATION_MS_LAPSUS = 50;
     private static final int STARTING_WIDTH = 4;
     private static final int STARTING_HEIGHT = 4;
     int rectangleWidth;
     int rectangleHeight;
-    Point lastIteratedPoint;
+    GridPoint lastIteratedPoint;
     
     /**
      * Creates new form RectangleIterationPanel
@@ -291,7 +292,7 @@ public class RectangleIterationPanel extends javax.swing.JDialog {
 
     private void reset() {
         rectangleIteratorController.reset();
-        iteredCells = new HashSet<Point>();
+        iteredCells = new HashSet<Cell>();
         repaintIteredCells();
         enableIteration(! finished());
     }
@@ -307,11 +308,11 @@ public class RectangleIterationPanel extends javax.swing.JDialog {
 
     private void advance() {
         lastIteratedPoint = rectangleIteratorController.getNext();
-        iteredCells.add(new Point(lastIteratedPoint.x, lastIteratedPoint.y));
+        iteredCells.add(new Cell(lastIteratedPoint.x, lastIteratedPoint.y));
         repaintIteredCells();
     }
 
-    public Point getLastIteratedPoint() {
+    public GridPoint getLastIteratedPoint() {
         return lastIteratedPoint;
     }
 

@@ -5,7 +5,7 @@
 package geomatrix.presentation.swing;
 
 import geomatrix.business.controllers.CellIteratorController;
-import java.awt.Point;
+import geomatrix.gridplane.Cell;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public class CellIterationPanel extends javax.swing.JDialog {
 
     private CellIteratorController cellIteratorController;
     private MapPanel mapPanel;
-    private Set<Point> iteredCells;
+    private Set<Cell> iteredCells;
     private static final int AUTOMATIC_ITERATION_MS_LAPSUS = 36;
     
     /**
@@ -145,7 +145,7 @@ public class CellIterationPanel extends javax.swing.JDialog {
 
     private void reset() {
         cellIteratorController.reset();
-        iteredCells = new HashSet<Point>();
+        iteredCells = new HashSet<Cell>();
         repaintIteredCells();
         enableIteration(! finished());
     }
