@@ -411,6 +411,12 @@ public class Geomatrix implements ExtendedAPI {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
+    public Collection<Cell> getContainedCells() {
+        Collection<Cell> containedCells = new ArrayList<Cell>();
+        for (Cell cell : this) containedCells.add(cell);
+        return containedCells;
+    }
+    
     /**
      * Returns whether this geomatrix is consistent.
      * pre: the method initializeDataStructsFromVertexs works
@@ -431,25 +437,6 @@ public class Geomatrix implements ExtendedAPI {
         
         boolean result = verticalLines.isEmpty() && horizontalLines.isEmpty();
         return result;
-    }
-    
-    public static List<Line> getInvalidLines(Set<GridPoint> vertexs) {
-        HashSet<Line> lines = new HashSet<Line>();
-        
-        for (GridPoint vertex : vertexs) {
-            Line verticalLine = new Line(vertex.x, Axis.Vertical);
-            if (lines.contains(verticalLine))
-                lines.remove(verticalLine);
-            else lines.add(verticalLine);
-            
-            Line horizontalLine = new Line(vertex.y, Axis.Horizontal);
-            if (lines.contains(horizontalLine))
-                lines.remove(horizontalLine);
-            else lines.add(horizontalLine);
-        }
-
-        List<Line> result = new ArrayList<Line>(lines);
-        return result;        
     }
 
     @Override
