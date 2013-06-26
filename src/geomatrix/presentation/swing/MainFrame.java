@@ -1,6 +1,7 @@
 
 package geomatrix.presentation.swing;
 
+import geomatrix.business.controllers.GeomatrixController2;
 import java.awt.BorderLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -15,7 +16,8 @@ import manticore.presentation.SwingController;
 public class MainFrame extends javax.swing.JFrame {
 
     private MapPanel mapPanel;
-    private SwingController swing;
+    private GeomatrixController2 geomatrixController;
+    private SwingController swingController;
     
     //here will be stored from which area the translate dialog is opened.
     //I don't know how to pass this value more properly when
@@ -28,7 +30,8 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame(SwingController swing) {
         setResizable(false);
         initComponents();
-        this.swing = swing;
+        this.swingController = swing;
+        this.geomatrixController = swing.getBusinessController(GeomatrixController2.class);
         initMapPanel();
         pack();
         repaint();
@@ -1616,11 +1619,9 @@ public class MainFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void initMapPanel() {
-        mapPanel = swing.get(MapPanel.class);
-        mapPanel.setMainFrame(this);
+        mapPanel = swingController.get(MapPanel.class);
         add(mapPanel, BorderLayout.CENTER);
         mapPanel.setVisible(true);
-        pack();
     }
 
     void enableOperationsThatRequireValidArea(int areaNumber, boolean isValid) {
