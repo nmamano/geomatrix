@@ -4,8 +4,8 @@
  */
 package geomatrix.business.models.binary.geomatrix;
 
-import geomatrix.business.models.binary.GridPoint;
-import geomatrix.business.models.binary.Rectangle;
+import geomatrix.gridplane.GridPoint;
+import geomatrix.gridplane.Rectangle;
 import geomatrix.utils.Interval;
 import geomatrix.utils.Segment;
 import java.awt.Point;

@@ -4,10 +4,10 @@
  */
 package geomatrix.business.models.binary.geomatrix;
 
-import geomatrix.business.models.binary.Cell;
-import geomatrix.business.models.binary.CellSet;
-import geomatrix.business.models.binary.GridPoint;
-import geomatrix.business.models.binary.Rectangle;
+import geomatrix.gridplane.Cell;
+import geomatrix.business.models.binary.MasterAPI;
+import geomatrix.gridplane.GridPoint;
+import geomatrix.gridplane.Rectangle;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -81,7 +81,7 @@ public class GeomatrixTest {
     @Test
     public void testContains_CellSet() {
         System.out.println("contains");
-        CellSet c = null;
+        MasterAPI c = null;
         Geomatrix instance = new Geomatrix();
         boolean expResult = false;
         boolean result = instance.contains(c);
@@ -96,7 +96,7 @@ public class GeomatrixTest {
     @Test
     public void testUnion() {
         System.out.println("union");
-        CellSet c = null;
+        MasterAPI c = null;
         Geomatrix instance = new Geomatrix();
         instance.union(c);
         // TODO review the generated test code and remove the default call to fail.
@@ -109,7 +109,7 @@ public class GeomatrixTest {
     @Test
     public void testIntersection() {
         System.out.println("intersection");
-        CellSet c = null;
+        MasterAPI c = null;
         Geomatrix instance = new Geomatrix();
         instance.intersection(c);
         // TODO review the generated test code and remove the default call to fail.
@@ -122,7 +122,7 @@ public class GeomatrixTest {
     @Test
     public void testDifference() {
         System.out.println("difference");
-        CellSet c = null;
+        MasterAPI c = null;
         Geomatrix instance = new Geomatrix();
         instance.difference(c);
         // TODO review the generated test code and remove the default call to fail.
@@ -242,7 +242,7 @@ public class GeomatrixTest {
     @Test
     public void testSymmetricDifference() {
         System.out.println("symmetricDifference");
-        CellSet c = null;
+        MasterAPI c = null;
         Geomatrix instance = new Geomatrix();
         instance.symmetricDifference(c);
         // TODO review the generated test code and remove the default call to fail.

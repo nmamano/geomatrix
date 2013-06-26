@@ -1,5 +1,5 @@
 
-package geomatrix.business.models.binary;
+package geomatrix.gridplane;
 
 /**
  * A cell of the grid.

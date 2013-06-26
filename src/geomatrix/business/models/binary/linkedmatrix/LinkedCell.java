@@ -1,7 +1,7 @@
 
 package geomatrix.business.models.binary.linkedmatrix;
 
-import geomatrix.business.models.binary.Cell;
+import geomatrix.gridplane.Cell;
 
 /**
  * Represents a cell linked to a "next" cell and a "previous" cell.

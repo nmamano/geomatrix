@@ -4,7 +4,7 @@
  */
 package geomatrix.business.controllers;
 
-import geomatrix.business.models.binary.Cell;
+import geomatrix.gridplane.Cell;
 import geomatrix.business.models.binary.geomatrix.Geomatrix;
 import java.awt.Point;
 import java.util.Iterator;

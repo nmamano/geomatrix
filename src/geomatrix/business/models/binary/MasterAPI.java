@@ -1,6 +1,7 @@
 
 package geomatrix.business.models.binary;
 
+import geomatrix.gridplane.Cell;
 import java.util.Iterator;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Iterator;
  * The remove method of the iterator is optional.
  * @author Nil
  */
-public interface CellSet 
+public interface MasterAPI 
     extends Iterable<Cell> {
     
     /**
@@ -24,28 +25,28 @@ public interface CellSet
      * tested.
      * @return true if every cell in other is contained in this cell set.
      */
-    boolean contains(CellSet other);
+    boolean contains(MasterAPI other);
     
     /**
      * This cell set becomes the union of this cell set and cells. cells is not
      * modified.
      * @param cells the cell set with which this cell set is to be united.
      */
-    void union(CellSet other);
+    void union(MasterAPI other);
     
     /**
      * This cell set becomes the intersection of this cell set and cells. cells
      * is not modified.
      * @param cells the cell set with which this cell set is to be intersected.
      */
-    void intersection(CellSet other);
+    void intersection(MasterAPI other);
     
     /**
      * This cell set becomes the difference of this cell set minus cells. cells
      * is not modified.
      * @param cells the cell set to be rested to this cell set.
      */    
-    void difference(CellSet other);
+    void difference(MasterAPI other);
     
     /**
      * Returns an iterator through the contained cells.

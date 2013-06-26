@@ -1,8 +1,8 @@
 
 package geomatrix.business.models.binary.linkedmatrix;
 
-import geomatrix.business.models.binary.Cell;
-import geomatrix.business.models.binary.CellSet;
+import geomatrix.gridplane.Cell;
+import geomatrix.business.models.binary.MasterAPI;
 import java.util.Iterator;
 
 /**
@@ -10,7 +10,7 @@ import java.util.Iterator;
  * The cells migth have only positive coordinates in a fixed range.
  * @author Nil
  */
-public class LinkedMatrix implements CellSet {
+public class LinkedMatrix implements MasterAPI {
 
     private LinkedCell[][] cellArray;
     
@@ -77,7 +77,7 @@ public class LinkedMatrix implements CellSet {
      * @return 
      */
     @Override
-    public boolean contains(CellSet other) {
+    public boolean contains(MasterAPI other) {
         for (Object nextCell : other) {
             Cell cell = (Cell) nextCell;
             if (! contains(cell)) return false;
@@ -91,7 +91,7 @@ public class LinkedMatrix implements CellSet {
      * @param other 
      */
     @Override
-    public void union(CellSet other) {
+    public void union(MasterAPI other) {
         for (Object nextCell : other) {
             Cell cell = (Cell) nextCell;
             add(cell);
@@ -104,7 +104,7 @@ public class LinkedMatrix implements CellSet {
      * @param other 
      */
     @Override
-    public void intersection(CellSet other) {
+    public void intersection(MasterAPI other) {
         for (Object nextCell : this) {
             Cell cell = (Cell) nextCell;
             if (! other.contains(cell)) {
@@ -119,7 +119,7 @@ public class LinkedMatrix implements CellSet {
      * @param other 
      */
     @Override
-    public void difference(CellSet other) {
+    public void difference(MasterAPI other) {
         for (Object nextCell : other) {
             Cell cell = (Cell) nextCell;
             if (contains(cell)) {

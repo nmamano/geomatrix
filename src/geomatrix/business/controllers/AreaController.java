@@ -4,9 +4,9 @@
  */
 package geomatrix.business.controllers;
 
-import geomatrix.business.models.binary.Cell;
-import geomatrix.business.models.binary.GridPoint;
-import geomatrix.business.models.binary.Rectangle;
+import geomatrix.gridplane.Cell;
+import geomatrix.gridplane.GridPoint;
+import geomatrix.gridplane.Rectangle;
 import geomatrix.business.models.binary.geomatrix.Geomatrix;
 import geomatrix.presentation.swing.GridCell;
 import geomatrix.utils.Line;

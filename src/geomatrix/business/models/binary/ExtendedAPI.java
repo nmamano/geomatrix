@@ -4,6 +4,8 @@
  */
 package geomatrix.business.models.binary;
 
+import geomatrix.gridplane.Rectangle;
+import geomatrix.gridplane.GridPoint;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,8 +14,8 @@ import java.util.List;
  * methods.
  * @author Nil
  */
-public interface Area
-        extends CellSet {
+public interface ExtendedAPI
+        extends MasterAPI {
     
     /**
      * This area is slided p.x cells in the x axis and p.y cells in the
@@ -71,7 +73,7 @@ public interface Area
      * @param cells the cell set with which this cell set is to be applied the
      * symmetric difference.
      */   
-    void symmetricDifference(CellSet other);
+    void symmetricDifference(MasterAPI other);
     
     /**
      * Returns the cardinality of this set.

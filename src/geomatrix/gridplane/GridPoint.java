@@ -1,5 +1,5 @@
 
-package geomatrix.business.models.binary;
+package geomatrix.gridplane;
 
 /**
  * Represents a grid point.

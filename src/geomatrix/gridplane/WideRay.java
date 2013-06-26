@@ -1,6 +1,7 @@
 
-package geomatrix.business.models.binary;
+package geomatrix.gridplane;
 
+import geomatrix.gridplane.Cell;
 import geomatrix.utils.Direction;
 
 /**

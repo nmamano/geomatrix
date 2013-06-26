@@ -4,14 +4,14 @@
  */
 package geomatrix.business.models.binary.geomatrix;
 
-import geomatrix.business.models.binary.Area;
-import geomatrix.business.models.binary.Cell;
-import geomatrix.business.models.binary.CellSet;
-import geomatrix.business.models.binary.HorizontalSegment;
-import geomatrix.business.models.binary.GridPoint;
-import geomatrix.business.models.binary.Rectangle;
-import geomatrix.business.models.binary.VerticalSegment;
-import geomatrix.business.models.binary.WideRay;
+import geomatrix.business.models.binary.ExtendedAPI;
+import geomatrix.gridplane.Cell;
+import geomatrix.business.models.binary.MasterAPI;
+import geomatrix.gridplane.HorizontalSegment;
+import geomatrix.gridplane.GridPoint;
+import geomatrix.gridplane.Rectangle;
+import geomatrix.gridplane.VerticalSegment;
+import geomatrix.gridplane.WideRay;
 import geomatrix.utils.Direction;
 import geomatrix.utils.Interval;
 import geomatrix.utils.Line;
@@ -34,7 +34,7 @@ import java.util.Set;
  * Area implementation of the master interface.
  * @author Nil
  */
-public class Geomatrix implements Area {
+public class Geomatrix implements ExtendedAPI {
 
     private List<GridPoint> vertexes;
     private List<VerticalSegment> verticalEdges;
@@ -55,32 +55,32 @@ public class Geomatrix implements Area {
      * Given a x' value, permits fast access to all vertexes of the area
      * of the form (x',y).
      */
-    private HashMap<Integer,List<GridPoint>> vertexesStoredByX;
+    private HashMap<Integer, List<GridPoint>> vertexesStoredByX;
     
     /**
      * Given a y' value, permits fast access to all vertexes of the area
      * of the form (x,y').
      */
-    private HashMap<Integer,List<GridPoint>> vertexesStoredByY;
+    private HashMap<Integer, List<GridPoint>> vertexesStoredByY;
     
     /**
      * Given first x' value, permits fast access to all vertical edges of the area
      * of the form (x',y).
      */
-    private HashMap<Integer,List<VerticalSegment>> verticalEdgesStoredByX;
+    private HashMap<Integer, List<VerticalSegment>> verticalEdgesStoredByX;
  
     /**
      * Given first y' value, permits fast access to all horizontal edges of the area
      * of the form (x,y').
      */
-    private HashMap<Integer,List<HorizontalSegment>> horizontalEdgesStoredByY;
+    private HashMap<Integer, List<HorizontalSegment>> horizontalEdgesStoredByY;
     
     /**
      * Data structs for rectangle iteration include self edge intersections,
      * critical points, hash maps of critical points and bottom and
      * right pseudo edges.
      */
-    private boolean alreadyInitializeDataStructsForRectangleIteration;
+    private boolean haveInitializedStructsForRectangleIteration;
     
     private List<GridPoint> selfEdgeIntersections;
 
@@ -149,7 +149,7 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public boolean contains(CellSet c) {
+    public boolean contains(MasterAPI c) {
         assert(c instanceof Geomatrix);
         Geomatrix other = (Geomatrix) c;
         
@@ -171,7 +171,7 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public void union(CellSet c) {
+    public void union(MasterAPI c) {
         assert(c instanceof Geomatrix);
         Geomatrix other = (Geomatrix) c;
         
@@ -194,9 +194,10 @@ public class Geomatrix implements Area {
         
         //2) find vextexs that have an odd number of adjacent contained squares
         //in either area
+        
         for (GridPoint myVertex : vertexes) {
             List<Boolean> otherAdjCells = other.areAdjacentCellsContained(myVertex);
-            
+
             if (noneTrue(otherAdjCells)) {
                 //if this vertex is disjoint from other, it is a vertex of the
                 //union
@@ -206,6 +207,7 @@ public class Geomatrix implements Area {
             //the union
             else if (!allTrue(otherAdjCells)) {
                 List<Boolean> myAdjCells = areAdjacentCellsContained(myVertex);
+                
                 int count = 0;
                 if (myAdjCells.get(0) || otherAdjCells.get(0)) ++count;
                 if (myAdjCells.get(1) || otherAdjCells.get(1)) ++count;
@@ -214,10 +216,10 @@ public class Geomatrix implements Area {
                 if (count%2 == 1) newAreaVertexs.add(myVertex);
             }
         }
-        
+
         for (GridPoint otherVertex : other.vertexes) {
             List<Boolean> myAdjCells = areAdjacentCellsContained(otherVertex);
-            
+
             if (noneTrue(myAdjCells)) {
                 //if otherVertex is disjoint from this area, it is a vertex of 
                 //the union
@@ -227,6 +229,7 @@ public class Geomatrix implements Area {
             //the union
             else if (!allTrue(myAdjCells)) {
                 List<Boolean> otherAdjCells = other.areAdjacentCellsContained(otherVertex);
+
                 int count = 0;
                 if (myAdjCells.get(0) || otherAdjCells.get(0)) ++count;
                 if (myAdjCells.get(1) || otherAdjCells.get(1)) ++count;
@@ -240,7 +243,7 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public void intersection(CellSet c) {
+    public void intersection(MasterAPI c) {
         assert(c instanceof Geomatrix);
         Geomatrix other = (Geomatrix) c;
         
@@ -253,7 +256,7 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public void difference(CellSet c) {
+    public void difference(MasterAPI c) {
         assert(c instanceof Geomatrix);
         Geomatrix other = (Geomatrix) c;
         
@@ -341,7 +344,7 @@ public class Geomatrix implements Area {
     }
 
     @Override
-    public void symmetricDifference(CellSet c) {
+    public void symmetricDifference(MasterAPI c) {
         assert(c instanceof Geomatrix);
         Geomatrix other = (Geomatrix) c;
         
@@ -470,7 +473,7 @@ public class Geomatrix implements Area {
         
     private void initializeDataStructsFromVertexs() {
         assert(valid());
-        alreadyInitializeDataStructsForRectangleIteration = false;
+        haveInitializedStructsForRectangleIteration = false;
         
         initializeMapsOfVertexsAndBoundingRectangle();
         initializeEdgesAndPathRepresentatives();
@@ -980,12 +983,12 @@ public class Geomatrix implements Area {
     }
     
     private void assertDataStructsForRectangleIterationInitialized() {
-        if (! alreadyInitializeDataStructsForRectangleIteration) {
+        if (! haveInitializedStructsForRectangleIteration) {
             initializeSelfEdgeIntersections();
             initializeCriticalPoints();
             initializeMapsOfCriticalPoints();
             initializePseudoEdges();
-            alreadyInitializeDataStructsForRectangleIteration = true;
+            haveInitializedStructsForRectangleIteration = true;
         }
         
     }
@@ -1131,6 +1134,10 @@ public class Geomatrix implements Area {
         int y = edge.getInterval().low;
         Cell adjRightCell = new Cell(x, y);
         return contains(adjRightCell);
+    }
+
+    private void addVertexesAdjacentCellsContainmentToHashMap(GridPoint myVertex, List<Boolean> myAdjCells) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 

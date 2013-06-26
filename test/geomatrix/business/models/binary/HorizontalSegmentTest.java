@@ -4,6 +4,11 @@
  */
 package geomatrix.business.models.binary;
 
+import geomatrix.gridplane.WideRay;
+import geomatrix.gridplane.VerticalSegment;
+import geomatrix.gridplane.HorizontalSegment;
+import geomatrix.gridplane.GridPoint;
+import geomatrix.gridplane.Cell;
 import geomatrix.utils.Direction;
 import geomatrix.utils.Interval;
 import geomatrix.utils.Pair;

@@ -1,6 +1,7 @@
 
-package geomatrix.business.models.binary;
+package geomatrix.gridplane;
 
+import geomatrix.gridplane.GridPoint;
 import geomatrix.utils.Direction;
 import geomatrix.utils.Interval;
 import geomatrix.utils.Pair;
