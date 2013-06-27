@@ -4,6 +4,7 @@
  */
 package geomatrix.business.models.binary.geomatrix;
 
+import geomatrix.gridplane.Cell;
 import geomatrix.gridplane.GridPoint;
 import geomatrix.gridplane.Line;
 import geomatrix.utils.Axis;
@@ -41,5 +42,13 @@ public class PointSet {
     
     public Geomatrix getGeomatrix() {
         return Geomatrix.buildGeomatrixFromPoints(points);
+    }
+    
+    public Collection<GridPoint> getPoints() {
+        return points;
+    }
+    
+    public Collection<Cell> getContainedCells() {
+        return getGeomatrix().getContainedCells();
     }
 }

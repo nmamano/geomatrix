@@ -4,7 +4,7 @@
  */
 package geomatrix;
 
-import geomatrix.business.controllers.GeomatrixController;
+import geomatrix.business.controllers.OldGeomatrixController;
 import geomatrix.presentation.swing.MainFrame;
 import manticore.Application;
 import manticore.Debug;
@@ -33,7 +33,7 @@ public class Main {
         app.setDataController(dataController);
         
         // Add business controllers
-        app.addBusiness(GeomatrixController.class);
+        app.addBusiness(OldGeomatrixController.class);
         
         // Add presentation controllers
         PresentationController swingController = new SwingController(MainFrame.class);

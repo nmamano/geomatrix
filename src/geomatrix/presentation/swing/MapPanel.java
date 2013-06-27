@@ -4,10 +4,12 @@
  */
 package geomatrix.presentation.swing;
 
+import geomatrix.gridplane.UnitarySegment;
 import geomatrix.business.controllers.RectangleIteratorController;
 import geomatrix.gridplane.Line;
 import geomatrix.business.controllers.GeomatrixController;
 import geomatrix.business.controllers.CellIteratorController;
+import geomatrix.business.events.AreaModifiedEvent;
 import geomatrix.gridplane.Cell;
 import geomatrix.gridplane.GridPoint;
 import geomatrix.gridplane.Rectangle;
@@ -15,6 +17,7 @@ import geomatrix.gridplane.Segment;
 import geomatrix.utils.Direction;
 import geomatrix.gridplane.Vector;
 import geomatrix.utils.Axis;
+import geomatrix.utils.Interval;
 import geomatrix.utils.Pair;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import manticore.Debug;
 import manticore.presentation.SwingController;
+import manticore.presentation.annotation.Listen;
 
 
 /**
@@ -40,18 +44,14 @@ import manticore.presentation.SwingController;
  * @author Nil
  */
 public class MapPanel extends JPanel {
-    
-    private MainFrame mainFrame;
-    private GeomatrixController areaController;
-    
-    private int selectedAreaNumber;
-  
-    private PresentationArea area1;
-    private PresentationArea area2;
-    private PresentationArea area3;
 
-    private int gridWidth = 20;
-    private int gridHeight = 20;
+    private GeomatrixController geomatrixController;
+
+    private int gridWidth;
+    private int gridHeight;
+    
+    private static final int STARTING_GRID_WIDTH = 20;
+    private static final int STARTING_GRID_HEIGHT = 20;
     
     private static final int CELL_PIXEL_LENGTH = 20;
     private static final int VERTEX_PIXEL_RADIUS = 9;
@@ -62,6 +62,7 @@ public class MapPanel extends JPanel {
     private static final Color AREA_1_COLOR = Color.RED;
     private static final Color AREA_2_COLOR = Color.BLUE;
     private static final Color AREA_3_COLOR = Color.GREEN;
+    
     private static final Color BACKGROUND_GRID_COLOR = Color.white;
     private static final Color COLOR_GRID = Color.decode("#EEEEEE");
     private static final Color OVERLAPPED_LINES_COLOR = Color.GRAY;
@@ -69,10 +70,16 @@ public class MapPanel extends JPanel {
     private static final Color OVERLAPPED_CELLS_COLOR = Color.GRAY;
     private static final Color DOUBLY_OVERLAPPED_CELLS_COLOR = Color.BLACK;
     
-    private Set<Cell> iteredCells;
-    private boolean ignoreInput;
-    
+    //??
+    private boolean ignoreInput;   
     private RectangleIterationPanel rectangleIterationPanel;
+    
+    //the new data structs
+    Combinations[][] cells;
+    Combinations[][] verticalUnitarySegments;
+    Combinations[][] horizontalUnitarySegments;
+    Combinations[][] vertexes;
+    private Set<Cell> iteredCells;
     
     /**
      * Initialization.
@@ -83,31 +90,72 @@ public class MapPanel extends JPanel {
      */
     public MapPanel(SwingController swingController) {
         
-        setIgnoreInput(false);
+        //??
+        //setIgnoreInput(false);
         
-        setPreferredSize(new Dimension(gridWidth*CELL_PIXEL_LENGTH,
-                                       gridHeight*CELL_PIXEL_LENGTH));
+        //??
+        //setPreferredSize(new Dimension(gridWidth*CELL_PIXEL_LENGTH,
+        //                               gridHeight*CELL_PIXEL_LENGTH));
         
-        this.areaController = swingController.getBusinessController(GeomatrixController.class);
-        selectedAreaNumber = 1;
-        
-        area1 = new PresentationArea(true, AREA_1_COLOR);
-        area2 = new PresentationArea(false, AREA_2_COLOR);
-        area3 = new PresentationArea(false, AREA_3_COLOR);
-        
+        this.geomatrixController = swingController.getBusinessController(GeomatrixController.class);
+
         this.addMouseListener(new SelectGridPointListener());
+        setGridSize(STARTING_GRID_WIDTH, STARTING_GRID_HEIGHT);
         repaint();
         
     }
+    
+    private void setGridSize(int gridWidth, int gridHeight) {
+        this.gridWidth = gridWidth;
+        this.gridHeight = gridHeight;
+        cells = new Combinations[gridWidth][gridHeight];
+        verticalUnitarySegments = new Combinations[gridWidth+1][gridHeight];
+        horizontalUnitarySegments = new Combinations[gridWidth][gridHeight+1];
+        vertexes = new Combinations[gridWidth+1][gridHeight+1];
+        iteredCells = new HashSet<Cell>();
+    }
+    
+    @Listen(AreaModifiedEvent.class)
+    public void areaModified(AreaModifiedEvent evt) {    
+        updateDataStructs(evt);
+        repaint();
+    }
 
-    /**
-     * This coupling is made so that mapPanel can tell the main frame when the
-     * areas are valid/unvalid so that it can enable/disable the menu
-     * options that require the areas to be valid.
-     * @param mainFrame 
-     */
-    void setMainFrame(MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
+    private void updateDataStructs(AreaModifiedEvent evt) {
+        updateCells(evt);
+        updateUnitarySegments(evt);
+        updateVertexes(evt);
+    }
+    
+    private void updateCells(AreaModifiedEvent evt) {
+            for (Cell cell : evt.containedCells) {
+            cells[cell.x][cell.y] = cells[cell.x][cell.y].add(evt.areaID);
+        }    
+    }
+    
+    private void updateUnitarySegments(AreaModifiedEvent evt) {
+        for (Line line : evt.invalidLines) {
+            if (line.axis == Axis.Vertical) {
+                Segment segment = new Segment(line.fixedCoordinate, new Interval(0, gridHeight), Axis.Vertical);
+                Collection<UnitarySegment> unitarySegments = segment.breakIntoUnitarySegments();
+                for (UnitarySegment unitarySegment : unitarySegments) {
+                    verticalUnitarySegments[unitarySegment.topLeftEndPoint.x][unitarySegment.topLeftEndPoint.y].add(evt.areaID);
+                }
+            }
+            else {
+                Segment segment = new Segment(line.fixedCoordinate, new Interval(0, gridWidth), Axis.Horizontal);
+                Collection<UnitarySegment> unitarySegments = segment.breakIntoUnitarySegments();
+                for (UnitarySegment unitarySegment : unitarySegments) {
+                    horizontalUnitarySegments[unitarySegment.topLeftEndPoint.x][unitarySegment.topLeftEndPoint.y].add(evt.areaID);
+                }                
+            }
+        }    
+    }
+    
+    private void updateVertexes(AreaModifiedEvent evt) {
+        for (GridPoint point : evt.vertexes) {
+            vertexes[point.x][point.y] = vertexes[point.x][point.y].add(evt.areaID);
+        }  
     }
     
     @Override
@@ -249,19 +297,19 @@ public class MapPanel extends JPanel {
     private void paintInvalidLines(Graphics2D g) {
         List<Line> area1InvalidLines, area2InvalidLines, area3InvalidLines;
         if (area1.isDisplayed) {
-            area1InvalidLines = areaController.getInvalidLines(area1.vertexs);
+            area1InvalidLines = geomatrixController.getInvalidLines(area1.vertexs);
         }
         else {
             area1InvalidLines = new ArrayList<Line>();
         }
         if (area2.isDisplayed) {
-            area2InvalidLines = areaController.getInvalidLines(area2.vertexs);
+            area2InvalidLines = geomatrixController.getInvalidLines(area2.vertexs);
         }
         else {
             area2InvalidLines = new ArrayList<Line>();
         }
         if (area3.isDisplayed) {
-            area3InvalidLines = areaController.getInvalidLines(area3.vertexs);
+            area3InvalidLines = geomatrixController.getInvalidLines(area3.vertexs);
         }
         else {
             area3InvalidLines = new ArrayList<Line>();
@@ -333,19 +381,19 @@ public class MapPanel extends JPanel {
     private void paintContainedCells(Graphics2D g) {
         List<Cell> area1ContainedCells, area2ContainedCells, area3ContainedCells;
         if (area1.isDisplayed) {
-            area1ContainedCells = areaController.getContainedCells(area1.vertexs);
+            area1ContainedCells = geomatrixController.getContainedCells(area1.vertexs);
         }
         else {
             area1ContainedCells = new ArrayList<Cell>();
         }
         if (area2.isDisplayed) {
-            area2ContainedCells = areaController.getContainedCells(area2.vertexs);
+            area2ContainedCells = geomatrixController.getContainedCells(area2.vertexs);
         }
         else {
             area2ContainedCells = new ArrayList<Cell>();
         }
         if (area3.isDisplayed) {
-            area3ContainedCells = areaController.getContainedCells(area3.vertexs);
+            area3ContainedCells = geomatrixController.getContainedCells(area3.vertexs);
         }
         else {
             area3ContainedCells = new ArrayList<Cell>();
@@ -416,7 +464,7 @@ public class MapPanel extends JPanel {
     }
 
     private void updateMenusThatRequireValidAreaActivation(int modifiedAreaNumber) {
-        if (areaController.isValidArea(getArea(modifiedAreaNumber).vertexs)) {
+        if (geomatrixController.isValidArea(getArea(modifiedAreaNumber).vertexs)) {
             mainFrame.enableOperationsThatRequireValidArea(modifiedAreaNumber, true);
         }
         else {
@@ -447,10 +495,10 @@ public class MapPanel extends JPanel {
         assert(destinationAreaNumber != otherAreaNumber);
         Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
         Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
-        assert(areaController.isValidArea(destinationAreaVertexs) &&
-               areaController.isValidArea(otherAreaVertexs));
+        assert(geomatrixController.isValidArea(destinationAreaVertexs) &&
+               geomatrixController.isValidArea(otherAreaVertexs));
         
-        getArea(destinationAreaNumber).vertexs = areaController.union(destinationAreaVertexs,
+        getArea(destinationAreaNumber).vertexs = geomatrixController.union(destinationAreaVertexs,
                                                       otherAreaVertexs);
         
         updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
@@ -461,10 +509,10 @@ public class MapPanel extends JPanel {
         assert(destinationAreaNumber != otherAreaNumber);
         Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
         Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
-        assert(areaController.isValidArea(destinationAreaVertexs) &&
-               areaController.isValidArea(otherAreaVertexs));
+        assert(geomatrixController.isValidArea(destinationAreaVertexs) &&
+               geomatrixController.isValidArea(otherAreaVertexs));
         
-        getArea(destinationAreaNumber).vertexs = areaController.intersection(
+        getArea(destinationAreaNumber).vertexs = geomatrixController.intersection(
                 destinationAreaVertexs, otherAreaVertexs);
         
         updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
@@ -475,10 +523,10 @@ public class MapPanel extends JPanel {
         assert(destinationAreaNumber != otherAreaNumber);
         Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
         Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
-        assert(areaController.isValidArea(destinationAreaVertexs) &&
-               areaController.isValidArea(otherAreaVertexs));
+        assert(geomatrixController.isValidArea(destinationAreaVertexs) &&
+               geomatrixController.isValidArea(otherAreaVertexs));
         
-        getArea(destinationAreaNumber).vertexs = areaController.difference(
+        getArea(destinationAreaNumber).vertexs = geomatrixController.difference(
                 destinationAreaVertexs, otherAreaVertexs);
         
         updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
@@ -489,10 +537,10 @@ public class MapPanel extends JPanel {
         assert(destinationAreaNumber != otherAreaNumber);
         Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
         Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
-        assert(areaController.isValidArea(destinationAreaVertexs) &&
-               areaController.isValidArea(otherAreaVertexs));
+        assert(geomatrixController.isValidArea(destinationAreaVertexs) &&
+               geomatrixController.isValidArea(otherAreaVertexs));
         
-        getArea(destinationAreaNumber).vertexs = areaController.symmetricDifference(
+        getArea(destinationAreaNumber).vertexs = geomatrixController.symmetricDifference(
                 destinationAreaVertexs, otherAreaVertexs);
         
         updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
@@ -510,19 +558,19 @@ public class MapPanel extends JPanel {
                 area3BoundingRectangleEdges;
         
         if (shouldPaintBoundingRectangle(1)) {
-            area1BoundingRectangleEdges = areaController.getBoundingRectangleEdges(area1.vertexs);
+            area1BoundingRectangleEdges = geomatrixController.getBoundingRectangleEdges(area1.vertexs);
         }
         else {
             area1BoundingRectangleEdges = new ArrayList<Segment>();
         }
         if (shouldPaintBoundingRectangle(2)) {
-            area2BoundingRectangleEdges = areaController.getBoundingRectangleEdges(area2.vertexs);
+            area2BoundingRectangleEdges = geomatrixController.getBoundingRectangleEdges(area2.vertexs);
         }
         else {
             area2BoundingRectangleEdges = new ArrayList<Segment>();
         }
         if (shouldPaintBoundingRectangle(3)) {
-            area3BoundingRectangleEdges = areaController.getBoundingRectangleEdges(area3.vertexs);
+            area3BoundingRectangleEdges = geomatrixController.getBoundingRectangleEdges(area3.vertexs);
         }
         else {
             area3BoundingRectangleEdges = new ArrayList<Segment>();
@@ -533,7 +581,7 @@ public class MapPanel extends JPanel {
     private boolean shouldPaintBoundingRectangle(int areaNumber) {
         return getArea(areaNumber).isDisplayed &&
                getArea(areaNumber).isBoundingRectangleDisplayed &&
-               areaController.isValidArea(getArea(areaNumber).vertexs);
+               geomatrixController.isValidArea(getArea(areaNumber).vertexs);
     }
 
     private void paintSegments(Collection<Segment> area1Segments,
@@ -594,9 +642,9 @@ public class MapPanel extends JPanel {
     }
 
     void translateArea(int areaNumber, int xTranslate, int yTranslate) {
-        assert(areaController.isValidArea(getArea(areaNumber).vertexs));
+        assert(geomatrixController.isValidArea(getArea(areaNumber).vertexs));
         
-        getArea(areaNumber).vertexs = areaController.translate(
+        getArea(areaNumber).vertexs = geomatrixController.translate(
                 getArea(areaNumber).vertexs, xTranslate, yTranslate);
         
         repaint();
@@ -610,7 +658,7 @@ public class MapPanel extends JPanel {
      * @param degrees 
      */
     void rotateArea(int areaNumber, int degrees) {
-        assert(areaController.isValidArea(getArea(areaNumber).vertexs));
+        assert(geomatrixController.isValidArea(getArea(areaNumber).vertexs));
         assert(degrees == 90 || degrees == 180 || degrees == 270);
         
         rotate90AndReallocate(areaNumber);
@@ -623,14 +671,14 @@ public class MapPanel extends JPanel {
     }
 
     private void rotate90AndReallocate(int areaNumber) {
-        getArea(areaNumber).vertexs = areaController.rotate90Degrees(
+        getArea(areaNumber).vertexs = geomatrixController.rotate90Degrees(
                 getArea(areaNumber).vertexs);
         translateArea(areaNumber, gridWidth, 0);
     }
 
     void reflectVertical(int areaNumber) {
-        assert(areaController.isValidArea(getArea(areaNumber).vertexs));
-        getArea(areaNumber).vertexs = areaController.reflectVertical(
+        assert(geomatrixController.isValidArea(getArea(areaNumber).vertexs));
+        getArea(areaNumber).vertexs = geomatrixController.reflectVertical(
                 getArea(areaNumber).vertexs);
         
         translateArea(areaNumber, gridWidth, 0); //reallocate in visible area
@@ -639,8 +687,8 @@ public class MapPanel extends JPanel {
     }
 
     void reflectHorizontal(int areaNumber) {
-        assert(areaController.isValidArea(getArea(areaNumber).vertexs));
-        getArea(areaNumber).vertexs = areaController.reflectHorizontal(
+        assert(geomatrixController.isValidArea(getArea(areaNumber).vertexs));
+        getArea(areaNumber).vertexs = geomatrixController.reflectHorizontal(
                 getArea(areaNumber).vertexs);
         
         translateArea(areaNumber, 0, gridHeight); //reallocate in visible area
@@ -707,6 +755,7 @@ public class MapPanel extends JPanel {
             }
         }
     }
+
 
         
     private class SelectGridPointListener extends MouseAdapter {

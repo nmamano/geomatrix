@@ -8,6 +8,8 @@ import geomatrix.utils.Axis;
 import geomatrix.utils.Direction;
 import geomatrix.utils.Interval;
 import geomatrix.utils.Pair;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -70,6 +72,18 @@ public class Segment implements Comparable {
         assert(intersects(other));
         if (axis == Axis.Vertical) return new GridPoint(fixed, other.fixed);
         else return new GridPoint(other.fixed, fixed);
+    }
+    
+    public Collection<UnitarySegment> breakIntoUnitarySegments() {
+        Collection<UnitarySegment> unitarySegments = new ArrayList<UnitarySegment>();
+        
+        for (int i = range.low; i < range.high; ++i) {
+            GridPoint topLeftEndPoint;
+            if (axis == Axis.Vertical) topLeftEndPoint = new GridPoint(fixed, i);
+            else topLeftEndPoint = new GridPoint(i, fixed);
+            unitarySegments.add(new UnitarySegment(topLeftEndPoint, axis));
+        }
+        return unitarySegments;
     }
     
     private boolean beyondRayOrigin(WideRay ray) {

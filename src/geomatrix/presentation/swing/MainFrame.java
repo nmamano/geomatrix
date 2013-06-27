@@ -1,13 +1,15 @@
 
 package geomatrix.presentation.swing;
 
-import geomatrix.business.controllers.GeomatrixController2;
+import geomatrix.business.controllers.GeomatrixController;
+import geomatrix.business.events.AreaModifiedEvent;
 import java.awt.BorderLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import manticore.presentation.SwingController;
+import manticore.presentation.annotation.Listen;
 
 /**
  *
@@ -16,7 +18,7 @@ import manticore.presentation.SwingController;
 public class MainFrame extends javax.swing.JFrame {
 
     private MapPanel mapPanel;
-    private GeomatrixController2 geomatrixController;
+    private GeomatrixController geomatrixController;
     private SwingController swingController;
     
     //here will be stored from which area the translate dialog is opened.
@@ -31,10 +33,15 @@ public class MainFrame extends javax.swing.JFrame {
         setResizable(false);
         initComponents();
         this.swingController = swing;
-        this.geomatrixController = swing.getBusinessController(GeomatrixController2.class);
+        this.geomatrixController = swing.getBusinessController(GeomatrixController.class);
         initMapPanel();
         pack();
         repaint();
+    }
+    
+    @Listen(AreaModifiedEvent.class)
+    public void areaModified(AreaModifiedEvent evt) {
+        enableOperationsThatRequireValidArea(evt.areaID, evt.valid);
     }
 
     /**
@@ -1124,6 +1131,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void selectArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArea1ActionPerformed
+        geomatrixController.setSelected(1);
         mapPanel.setSelected(1);
         displayArea1.setSelected(true); //a selected area is always displayed
     }//GEN-LAST:event_selectArea1ActionPerformed
