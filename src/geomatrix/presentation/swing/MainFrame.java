@@ -2,7 +2,9 @@
 package geomatrix.presentation.swing;
 
 import geomatrix.business.controllers.GeomatrixController;
-import geomatrix.business.events.AreaModifiedEvent;
+import geomatrix.business.events.AreaDisplayedEvent;
+import geomatrix.business.events.AreasModifiedEvent;
+import geomatrix.business.events.AreaSelectedEvent;
 import java.awt.BorderLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -39,11 +41,20 @@ public class MainFrame extends javax.swing.JFrame {
         repaint();
     }
     
-    @Listen(AreaModifiedEvent.class)
-    public void areaModified(AreaModifiedEvent evt) {
-        enableOperationsThatRequireValidArea(evt.areaID, evt.valid);
+    @Listen(AreasModifiedEvent.class)
+    public void areaModified(AreasModifiedEvent evt) {
+        enableOperationsThatRequireValidArea(1, evt.area1.valid);
+        enableOperationsThatRequireValidArea(2, evt.area2.valid);
+        enableOperationsThatRequireValidArea(3, evt.area3.valid);
     }
 
+    @Listen(AreaSelectedEvent.class)
+    public void areaSelected(AreaSelectedEvent evt) {
+        if (evt.areaID == 1) displayArea1.setSelected(true);
+        else if (evt.areaID == 2) displayArea2.setSelected(true);
+        else displayArea3.setSelected(true);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1132,221 +1143,196 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void selectArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArea1ActionPerformed
         geomatrixController.setSelected(1);
-        mapPanel.setSelected(1);
-        displayArea1.setSelected(true); //a selected area is always displayed
     }//GEN-LAST:event_selectArea1ActionPerformed
 
     private void displayArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayArea1ActionPerformed
-        try {
-            if (displayArea1.isSelected()) mapPanel.setDisplayed(1, true);
-            else mapPanel.setDisplayed(1, false);
-        }
-        catch (HideSelectedAreaException e) {
-            //do not allow to hide selected area
-            displayArea1.setSelected(true);
-        }
+        geomatrixController.setDisplayed(1, true);
     }//GEN-LAST:event_displayArea1ActionPerformed
 
     private void displayArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayArea2ActionPerformed
-        try {
-            if (displayArea2.isSelected()) mapPanel.setDisplayed(2, true);
-            else mapPanel.setDisplayed(2, false);
-        }
-        catch (HideSelectedAreaException e) {
-            //do not allow to hide selected area
-            displayArea2.setSelected(true);
-        }
+        geomatrixController.setDisplayed(2, true);
     }//GEN-LAST:event_displayArea2ActionPerformed
 
     private void displayArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayArea3ActionPerformed
-        try {
-            if (displayArea3.isSelected()) mapPanel.setDisplayed(3, true);
-            else mapPanel.setDisplayed(3, false);
-        }
-        catch (HideSelectedAreaException e) {
-            //do not allow to hide selected area
-            displayArea3.setSelected(true);
-        }
+        geomatrixController.setDisplayed(3, true);
     }//GEN-LAST:event_displayArea3ActionPerformed
 
     private void selectArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArea2ActionPerformed
-        mapPanel.setSelected(2);
-        displayArea2.setSelected(true); //a selected area is always displayed
+        geomatrixController.setSelected(2);
     }//GEN-LAST:event_selectArea2ActionPerformed
 
     private void selectArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectArea3ActionPerformed
-        mapPanel.setSelected(3);
-        displayArea3.setSelected(true); //a selected area is always displayed
+        geomatrixController.setSelected(3);
     }//GEN-LAST:event_selectArea3ActionPerformed
 
     private void area1CloneArea3(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1CloneArea3
-        mapPanel.cloneArea(1,3);
+        geomatrixController.cloneArea(1,3);
     }//GEN-LAST:event_area1CloneArea3
 
     private void area1UnionArea2(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1UnionArea2
-        mapPanel.unionArea(1,2);
+        geomatrixController.unionArea(1,2);
     }//GEN-LAST:event_area1UnionArea2
 
     private void area2New(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2New
-        mapPanel.resetArea(2);
+        geomatrixController.resetArea(2);
     }//GEN-LAST:event_area2New
 
     private void area3UnionArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3UnionArea1ActionPerformed
-        mapPanel.unionArea(3,1);
+        geomatrixController.unionArea(3,1);
     }//GEN-LAST:event_area3UnionArea1ActionPerformed
 
     private void area3DifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3DifferenceArea2ActionPerformed
-        mapPanel.differenceArea(3,2);
+        geomatrixController.differenceArea(3,2);
     }//GEN-LAST:event_area3DifferenceArea2ActionPerformed
 
     private void area3New(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3New
-        mapPanel.resetArea(3);
+        geomatrixController.resetArea(3);
     }//GEN-LAST:event_area3New
 
     private void area1New(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1New
-        mapPanel.resetArea(1);
+        geomatrixController.resetArea(1);
     }//GEN-LAST:event_area1New
 
     private void area1CloneArea2(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1CloneArea2
-        mapPanel.cloneArea(1,2);
+        geomatrixController.cloneArea(1,2);
     }//GEN-LAST:event_area1CloneArea2
 
     private void area2CloneArea1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2CloneArea1
-        mapPanel.cloneArea(2,1);
+        geomatrixController.cloneArea(2,1);
     }//GEN-LAST:event_area2CloneArea1
 
     private void area2CloneArea3(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2CloneArea3
-        mapPanel.cloneArea(2,3);
+        geomatrixController.cloneArea(2,3);
     }//GEN-LAST:event_area2CloneArea3
 
     private void area3CloneArea1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3CloneArea1
-        mapPanel.cloneArea(3,1);
+        geomatrixController.cloneArea(3,1);
     }//GEN-LAST:event_area3CloneArea1
 
     private void area3CloneArea2(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3CloneArea2
-        mapPanel.cloneArea(2,3);
+        geomatrixController.cloneArea(2,3);
     }//GEN-LAST:event_area3CloneArea2
 
     private void area1UnionArea3(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1UnionArea3
-        mapPanel.unionArea(1,3);
+        geomatrixController.unionArea(1,3);
     }//GEN-LAST:event_area1UnionArea3
 
     private void area2UnionArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2UnionArea1ActionPerformed
-        mapPanel.unionArea(2,1);
+        geomatrixController.unionArea(2,1);
     }//GEN-LAST:event_area2UnionArea1ActionPerformed
 
     private void area2UnionArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2UnionArea3ActionPerformed
-        mapPanel.unionArea(2,3);
+        geomatrixController.unionArea(2,3);
     }//GEN-LAST:event_area2UnionArea3ActionPerformed
 
     private void area3UnionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3UnionArea2ActionPerformed
-        mapPanel.unionArea(3,2);
+        geomatrixController.unionArea(3,2);
     }//GEN-LAST:event_area3UnionArea2ActionPerformed
 
     private void area1IntersectionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1IntersectionArea2ActionPerformed
-        mapPanel.intersectionArea(1,2);
+        geomatrixController.intersectionArea(1,2);
     }//GEN-LAST:event_area1IntersectionArea2ActionPerformed
 
     private void area1IntersectionArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1IntersectionArea3ActionPerformed
-         mapPanel.intersectionArea(1,3);
+         geomatrixController.intersectionArea(1,3);
     }//GEN-LAST:event_area1IntersectionArea3ActionPerformed
 
     private void area2IntersectionArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2IntersectionArea1ActionPerformed
-         mapPanel.intersectionArea(2,1);
+         geomatrixController.intersectionArea(2,1);
     }//GEN-LAST:event_area2IntersectionArea1ActionPerformed
 
     private void area2IntersectionArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2IntersectionArea3ActionPerformed
-         mapPanel.intersectionArea(2,3);
+         geomatrixController.intersectionArea(2,3);
     }//GEN-LAST:event_area2IntersectionArea3ActionPerformed
 
     private void area3IntersectionArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3IntersectionArea1ActionPerformed
-         mapPanel.intersectionArea(3,1);
+         geomatrixController.intersectionArea(3,1);
     }//GEN-LAST:event_area3IntersectionArea1ActionPerformed
 
     private void area3IntersectionArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3IntersectionArea2ActionPerformed
-         mapPanel.intersectionArea(3,2);
+         geomatrixController.intersectionArea(3,2);
     }//GEN-LAST:event_area3IntersectionArea2ActionPerformed
 
     private void area1DifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1DifferenceArea2ActionPerformed
-        mapPanel.differenceArea(1,2);
+        geomatrixController.differenceArea(1,2);
     }//GEN-LAST:event_area1DifferenceArea2ActionPerformed
 
     private void area1DifferenceArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1DifferenceArea3ActionPerformed
-        mapPanel.differenceArea(1,3);
+        geomatrixController.differenceArea(1,3);
     }//GEN-LAST:event_area1DifferenceArea3ActionPerformed
 
     private void area2DifferenceArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2DifferenceArea1ActionPerformed
-        mapPanel.differenceArea(2,1);
+        geomatrixController.differenceArea(2,1);
     }//GEN-LAST:event_area2DifferenceArea1ActionPerformed
 
     private void area2DifferenceArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2DifferenceArea3ActionPerformed
-        mapPanel.differenceArea(2,3);
+        geomatrixController.differenceArea(2,3);
     }//GEN-LAST:event_area2DifferenceArea3ActionPerformed
 
     private void area3DifferenceArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3DifferenceArea1ActionPerformed
-        mapPanel.differenceArea(3,1);
+        geomatrixController.differenceArea(3,1);
     }//GEN-LAST:event_area3DifferenceArea1ActionPerformed
 
     private void area1SymmetricDifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1SymmetricDifferenceArea2ActionPerformed
-        mapPanel.symmetricDifferenceArea(1,2);
+        geomatrixController.symmetricDifferenceArea(1,2);
     }//GEN-LAST:event_area1SymmetricDifferenceArea2ActionPerformed
 
     private void area1SymmetricDifferenceArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1SymmetricDifferenceArea3ActionPerformed
-        mapPanel.symmetricDifferenceArea(1,3);
+        geomatrixController.symmetricDifferenceArea(1,3);
     }//GEN-LAST:event_area1SymmetricDifferenceArea3ActionPerformed
 
     private void area2SymmetricDifferenceArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2SymmetricDifferenceArea1ActionPerformed
-        mapPanel.symmetricDifferenceArea(2,1);
+        geomatrixController.symmetricDifferenceArea(2,1);
     }//GEN-LAST:event_area2SymmetricDifferenceArea1ActionPerformed
 
     private void area2SymmetricDifferenceArea3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2SymmetricDifferenceArea3ActionPerformed
-        mapPanel.symmetricDifferenceArea(2,3);
+        geomatrixController.symmetricDifferenceArea(2,3);
     }//GEN-LAST:event_area2SymmetricDifferenceArea3ActionPerformed
 
     private void area3SymmetricDifferenceArea1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3SymmetricDifferenceArea1ActionPerformed
-        mapPanel.symmetricDifferenceArea(3,1);
+        geomatrixController.symmetricDifferenceArea(3,1);
     }//GEN-LAST:event_area3SymmetricDifferenceArea1ActionPerformed
 
     private void area3SymmetricDifferenceArea2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3SymmetricDifferenceArea2ActionPerformed
-        mapPanel.symmetricDifferenceArea(3,2);
+        geomatrixController.symmetricDifferenceArea(3,2);
     }//GEN-LAST:event_area3SymmetricDifferenceArea2ActionPerformed
 
     private void area1ShowRectangleDecompositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1ShowRectangleDecompositionActionPerformed
-        throw new UnsupportedOperationException("No algorithm has been found for this problem yet.");
+        geomatrixController.rectangleDecomposition(1);
     }//GEN-LAST:event_area1ShowRectangleDecompositionActionPerformed
 
     private void area2ShowRectangleDecompositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2ShowRectangleDecompositionActionPerformed
-        throw new UnsupportedOperationException("No algorithm has been found for this problem yet.");
+        geomatrixController.rectangleDecomposition(2);
     }//GEN-LAST:event_area2ShowRectangleDecompositionActionPerformed
 
     private void area3ShowRectangleDecompositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3ShowRectangleDecompositionActionPerformed
-        throw new UnsupportedOperationException("No algorithm has been found for this problem yet.");
+        geomatrixController.rectangleDecomposition(3);
     }//GEN-LAST:event_area3ShowRectangleDecompositionActionPerformed
 
     private void area1ShowBoundingRectangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1ShowBoundingRectangleActionPerformed
         if (area1ShowBoundingRectangle.isSelected()) {
-            mapPanel.showBoundingRectangle(1, true);
+            geomatrixController.showBoundingRectangle(1, true);
         }
         else {
-            mapPanel.showBoundingRectangle(1, false);
+            geomatrixController.showBoundingRectangle(1, false);
         }
     }//GEN-LAST:event_area1ShowBoundingRectangleActionPerformed
 
     private void area2ShowBoundingRectangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2ShowBoundingRectangleActionPerformed
         if (area2ShowBoundingRectangle.isSelected()) {
-            mapPanel.showBoundingRectangle(2, true);
+            geomatrixController.showBoundingRectangle(2, true);
         }
         else {
-            mapPanel.showBoundingRectangle(2, false);
+            geomatrixController.showBoundingRectangle(2, false);
         }
     }//GEN-LAST:event_area2ShowBoundingRectangleActionPerformed
 
     private void area3ShowBoundingRectangleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3ShowBoundingRectangleActionPerformed
         if (area3ShowBoundingRectangle.isSelected()) {
-            mapPanel.showBoundingRectangle(3, true);
+            geomatrixController.showBoundingRectangle(3, true);
         }
         else {
-            mapPanel.showBoundingRectangle(3, false);
+            geomatrixController.showBoundingRectangle(3, false);
         }
     }//GEN-LAST:event_area3ShowBoundingRectangleActionPerformed
 
@@ -1362,7 +1348,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         int xTranslate = Integer.parseInt(xFieldTranslateDialog.getText());
         int yTranslate = Integer.parseInt(yFieldTranslateDialog.getText());
-        mapPanel.translateArea(areaNumberTranslate, xTranslate, yTranslate);
+        geomatrixController.translateArea(areaNumberTranslate, xTranslate, yTranslate);
         xFieldTranslateDialog.setText("0");
         yFieldTranslateDialog.setText("0");
         translateDialog.setVisible(false);
@@ -1380,63 +1366,63 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_area3TranslateActionPerformed
 
     private void area1Rotate90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1Rotate90ActionPerformed
-        mapPanel.rotateArea(1, 90);
+        geomatrixController.rotateArea(1, 90, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area1Rotate90ActionPerformed
 
     private void area1Rotate180ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1Rotate180ActionPerformed
-        mapPanel.rotateArea(1, 180);
+        geomatrixController.rotateArea(1, 180, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area1Rotate180ActionPerformed
 
     private void area1Rotate270ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1Rotate270ActionPerformed
-        mapPanel.rotateArea(1, 270);
+        geomatrixController.rotateArea(1, 270, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area1Rotate270ActionPerformed
 
     private void area2Rotate90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2Rotate90ActionPerformed
-        mapPanel.rotateArea(2, 90);
+        geomatrixController.rotateArea(2, 90, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area2Rotate90ActionPerformed
 
     private void area2Rotate180ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2Rotate180ActionPerformed
-        mapPanel.rotateArea(2, 180);
+        geomatrixController.rotateArea(2, 180, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area2Rotate180ActionPerformed
 
     private void area2Rotate270ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2Rotate270ActionPerformed
-        mapPanel.rotateArea(2, 270);
+        geomatrixController.rotateArea(2, 270, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area2Rotate270ActionPerformed
 
     private void area3Rotate90ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3Rotate90ActionPerformed
-        mapPanel.rotateArea(3, 90);
+        geomatrixController.rotateArea(3, 90, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area3Rotate90ActionPerformed
 
     private void area3Rotate180ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3Rotate180ActionPerformed
-        mapPanel.rotateArea(3, 180);
+        geomatrixController.rotateArea(3, 180, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area3Rotate180ActionPerformed
 
     private void area3Rotate270ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3Rotate270ActionPerformed
-        mapPanel.rotateArea(3, 270);
+        geomatrixController.rotateArea(3, 270, mapPanel.gridWidth, mapPanel.gridHeight);
     }//GEN-LAST:event_area3Rotate270ActionPerformed
 
     private void area1ReflectVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1ReflectVerticalActionPerformed
-        mapPanel.reflectVertical(1);
+        geomatrixController.reflectVertical(1, mapPanel.gridHeight);
     }//GEN-LAST:event_area1ReflectVerticalActionPerformed
 
     private void area1ReflectHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area1ReflectHorizontalActionPerformed
-        mapPanel.reflectHorizontal(1);
+        geomatrixController.reflectHorizontal(1, mapPanel.gridWidth);
     }//GEN-LAST:event_area1ReflectHorizontalActionPerformed
 
     private void area2ReflectVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2ReflectVerticalActionPerformed
-        mapPanel.reflectVertical(2);
+        geomatrixController.reflectVertical(2, mapPanel.gridHeight);
     }//GEN-LAST:event_area2ReflectVerticalActionPerformed
 
     private void area2ReflectHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area2ReflectHorizontalActionPerformed
-        mapPanel.reflectHorizontal(2);
+        geomatrixController.reflectHorizontal(2, mapPanel.gridWidth);
     }//GEN-LAST:event_area2ReflectHorizontalActionPerformed
 
     private void area3ReflectVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3ReflectVerticalActionPerformed
-        mapPanel.reflectVertical(3);
+        geomatrixController.reflectVertical(3, mapPanel.gridHeight);
     }//GEN-LAST:event_area3ReflectVerticalActionPerformed
 
     private void area3ReflectHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_area3ReflectHorizontalActionPerformed
-        mapPanel.reflectHorizontal(3);
+        geomatrixController.reflectHorizontal(3, mapPanel.gridWidth);
     }//GEN-LAST:event_area3ReflectHorizontalActionPerformed
 
     private void okButtonResizeGridDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonResizeGridDialogActionPerformed
@@ -1448,7 +1434,14 @@ public class MainFrame extends javax.swing.JFrame {
         int ySize = Integer.parseInt(yFieldResizeGridDialog.getText());
         
         resizeGridDialog.setVisible(false);
+        setSize(xSize, ySize);
+        setSize(getWidth() + mapPanel.getGridWidthOffset(xSize) * MapPanel.CELL_PIXEL_LENGTH,
+                getHeight() + mapPanel.getGridHeightOffset(ySize) * MapPanel.CELL_PIXEL_LENGTH);
+
         mapPanel.setGridSize(xSize, ySize);
+        
+        mapPanel.repaint();
+        repaint();
     }//GEN-LAST:event_okButtonResizeGridDialogActionPerformed
 
     private void setGridSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setGridSizeActionPerformed

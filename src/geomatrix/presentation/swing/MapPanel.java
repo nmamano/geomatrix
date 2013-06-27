@@ -9,32 +9,23 @@ import geomatrix.business.controllers.RectangleIteratorController;
 import geomatrix.gridplane.Line;
 import geomatrix.business.controllers.GeomatrixController;
 import geomatrix.business.controllers.CellIteratorController;
-import geomatrix.business.events.AreaModifiedEvent;
+import geomatrix.business.events.AreasModifiedEvent;
 import geomatrix.gridplane.Cell;
 import geomatrix.gridplane.GridPoint;
 import geomatrix.gridplane.Rectangle;
 import geomatrix.gridplane.Segment;
-import geomatrix.utils.Direction;
-import geomatrix.gridplane.Vector;
 import geomatrix.utils.Axis;
 import geomatrix.utils.Interval;
-import geomatrix.utils.Pair;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import manticore.Debug;
 import manticore.presentation.SwingController;
 import manticore.presentation.annotation.Listen;
 
@@ -47,13 +38,13 @@ public class MapPanel extends JPanel {
 
     private GeomatrixController geomatrixController;
 
-    private int gridWidth;
-    private int gridHeight;
+    public int gridWidth;
+    public int gridHeight;
     
     private static final int STARTING_GRID_WIDTH = 20;
     private static final int STARTING_GRID_HEIGHT = 20;
     
-    private static final int CELL_PIXEL_LENGTH = 20;
+    public static final int CELL_PIXEL_LENGTH = 20;
     
     private static final Color BACKGROUND_GRID_COLOR = Color.white;
     private static final Color GRID_COLOR = Color.decode("#EEEEEE");
@@ -96,7 +87,7 @@ public class MapPanel extends JPanel {
         
     }
     
-    private void setGridSize(int gridWidth, int gridHeight) {
+    public void setGridSize(int gridWidth, int gridHeight) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         cells = new Combinations[gridWidth][gridHeight];
@@ -127,13 +118,13 @@ public class MapPanel extends JPanel {
         vertexes[gridWidth][gridHeight] = Combinations.None;
     }
 
-    @Listen(AreaModifiedEvent.class)
-    public void areaModified(AreaModifiedEvent evt) {    
+    @Listen(AreasModifiedEvent.class)
+    public void areaModified(AreasModifiedEvent evt) {    
         updateDataStructs(evt);
         repaint();
     }
 
-    private void updateDataStructs(AreaModifiedEvent evt) {
+    private void updateDataStructs(AreasModifiedEvent evt) {
         updateCells(evt.containedCells, evt.areaID);
         updateUnitarySegments(evt.invalidLines, evt.areaID);
         updateVertexes(evt.vertexes, evt.areaID);
@@ -222,210 +213,12 @@ public class MapPanel extends JPanel {
         } 
     }
         
-    /**
-     * Sets the indicated area as selected.
-     * If it was not displayed, it is displayed.
-     * @param areaNumber the number of the area to be selected
-     */
-    void setSelected(int areaNumber) {
-        
-        assert(areaNumber >= 1 && areaNumber <= 3);
-        
-        selectedAreaNumber = areaNumber;
-        try {
-            setDisplayed(areaNumber, true);
-        }
-        catch (HideSelectedAreaException e) {
-            //this can't happen because the shouldBeDisplayed parameter is true.
-            assert(false);
-        }
-    }
-
-    /**
-     * Displays or hides the indicated area according to 'shouldBeDisplayed'.
-     * If the indicated area is already in the indicated state, nothing is done.
-     * If the indicated area is selected, an exception is thrown.
-     * @param areaNumber the number of the area to be displayed or hidden.
-     * @param shouldBeDisplayed the boolean indicating if the area has to be
-     * displayed or not.
-     */
-    void setDisplayed(int areaNumber, boolean shouldBeDisplayed)
-        throws HideSelectedAreaException {
-        
-        assert(areaNumber >= 1 && areaNumber <= 3);
-        
-        if (areaNumber == selectedAreaNumber && ! shouldBeDisplayed) {
-            throw new HideSelectedAreaException();
-        }
-        getArea(areaNumber).isDisplayed = shouldBeDisplayed;
-       
-        repaint();
+    int getGridWidthOffset(int xSize) {
+        return xSize - gridWidth;
     }
     
-
-
-    private PresentationArea getArea(int areaNumber) {
-        assert(areaNumber >= 1 && areaNumber <= 3);
-        
-        if (areaNumber == 1) return area1;
-        if (areaNumber == 2) return area2;
-        return area3;
-    }
-
-    private void updateMenusThatRequireValidAreaActivation(int modifiedAreaNumber) {
-        if (geomatrixController.isValidArea(getArea(modifiedAreaNumber).vertexs)) {
-            mainFrame.enableOperationsThatRequireValidArea(modifiedAreaNumber, true);
-        }
-        else {
-            mainFrame.enableOperationsThatRequireValidArea(modifiedAreaNumber, false);
-        }
-    }
-        
-    void resetArea(int areaNumber) {
-        getArea(areaNumber).vertexs = new HashSet<GridPoint>();
-        
-        updateMenusThatRequireValidAreaActivation(areaNumber);
-        repaint();
-    }
-
-    void cloneArea(int destinationAreaNumber, int toBeClonedAreaNumber) {
-        assert(destinationAreaNumber != toBeClonedAreaNumber);
-        
-        getArea(destinationAreaNumber).vertexs = new HashSet<GridPoint>();
-        for (GridPoint vertex : getArea(toBeClonedAreaNumber).vertexs) {
-            getArea(destinationAreaNumber).vertexs.add(vertex);
-        }
-        
-        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
-        repaint();
-    }
-
-    void unionArea(int destinationAreaNumber, int otherAreaNumber) {
-        assert(destinationAreaNumber != otherAreaNumber);
-        Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
-        Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
-        assert(geomatrixController.isValidArea(destinationAreaVertexs) &&
-               geomatrixController.isValidArea(otherAreaVertexs));
-        
-        getArea(destinationAreaNumber).vertexs = geomatrixController.union(destinationAreaVertexs,
-                                                      otherAreaVertexs);
-        
-        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
-        repaint();
-    }
-    
-    void intersectionArea(int destinationAreaNumber, int otherAreaNumber) {
-        assert(destinationAreaNumber != otherAreaNumber);
-        Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
-        Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
-        assert(geomatrixController.isValidArea(destinationAreaVertexs) &&
-               geomatrixController.isValidArea(otherAreaVertexs));
-        
-        getArea(destinationAreaNumber).vertexs = geomatrixController.intersection(
-                destinationAreaVertexs, otherAreaVertexs);
-        
-        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
-        repaint();
-    }
-
-    void differenceArea(int destinationAreaNumber, int otherAreaNumber) {
-        assert(destinationAreaNumber != otherAreaNumber);
-        Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
-        Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
-        assert(geomatrixController.isValidArea(destinationAreaVertexs) &&
-               geomatrixController.isValidArea(otherAreaVertexs));
-        
-        getArea(destinationAreaNumber).vertexs = geomatrixController.difference(
-                destinationAreaVertexs, otherAreaVertexs);
-        
-        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
-        repaint();
-    }
-
-    void symmetricDifferenceArea(int destinationAreaNumber, int otherAreaNumber) {
-        assert(destinationAreaNumber != otherAreaNumber);
-        Set<GridPoint> destinationAreaVertexs = getArea(destinationAreaNumber).vertexs;
-        Set<GridPoint> otherAreaVertexs = getArea(otherAreaNumber).vertexs;
-        assert(geomatrixController.isValidArea(destinationAreaVertexs) &&
-               geomatrixController.isValidArea(otherAreaVertexs));
-        
-        getArea(destinationAreaNumber).vertexs = geomatrixController.symmetricDifference(
-                destinationAreaVertexs, otherAreaVertexs);
-        
-        updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
-        repaint();
-    }
-   
-    private boolean shouldPaintBoundingRectangle(int areaNumber) {
-        return getArea(areaNumber).isDisplayed &&
-               getArea(areaNumber).isBoundingRectangleDisplayed &&
-               geomatrixController.isValidArea(getArea(areaNumber).vertexs);
-    }
-
-    void translateArea(int areaNumber, int xTranslate, int yTranslate) {
-        assert(geomatrixController.isValidArea(getArea(areaNumber).vertexs));
-        
-        getArea(areaNumber).vertexs = geomatrixController.translate(
-                getArea(areaNumber).vertexs, xTranslate, yTranslate);
-        
-        repaint();
-    }
-
-    /**
-     * This method might give trouble if the grid is not squared.
-     * Because of the reallocation. A rotated area will not necessarily fit
-     * in the grid once rotated if its not squared.
-     * @param areaNumber
-     * @param degrees 
-     */
-    void rotateArea(int areaNumber, int degrees) {
-        assert(geomatrixController.isValidArea(getArea(areaNumber).vertexs));
-        assert(degrees == 90 || degrees == 180 || degrees == 270);
-        
-        rotate90AndReallocate(areaNumber);
-        //rotating 180 equals rotating 90 twice
-        if (degrees > 90) rotate90AndReallocate(areaNumber);
-        //rotating 270 equals rotating 90 three times
-        if (degrees > 180) rotate90AndReallocate(areaNumber);
-
-        repaint();
-    }
-
-    private void rotate90AndReallocate(int areaNumber) {
-        getArea(areaNumber).vertexs = geomatrixController.rotate90Degrees(
-                getArea(areaNumber).vertexs);
-        translateArea(areaNumber, gridWidth, 0);
-    }
-
-    void reflectVertical(int areaNumber) {
-        assert(geomatrixController.isValidArea(getArea(areaNumber).vertexs));
-        getArea(areaNumber).vertexs = geomatrixController.reflectVertical(
-                getArea(areaNumber).vertexs);
-        
-        translateArea(areaNumber, gridWidth, 0); //reallocate in visible area
-        
-        repaint();
-    }
-
-    void reflectHorizontal(int areaNumber) {
-        assert(geomatrixController.isValidArea(getArea(areaNumber).vertexs));
-        getArea(areaNumber).vertexs = geomatrixController.reflectHorizontal(
-                getArea(areaNumber).vertexs);
-        
-        translateArea(areaNumber, 0, gridHeight); //reallocate in visible area
-        
-        repaint();
-    }
-
-    void setGridSize(int xSize, int ySize) {
-        int gridWidthOffset = xSize - gridWidth;
-        int gridHeightOffset = ySize - gridHeight;
-        gridWidth = xSize;
-        gridHeight = ySize;
-        mainFrame.setSize(mainFrame.getWidth()+gridWidthOffset*CELL_PIXEL_LENGTH,
-                          mainFrame.getHeight()+gridHeightOffset*CELL_PIXEL_LENGTH);
-        mainFrame.repaint();
-        repaint();
+    int getGridHeightOffset(int ySize) {
+        return ySize - gridHeight;
     }
 
     void cellIteration(int areaNumber) {
@@ -475,8 +268,6 @@ public class MapPanel extends JPanel {
             }
         }
     }
-
-
         
     private class SelectGridPointListener extends MouseAdapter {
 

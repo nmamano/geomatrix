@@ -88,20 +88,20 @@ public class Rectangle {
         return edges;    
     }
     
-    public Segment getLeftEdge() {
-        return new Segment(topLeft.x, getYInterval(), Axis.Vertical);
+    public VerticalSegment getLeftEdge() {
+        return new VerticalSegment(topLeft.x, getYInterval());
     }   
     
-    public Segment getRightEdge() {
-        return new Segment(bottomRight.x, getYInterval(), Axis.Vertical);
+    public VerticalSegment getRightEdge() {
+        return new VerticalSegment(bottomRight.x, getYInterval());
     }  
     
-    public Segment getTopEdge() {
-        return new Segment(topLeft.y, getXInterval(), Axis.Horizontal);
+    public HorizontalSegment getTopEdge() {
+        return new HorizontalSegment(topLeft.y, getXInterval());
     }  
     
-    public Segment getBottomEdge() {
-        return new Segment(bottomRight.y, getXInterval(), Axis.Horizontal);
+    public HorizontalSegment getBottomEdge() {
+        return new HorizontalSegment(bottomRight.y, getXInterval());
     }
     
     public int getWidth() {

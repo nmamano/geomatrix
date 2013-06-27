@@ -10,14 +10,19 @@ import geomatrix.gridplane.Line;
 import geomatrix.utils.Axis;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  *
  * @author Nil
  */
 public class PointSet {
-    HashSet<GridPoint> points;
-    
+    public HashSet<GridPoint> points;
+
+    public PointSet(HashSet<GridPoint> points) {
+        this.points = points;
+    }
+
     public Collection<Line> getInvalidLines() {
         HashSet<Line> lines = new HashSet<Line>();
         
@@ -43,12 +48,16 @@ public class PointSet {
     public Geomatrix getGeomatrix() {
         return Geomatrix.buildGeomatrixFromPoints(points);
     }
-    
-    public Collection<GridPoint> getPoints() {
-        return points;
-    }
-    
+
     public Collection<Cell> getContainedCells() {
         return getGeomatrix().getContainedCells();
+    }
+
+    public PointSet copy() {
+        return new PointSet((HashSet<GridPoint>) points.clone());
+    }
+
+    public void setPoints(Collection<GridPoint> vertexs) {
+        points = new HashSet<GridPoint>(vertexs);
     }
 }
