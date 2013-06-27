@@ -54,21 +54,12 @@ public class MapPanel extends JPanel {
     private static final int STARTING_GRID_HEIGHT = 20;
     
     private static final int CELL_PIXEL_LENGTH = 20;
-    private static final int VERTEX_PIXEL_RADIUS = 9;
-    private static final int ITERATION_MARK_PIXEL_RADIUS = 8;
-    private static final Color ITERATION_MARK_COLOR = Color.ORANGE;
-    private static final Color ITERATION_RECTANGLE_COLOR = Color.BLACK;
-    
-    private static final Color AREA_1_COLOR = Color.RED;
-    private static final Color AREA_2_COLOR = Color.BLUE;
-    private static final Color AREA_3_COLOR = Color.GREEN;
     
     private static final Color BACKGROUND_GRID_COLOR = Color.white;
-    private static final Color COLOR_GRID = Color.decode("#EEEEEE");
+    private static final Color GRID_COLOR = Color.decode("#EEEEEE");
     private static final Color OVERLAPPED_LINES_COLOR = Color.GRAY;
     private static final Color DOUBLY_OVERLAPPED_LINES_COLOR = Color.BLACK;
-    private static final Color OVERLAPPED_CELLS_COLOR = Color.GRAY;
-    private static final Color DOUBLY_OVERLAPPED_CELLS_COLOR = Color.BLACK;
+
     
     //??
     private boolean ignoreInput;   
@@ -113,8 +104,29 @@ public class MapPanel extends JPanel {
         horizontalUnitarySegments = new Combinations[gridWidth][gridHeight+1];
         vertexes = new Combinations[gridWidth+1][gridHeight+1];
         iteredCells = new HashSet<Cell>();
+        setDataStructsEmpty();
     }
     
+    private void setDataStructsEmpty() {
+        for (int i = 0; i < gridWidth; ++i) {
+            for (int j = 0; j < gridHeight; ++j) {
+                cells[i][j] = Combinations.None;
+                verticalUnitarySegments[i][j] = Combinations.None;
+                horizontalUnitarySegments[i][j] = Combinations.None;
+                vertexes[i][j] = Combinations.None;
+            }
+        }
+        for (int i = 0; i < gridWidth; ++i) {
+            horizontalUnitarySegments[i][gridHeight] = Combinations.None;
+            vertexes[i][gridHeight] = Combinations.None;
+        }
+        for (int j = 0; j < gridHeight; ++j) {
+            horizontalUnitarySegments[gridWidth][j] = Combinations.None;
+            vertexes[gridWidth][j] = Combinations.None;            
+        }
+        vertexes[gridWidth][gridHeight] = Combinations.None;
+    }
+
     @Listen(AreaModifiedEvent.class)
     public void areaModified(AreaModifiedEvent evt) {    
         updateDataStructs(evt);
@@ -122,39 +134,39 @@ public class MapPanel extends JPanel {
     }
 
     private void updateDataStructs(AreaModifiedEvent evt) {
-        updateCells(evt);
-        updateUnitarySegments(evt);
-        updateVertexes(evt);
+        updateCells(evt.containedCells, evt.areaID);
+        updateUnitarySegments(evt.invalidLines, evt.areaID);
+        updateVertexes(evt.vertexes, evt.areaID);
     }
     
-    private void updateCells(AreaModifiedEvent evt) {
-            for (Cell cell : evt.containedCells) {
-            cells[cell.x][cell.y] = cells[cell.x][cell.y].add(evt.areaID);
+    private void updateCells(Collection<Cell> containedCells, int areaID) {
+            for (Cell cell : containedCells) {
+            cells[cell.x][cell.y] = cells[cell.x][cell.y].add(areaID);
         }    
     }
     
-    private void updateUnitarySegments(AreaModifiedEvent evt) {
-        for (Line line : evt.invalidLines) {
+    private void updateUnitarySegments(Collection<Line> invalidLines, int areaID) {
+        for (Line line : invalidLines) {
             if (line.axis == Axis.Vertical) {
                 Segment segment = new Segment(line.fixedCoordinate, new Interval(0, gridHeight), Axis.Vertical);
                 Collection<UnitarySegment> unitarySegments = segment.breakIntoUnitarySegments();
                 for (UnitarySegment unitarySegment : unitarySegments) {
-                    verticalUnitarySegments[unitarySegment.topLeftEndPoint.x][unitarySegment.topLeftEndPoint.y].add(evt.areaID);
+                    verticalUnitarySegments[unitarySegment.topLeftEndPoint.x][unitarySegment.topLeftEndPoint.y].add(areaID);
                 }
             }
             else {
                 Segment segment = new Segment(line.fixedCoordinate, new Interval(0, gridWidth), Axis.Horizontal);
                 Collection<UnitarySegment> unitarySegments = segment.breakIntoUnitarySegments();
                 for (UnitarySegment unitarySegment : unitarySegments) {
-                    horizontalUnitarySegments[unitarySegment.topLeftEndPoint.x][unitarySegment.topLeftEndPoint.y].add(evt.areaID);
+                    horizontalUnitarySegments[unitarySegment.topLeftEndPoint.x][unitarySegment.topLeftEndPoint.y].add(areaID);
                 }                
             }
         }    
     }
     
-    private void updateVertexes(AreaModifiedEvent evt) {
-        for (GridPoint point : evt.vertexes) {
-            vertexes[point.x][point.y] = vertexes[point.x][point.y].add(evt.areaID);
+    private void updateVertexes(Collection<GridPoint> points, int areaID) {
+        for (GridPoint point : points) {
+            vertexes[point.x][point.y] = vertexes[point.x][point.y].add(areaID);
         }  
     }
     
@@ -164,11 +176,10 @@ public class MapPanel extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
         
         Graphics2D g2D = (Graphics2D) g;
-        drawGrid(g2D);
-        paintVertexs(g2D);
-        paintInvalidLines(g2D);
+        Drawer.drawGrid(g2D, getWidth(), getHeight());
         paintAreas(g2D);
-        paintBoundingRectangles(g2D);
+        paintInvalidLines(g2D);
+        paintVertexs(g2D);
         try {
             paintIteredCells(g2D);
         }
@@ -179,55 +190,36 @@ public class MapPanel extends JPanel {
         }
         paintIteratingRectangle(g2D);
     }
-
-    private void paintVertexs(Graphics2D g) {
+    
+    private void paintAreas(Graphics2D g) {
         for (int i = 0; i < gridWidth; ++i) {
             for (int j = 0; j < gridHeight; ++j) {
-                paintVertex(new GridPoint(i, j), g);
+                Drawer.paintCell(new Cell(i,j), cells[i][j].getColor(), g);
             }
         }
     }
     
-    private void paintVertex(GridPoint point, Graphics2D g) {
-        Pixel coordinates = findCoordinates(point);
-        List<Color> colors = getColors(point);
-        if (colors.size() == 1) {
-            paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS, g);
-        }
-        else if (colors.size() == 2) {
-            paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS+1, g);
-            paintSphere(coordinates, colors.get(1), (VERTEX_PIXEL_RADIUS+1)/2, g);
-        }
-        else if (colors.size() == 3) {
-            paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS+2, g);
-            paintSphere(coordinates, colors.get(1), (VERTEX_PIXEL_RADIUS+2)*2/3, g);
-            paintSphere(coordinates, colors.get(2), (VERTEX_PIXEL_RADIUS+2)/3, g);
+    private void paintVertexs(Graphics2D g) {
+        for (int i = 0; i < gridWidth+1; ++i) {
+            for (int j = 0; j < gridHeight+1; ++j) {
+                Drawer.paintVertex(new GridPoint(i, j), vertexes[i][j].getColors(), g);
+            }
         }
     }
-    
-    private void paintSphere(Pixel center, Color color, int radius, Graphics2D g) {
-        g.setColor(color);
-        for (int i = 0; i <= radius; ++i) {
-            g.drawOval(center.x - i/2, center.y - i/2, i, i);
-        }
-    }
-    
-    private List<Color> getColors(GridPoint point) {
-        List<Color> colors = new ArrayList<Color>();
-        if (area1.containsVertex(point) && area1.isDisplayed) colors.add(area1.color);
-        if (area2.containsVertex(point) && area2.isDisplayed) colors.add(area2.color);
-        if (area3.containsVertex(point) && area3.isDisplayed) colors.add(area3.color);
-        return colors;
-    }
-      
-    private void drawGrid(Graphics2D g) {        
-        g.setColor(COLOR_GRID);
-        
-        for(int i = 0; i < getWidth(); i += cellSize())
-            g.drawLine(i, 0, i, getHeight());
-        
-        for(int i = 0; i < getHeight(); i += cellSize())
-            g.drawLine(0, i, getWidth(), i);
+
+    private void paintInvalidLines(Graphics2D g) {
+        for (int i = 0; i < gridWidth; ++i) {
+            for (int j = 0; j < gridHeight+1; ++j) {
+                UnitarySegment segment = new UnitarySegment(new GridPoint(i, j), Axis.Horizontal);
+                Drawer.paintUnitarySegment(segment, horizontalUnitarySegments[i][j].getColor(), g);
+            }
+        } 
+        for (int i = 0; i < gridWidth+1; ++i) {
+            for (int j = 0; j < gridHeight; ++j) {
+                UnitarySegment segment = new UnitarySegment(new GridPoint(i, j), Axis.Vertical);
+                Drawer.paintUnitarySegment(segment, verticalUnitarySegments[i][j].getColor(), g);
+            }
+        } 
     }
         
     /**
@@ -270,21 +262,7 @@ public class MapPanel extends JPanel {
         repaint();
     }
     
-    private int cellSize() {
-        return Math.max(this.getWidth() / gridWidth,
-                        this.getHeight() / gridHeight);
-    }
 
-    private Pixel findCoordinates(GridPoint p) {
-        return new Pixel(p.x*cellSize(), p.y*cellSize());
-    }
-    
-    private Pixel findCoordinates(Cell cell) {
-        Pixel center = new Pixel(cell.x*cellSize(), cell.y*cellSize());
-        center.x += CELL_PIXEL_LENGTH/2;
-        center.y += CELL_PIXEL_LENGTH/2;
-        return center;
-    }
 
     private PresentationArea getArea(int areaNumber) {
         assert(areaNumber >= 1 && areaNumber <= 3);
@@ -292,175 +270,6 @@ public class MapPanel extends JPanel {
         if (areaNumber == 1) return area1;
         if (areaNumber == 2) return area2;
         return area3;
-    }
-
-    private void paintInvalidLines(Graphics2D g) {
-        List<Line> area1InvalidLines, area2InvalidLines, area3InvalidLines;
-        if (area1.isDisplayed) {
-            area1InvalidLines = geomatrixController.getInvalidLines(area1.vertexs);
-        }
-        else {
-            area1InvalidLines = new ArrayList<Line>();
-        }
-        if (area2.isDisplayed) {
-            area2InvalidLines = geomatrixController.getInvalidLines(area2.vertexs);
-        }
-        else {
-            area2InvalidLines = new ArrayList<Line>();
-        }
-        if (area3.isDisplayed) {
-            area3InvalidLines = geomatrixController.getInvalidLines(area3.vertexs);
-        }
-        else {
-            area3InvalidLines = new ArrayList<Line>();
-        }
-        paintLines(area1InvalidLines, area2InvalidLines, area3InvalidLines, g);
-    }
-
-    private void paintLines(List<Line> area1Lines, List<Line> area2Lines,
-            List<Line> area3Lines, Graphics2D g) {
-        
-        Map<Line, Color> lineColors = findLineColors(
-                area1Lines, area2Lines, area3Lines);
-        
-        for (Line line : lineColors.keySet()) {
-            paintLine(line, lineColors.get(line), g);
-        }
-    }
-
-    private Map<Line, Color> findLineColors(List<Line> area1Lines,
-            List<Line> area2Lines, List<Line> area3Lines) {
-        
-        Map<Line, Color> lineColors = new HashMap<Line, Color>();
-        for (Line line : area1Lines) {
-            lineColors.put(line, area1.color);
-        }
-        for (Line line : area2Lines) {
-            if (lineColors.containsKey(line)) {
-                lineColors.put(line, OVERLAPPED_LINES_COLOR);
-            }
-            else {
-                lineColors.put(line, area2.color);
-            }
-        }
-        for (Line line : area3Lines) {
-            if (lineColors.containsKey(line)) {
-                if (lineColors.get(line) == OVERLAPPED_LINES_COLOR) {
-                    lineColors.put(line, DOUBLY_OVERLAPPED_LINES_COLOR);
-                }
-                else {
-                    lineColors.put(line, OVERLAPPED_LINES_COLOR);
-                }
-            }
-            else {
-                lineColors.put(line, area3.color);
-            }
-        }
-        return lineColors;
-    }
-
-    private void paintLine(Line line, Color color, Graphics2D g) {
-        g.setColor(color);
-        if (line.axis == Axis.Vertical) {
-            GridPoint lineOrigin = new GridPoint(line.fixedCoordinate, 0);
-            int xValue = findCoordinates(lineOrigin).x;
-            g.drawLine(xValue, 0, xValue, getHeight());
-        }
-        else {
-            GridPoint lineOrigin = new GridPoint(0, line.fixedCoordinate);
-            int yValue = findCoordinates(lineOrigin).y;
-            g.drawLine(0, yValue, getWidth(), yValue);
-        }
-    }
-
-    private void paintAreas(Graphics2D g) {
-        paintContainedCells(g);
-        paintEdges(g);
-    }
-
-    private void paintContainedCells(Graphics2D g) {
-        List<Cell> area1ContainedCells, area2ContainedCells, area3ContainedCells;
-        if (area1.isDisplayed) {
-            area1ContainedCells = geomatrixController.getContainedCells(area1.vertexs);
-        }
-        else {
-            area1ContainedCells = new ArrayList<Cell>();
-        }
-        if (area2.isDisplayed) {
-            area2ContainedCells = geomatrixController.getContainedCells(area2.vertexs);
-        }
-        else {
-            area2ContainedCells = new ArrayList<Cell>();
-        }
-        if (area3.isDisplayed) {
-            area3ContainedCells = geomatrixController.getContainedCells(area3.vertexs);
-        }
-        else {
-            area3ContainedCells = new ArrayList<Cell>();
-        }
-        paintCells(area1ContainedCells, area2ContainedCells, area3ContainedCells, g);
-    }
-
-    private void paintCells(List<Cell> area1ContainedCells,
-            List<Cell> area2ContainedCells, List<Cell> area3ContainedCells, Graphics2D g) {
-        
-        Map<Cell, Color> cellColors = findCellColors(
-                area1ContainedCells, area2ContainedCells, area3ContainedCells);
-        
-        for (Cell cell : cellColors.keySet()) {
-            paintCell(cell, cellColors.get(cell), g);
-        }
-    }
-
-    private Map<Cell, Color> findCellColors(List<Cell> area1cells,
-            List<Cell> area2cells, List<Cell> area3cells) {
-        
-        Map<Cell, Color> cellColors = new HashMap<Cell, Color>();
-        for (Cell cell : area1cells) {
-            cellColors.put(cell, area1.color);
-        }
-        for (Cell cell : area2cells) {
-            if (cellColors.containsKey(cell)) {
-                cellColors.put(cell, OVERLAPPED_CELLS_COLOR);
-            }
-            else {
-                cellColors.put(cell, area2.color);
-            }
-        }
-        for (Cell cell : area3cells) {
-            if (cellColors.containsKey(cell)) {
-                if (cellColors.get(cell) == OVERLAPPED_CELLS_COLOR) {
-                    cellColors.put(cell, DOUBLY_OVERLAPPED_CELLS_COLOR);
-                }
-                else {
-                    cellColors.put(cell, OVERLAPPED_CELLS_COLOR);
-                }
-            }
-            else {
-                cellColors.put(cell, area3.color);
-            }
-        }
-        return cellColors;
-    }
-
-    private void paintCell(Cell cell, Color color, Graphics2D g) {
-        g.setColor(color);
-        Pixel topLeft = findCoordinates(new GridPoint(cell.x, cell.y));
-        Pixel center = new Pixel(topLeft.x + cellSize()/2, topLeft.y + cellSize()/2);
-        
-        int i = center.x;
-        int j = center.y;
-        int size = 0;
-        g.drawRect(i, j, 1, 1);
-        for (; i > topLeft.x; --i) {            
-            g.drawRect(i, j, size, size);
-            --j;
-            size += 2;
-        }
-    }
-
-    private void paintEdges(Graphics2D g) {
-        //edges are not painted for now. It is not necessary.
     }
 
     private void updateMenusThatRequireValidAreaActivation(int modifiedAreaNumber) {
@@ -546,99 +355,11 @@ public class MapPanel extends JPanel {
         updateMenusThatRequireValidAreaActivation(destinationAreaNumber);
         repaint();
     }
-
-    void showBoundingRectangle(int areaNumber, boolean enable) {
-        getArea(areaNumber).isBoundingRectangleDisplayed = enable;
-        
-        repaint();
-    }
-
-    private void paintBoundingRectangles(Graphics2D g) {
-        Collection<Segment> area1BoundingRectangleEdges, area2BoundingRectangleEdges,
-                area3BoundingRectangleEdges;
-        
-        if (shouldPaintBoundingRectangle(1)) {
-            area1BoundingRectangleEdges = geomatrixController.getBoundingRectangleEdges(area1.vertexs);
-        }
-        else {
-            area1BoundingRectangleEdges = new ArrayList<Segment>();
-        }
-        if (shouldPaintBoundingRectangle(2)) {
-            area2BoundingRectangleEdges = geomatrixController.getBoundingRectangleEdges(area2.vertexs);
-        }
-        else {
-            area2BoundingRectangleEdges = new ArrayList<Segment>();
-        }
-        if (shouldPaintBoundingRectangle(3)) {
-            area3BoundingRectangleEdges = geomatrixController.getBoundingRectangleEdges(area3.vertexs);
-        }
-        else {
-            area3BoundingRectangleEdges = new ArrayList<Segment>();
-        }
-        paintSegments(area1BoundingRectangleEdges, area2BoundingRectangleEdges, area3BoundingRectangleEdges, g);
-    }
-        
+   
     private boolean shouldPaintBoundingRectangle(int areaNumber) {
         return getArea(areaNumber).isDisplayed &&
                getArea(areaNumber).isBoundingRectangleDisplayed &&
                geomatrixController.isValidArea(getArea(areaNumber).vertexs);
-    }
-
-    private void paintSegments(Collection<Segment> area1Segments,
-            Collection<Segment> area2Segments, Collection<Segment> area3Segments,
-            Graphics2D g) {
-
-        //TO REFACTOR
-//        for (Vector segment : lineColors.keySet()) {
-//            paintSegment(segment, lineColors.get(segment), g);
-//        }
-    }
-
-    private void paintSegment(Segment segment, Color color, Graphics2D g) {
-        g.setColor(color);
-        Pair<GridPoint, GridPoint> endPoints = segment.getEndpoints();
-        Pixel pixelEndPoint1 = findCoordinates(endPoints.first);
-        Pixel pixelEndPoint2 = findCoordinates(endPoints.second);
-        g.drawLine(pixelEndPoint1.x, pixelEndPoint1.y, pixelEndPoint2.x, pixelEndPoint2.y);
-    }
-
-    private Map<Vector, Color> findUnitarySegmentColors(
-            List<Vector> area1Segments, List<Vector> area2Segments,
-            List<Vector> area3Segments) {
-        
-        Map<Vector, Color> segmentColors = new HashMap<Vector, Color>();
-        for (Vector segment : area1Segments) {
-            segmentColors.put(segment, area1.color);
-        }
-        for (Vector segment : area2Segments) {
-            if (segmentColors.containsKey(segment)) {
-                segmentColors.put(segment, OVERLAPPED_LINES_COLOR);
-            }
-            else {
-                segmentColors.put(segment, area2.color);
-            }
-        }
-        for (Vector segment : area3Segments) {
-            if (segmentColors.containsKey(segment)) {
-                if (segmentColors.get(segment) == OVERLAPPED_LINES_COLOR) {
-                    segmentColors.put(segment, DOUBLY_OVERLAPPED_LINES_COLOR);
-                }
-                else {
-                    segmentColors.put(segment, OVERLAPPED_LINES_COLOR);
-                }
-            }
-            else {
-                segmentColors.put(segment, area3.color);
-            }
-        }
-        return segmentColors;
-    }
-
-    private void advance(GridPoint point, Direction direction) {
-        if (direction == Direction.N) --point.y;
-        else if (direction == Direction.S) ++point.y;
-        else if (direction == Direction.W) --point.x;
-        else ++point.x;
     }
 
     void translateArea(int areaNumber, int xTranslate, int yTranslate) {
@@ -719,8 +440,7 @@ public class MapPanel extends JPanel {
     void paintIteredCells(Graphics2D g) {
         if (iteredCells == null) return;
         for (Cell point : iteredCells) {
-            Pixel inGridCenter = findCoordinates(point);
-            paintSphere(inGridCenter, ITERATION_MARK_COLOR, ITERATION_MARK_PIXEL_RADIUS, g);
+            Drawer.paintIteredCell(point, g);
         }
     }
 
@@ -784,10 +504,99 @@ public class MapPanel extends JPanel {
         }
 
         private GridPoint getClosestVertex(Pixel pixel) {
-            return new GridPoint((pixel.x+CELL_PIXEL_LENGTH/2)/cellSize(),
-                                 (pixel.y+CELL_PIXEL_LENGTH/2)/cellSize());
+            return new GridPoint((pixel.x+CELL_PIXEL_LENGTH/2)/CELL_PIXEL_LENGTH,
+                                 (pixel.y+CELL_PIXEL_LENGTH/2)/CELL_PIXEL_LENGTH);
         }
 
-    }   
+    }
+    
+    private static class Drawer {
+        
+        private static final int VERTEX_PIXEL_RADIUS = 9;
+        private static final int ITERATION_MARK_PIXEL_RADIUS = 8;
+        private static final Color ITERATION_MARK_COLOR = Color.ORANGE;
+        private static final Color ITERATION_RECTANGLE_COLOR = Color.BLACK;
+    
+        public static void paintCell(Cell cell, Color color, Graphics2D g) {
+            if (color == null) return;
+            g.setColor(color);
+            Pixel topLeft = findCoordinates(new GridPoint(cell.x, cell.y));
+            Pixel center = new Pixel(topLeft.x + CELL_PIXEL_LENGTH/2, topLeft.y + CELL_PIXEL_LENGTH/2);
+
+            int i = center.x;
+            int j = center.y;
+            int size = 0;
+            g.drawRect(i, j, 1, 1);
+            for (; i > topLeft.x; --i) {            
+                g.drawRect(i, j, size, size);
+                --j;
+                size += 2;
+            }
+        }
+            
+        public static void paintVertex(GridPoint point, List<Color> colors, Graphics2D g) {
+            Pixel coordinates = findCoordinates(point);
+            if (colors.size() == 1) {
+                paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS, g);
+            }
+            else if (colors.size() == 2) {
+                paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS+1, g);
+                paintSphere(coordinates, colors.get(1), (VERTEX_PIXEL_RADIUS+1)/2, g);
+            }
+            else if (colors.size() == 3) {
+                paintSphere(coordinates, colors.get(0), VERTEX_PIXEL_RADIUS+2, g);
+                paintSphere(coordinates, colors.get(1), (VERTEX_PIXEL_RADIUS+2)*2/3, g);
+                paintSphere(coordinates, colors.get(2), (VERTEX_PIXEL_RADIUS+2)/3, g);
+            }
+        }
+
+        public static void paintIteredCell(Cell point, Graphics2D g) {
+            Pixel inGridCenter = findCoordinates(new GridPoint(point.x, point.y));
+            paintSphere(inGridCenter, ITERATION_MARK_COLOR, ITERATION_MARK_PIXEL_RADIUS, g);
+        }
+               
+        public static void drawGrid(Graphics2D g, int width, int height) {        
+            g.setColor(GRID_COLOR);
+
+            for(int i = 0; i < width; i += CELL_PIXEL_LENGTH)
+                g.drawLine(i, 0, i, height);
+
+            for(int i = 0; i < height; i += CELL_PIXEL_LENGTH)
+                g.drawLine(0, i, width, i);
+        }
+        
+        private static void paintUnitarySegment(UnitarySegment segment, Color color, Graphics2D g) {
+            g.setColor(color);
+            GridPoint endPoint1, endPoint2;
+            endPoint1 = segment.topLeftEndPoint;
+            if (segment.axis == Axis.Horizontal) endPoint2 = new GridPoint(endPoint1.x + 1, endPoint1.y);
+            else endPoint2 = new GridPoint(endPoint1.x, endPoint1.y + 1);
+
+            Pixel pixelEndPoint1 = findCoordinates(endPoint1);
+            Pixel pixelEndPoint2 = findCoordinates(endPoint2);
+            
+            g.drawLine(pixelEndPoint1.x, pixelEndPoint1.y, pixelEndPoint2.x, pixelEndPoint2.y);
+            g.drawLine(segment.topLeftEndPoint.x, segment.topLeftEndPoint.y, WIDTH, WIDTH);
+        }
+            
+        private static void paintSphere(Pixel center, Color color, int radius, Graphics2D g) {
+            g.setColor(color);
+            for (int i = 0; i <= radius; ++i) {
+                g.drawOval(center.x - i/2, center.y - i/2, i, i);
+            }
+        }
+        
+        private static Pixel findCoordinates(GridPoint p) {
+            return new Pixel(p.x*CELL_PIXEL_LENGTH, p.y*CELL_PIXEL_LENGTH);
+        }
+        
+        private Pixel findCoordinates(Cell cell) {
+            Pixel center = new Pixel(cell.x*CELL_PIXEL_LENGTH, cell.y*CELL_PIXEL_LENGTH);
+            center.x += CELL_PIXEL_LENGTH/2;
+            center.y += CELL_PIXEL_LENGTH/2;
+            return center;
+        }
+
+    }
     
 }
