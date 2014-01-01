@@ -26,6 +26,10 @@ The goal of Geomatrix is to provide:
 Potential applications:
 - Represent matrixes which model a physical space which contain mostly rectangular objects (like a room, or a city).
 
+Geomatrix was used in (and was actually born out of) https://github.com/parsons-project/interiores, a software to design rooms and distribute furniture automatically.
+
+Development
+-----------
 This is a 3 phase project.
 
 1. **Implementation:**
@@ -43,3 +47,8 @@ This is a 3 phase project.
   - Extend the concept to boolean matrixes of an arbitrary number of dimensions. For example, 3-dimensional matrixes can be represented by a set of vertices which define 3-dimensional figures.
 
 Current development point: finishing phase 1/starting phase 2.
+
+
+
+Contact info:
+Nil Mamano (tehotserver@gmail.com)
