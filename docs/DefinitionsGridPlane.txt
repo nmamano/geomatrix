@@ -1,7 +1,3 @@
-/////
-This file belongs to docs folder. It is here so I can open it with netbeans lols
-/////
-
 The grid or grid plane is a plane with a special topology.
 
 Axis:
@@ -45,7 +41,7 @@ Rays:
 A ray is a variaton of line that has a starting at a point, called origin.
 A ray is identified by its starting point and its direction, which can be
 N, W, S or E.
-The equation of the right ray (x',y') is:
+For example, the equation of the right ray (with direction E) (x',y') is:
 x > x'
 y = y'
 
@@ -96,8 +92,8 @@ A cell is contained in an area if it's part of the set.
 Edges:
 An edge of an area is a segment that fulfills the following property.
 A segment s is an edge of an area a if there is no pair of
-cells separated by s such that exactly one of them is
-contained in a and its endpoints are the endspoints of other edges of a.
+cells separated by s such that not exactly one of them is
+contained in a and its endpoints are the endpoints of other edges of a.
 Two cells are separated by s if there is a pair of points such that each cell is
 adjacent to both of them and the segment formed by those points is contained in
 s.
