@@ -31,7 +31,7 @@ The complexity of most operations is independent of the number of elements. For 
 **Potential applications:**
 - Represent matrixes which model a physical space which contain mostly rectangular objects (like a room, or a city).
 
-Geomatrix was used in *Interior Design* (https://github.com/parsons-project/interiores), an application to design rooms and distribute furniture automatically.
+Geomatrix was used in *[Interior Design](https://github.com/parsons-project/interiores)*, an application to design rooms and distribute furniture automatically.
 
 Development
 -----------
